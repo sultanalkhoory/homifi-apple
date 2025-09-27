@@ -1,118 +1,122 @@
 'use client';
-import Header from "@/components/Header";
-import IPhoneFrame from "@/components/IPhoneFrame";
-import FeatureStrip from "@/components/FeatureStrip";
-import { motion } from "framer-motion";
-import { fadeRise } from "@/lib/animations";
+import { motion } from 'framer-motion';
+import { scaleIn } from '@/lib/animations';
 
-export default function Page() {
+/**
+ * iPhone Frame Component - CSS-only, pixel-perfect iPhone 15/16 Pro mockup
+ * 
+ * Key Features:
+ * - 9:19.5 aspect ratio (accurate to real iPhone dimensions)
+ * - Responsive sizing optimized for desktop/mobile balance
+ * - Truly transparent screen window (no background, shows parent content through)
+ * - Accurate Dynamic Island size and positioning
+ * - Clean bezel only (no side buttons for minimal aesthetic)
+ * - Subtle shadows for depth
+ * 
+ * Usage:
+ * <IPhoneFrame>
+ *   // Optional: Add glass UI controls as children
+ * </IPhoneFrame>
+ */
+
+export default function IPhoneFrame({ children }: { children?: React.ReactNode }) {
   return (
-    <main>
-      <Header />
-
+    <motion.div
+      variants={scaleIn}
+      initial="hidden"
+      animate="show"
+      /**
+       * Responsive sizing - REDUCED for better desktop balance
+       * - Mobile (default): 180px
+       * - Small screens: 220px
+       * - Medium screens: 260px
+       * - Large screens: 280px
+       * - NEVER exceeds 300px (max-w-[300px])
+       * 
+       * This ensures the phone is elegant and proportional, not overwhelming
+       */
+      className="relative inline-block w-[180px] sm:w-[220px] md:w-[260px] lg:w-[280px] max-w-[300px]"
+    >
       {/* 
-        ========== HERO SECTION ==========
-        
-        Layout:
-        - Desktop: Two-column grid (text left, visual right)
-        - Mobile: Stacked vertically (text first, visual below)
-        
-        Key Implementation:
-        - Single photo source (background image in photo block)
-        - iPhone overlays with TRANSPARENT screen
-        - Photo shows through iPhone naturally (no duplicate images)
-        - iPhone capped at ≤45% viewport width on desktop
+        Main iPhone Body (TRANSPARENT - shows photo behind)
+        - aspect-[9/19.5] = accurate iPhone 15/16 Pro proportions
+        - rounded-[40px] = smooth corner radius matching real device
+        - NO bg-black = transparent body to show photo through
+        - overflow-visible = allows proper shadow rendering
+        - drop-shadow = creates depth and separation from background
       */}
-      <section className="pt-36 md:pt-44 pb-16 md:pb-20">
-        <div className="mx-auto max-w-6xl px-4 grid md:grid-cols-12 gap-12 items-center">
-          
-          {/* LEFT COLUMN - Copy Block */}
-          <motion.div
-            variants={fadeRise}
-            initial="hidden"
-            animate="show"
-            className="md:col-span-6 space-y-6"
-          >
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs text-gray-600">
-              <span>Seamless Smart Home</span>
-            </div>
-            
-            {/* Headline */}
-            <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-black">
-              Your home, perfectly in sync.
-            </h1>
-            
-            {/* Subhead */}
-            <p className="text-gray-600 text-lg max-w-prose">
-              Apple-first integration for lighting, privacy, climate, and security — designed to feel invisible until you need it.
-            </p>
-            
-            {/* CTA Buttons */}
-            <div className="flex gap-3">
-              <a href="#features" className="rounded-full bg-black text-white px-5 py-3 text-sm">
-                Explore Features
-              </a>
-              <a href="#contact" className="rounded-full border px-5 py-3 text-sm">
-                Get Started
-              </a>
-            </div>
-          </motion.div>
+      <div className="relative aspect-[9/19.5] rounded-[40px] overflow-visible
+                      drop-shadow-[0_14px_40px_rgba(0,0,0,0.35)]">
+
+        {/* 
+          BLACK BEZEL FRAME (ring around the edge)
+          - Creates the visible black iPhone frame
+          - ring-[8px] = 8px thick black border (matches reference image)
+          - ring-black = bezel color
+          - rounded-[40px] = matches outer body radius
+          - pointer-events-none = doesn't interfere with clicks
+          - This creates the substantial bezel while keeping the center transparent
+        */}
+        <div className="pointer-events-none absolute inset-0 rounded-[40px]
+                        ring-[8px] ring-inset ring-black
+                        shadow-[inset_0_0_10px_rgba(0,0,0,0.65)]">
 
           {/* 
-            RIGHT COLUMN - Visual Block
-            - Self-aligns to right on desktop
-            - Max width 45vw to maintain balance with text
-          */}
-          <div className="md:col-span-6 md:justify-self-end w-full md:max-w-[45vw]">
+            ========== SCREEN WINDOW - TRUE TRANSPARENCY ==========
             
+            CRITICAL: This is the actual screen area where content displays
+            
+            Key characteristics:
+            - NO background color (transparent)
+            - NO ring/border (clean edges)
+            - NO gloss overlay (shows parent content directly)
+            - overflow-hidden with rounded corners for clean masking
+            - Tighter corner radius to follow bezel curve
+            - pointer-events-auto = allows interaction with glass controls
+            
+            How transparency works:
+            1. Parent photo block sits behind entire iPhone
+            2. iPhone body is transparent (no bg-black)
+            3. Only the bezel ring is black (ring-[8px])
+            4. This screen window cuts through showing photo
+            5. Children (glass UI controls) float on top of transparent screen
+            
+            Result: Same photo visible both outside and "inside" the phone
+          */}
+          <div
+            className="
+              pointer-events-auto absolute left-[8px] right-[8px]
+              top-[8px] bottom-[8px]
+              rounded-[32px] overflow-hidden
+            "
+          >
             {/* 
-              PHOTO BLOCK - Single source of truth
-              - Contains background photo
-              - iPhone overlays on this block
-              - iPhone screen is transparent, shows this photo through it
+              Dynamic Island (notch replacement on iPhone 15/16 Pro)
+              - Positioned at top center of screen area
+              - left-1/2 -translate-x-1/2 = perfect horizontal centering
+              - mt-2 = small margin from top of screen
+              - Fixed size: 80px width × 24px height (matches reference image)
+              - bg-black = creates cutout effect against transparent screen
+              - z-10 = floats above any screen content
             */}
-            <div className="relative aspect-[9/16] rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 mt-2 z-10
+                            w-[80px] h-[24px]
+                            rounded-full bg-black" />
+            {/* 
+              Children render here (ONLY for glass UI controls - NO background images)
               
-              {/* Background Photo - THE ONLY IMAGE SOURCE */}
-              <img
-                src="/Curtains-Open-Lights-On.png"
-                alt="Living room with lights on and curtains open"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-
-              {/* 
-                Subtle Separation Glow
-                - Soft light behind iPhone for depth
-                - Bottom-right radial gradient
-                - Very subtle (35% opacity)
-              */}
-              <div className="pointer-events-none absolute right-0 bottom-0 w-2/3 h-2/3
-                              bg-[radial-gradient(60%_60%_at_75%_75%,rgba(255,255,255,0.35),transparent_60%)]" />
-
-              {/* 
-                IPHONE OVERLAY
-                - Positioned bottom-right
-                - Reduced scaling for better desktop proportions (85% → 95%)
-                - NO CHILDREN = transparent screen shows photo through it
-                - Glass UI controls can be added inside IPhoneFrame later
-              */}
-              <div className="absolute bottom-4 right-4 origin-bottom-right
-                              scale-85 sm:scale-90 md:scale-95">
-                <IPhoneFrame>
-                  {/* 
-                    Screen is transparent - no content here
-                    Later: Add glass UI controls like buttons/HUDs here
-                  */}
-                </IPhoneFrame>
-              </div>
-            </div>
+              The screen is transparent - the parent photo block shows through naturally.
+              Only add glass UI elements here:
+              - Glass buttons (lights toggle, curtains controls)
+              - HUD overlays (temperature, doorbell)
+              - Status text or indicators
+              
+              DO NOT add background images here - that defeats the transparency!
+            */}
+            {children}
           </div>
         </div>
-      </section>
-
-      {/* Features Strip */}
-      <FeatureStrip />
-    </main>
+      </div>
+    </motion.div>
   );
 }
