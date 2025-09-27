@@ -77,14 +77,14 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
         {/* 
           BLACK BEZEL FRAME (ring around the edge)
           - Creates the visible black iPhone frame
-          - ring-[6px] = 6px thick black border
+          - ring-[8px] = 8px thick black border (matches reference image)
           - ring-black = bezel color
           - rounded-[40px] = matches outer body radius
           - pointer-events-none = doesn't interfere with clicks
-          - This creates the bezel while keeping the center transparent
+          - This creates the substantial bezel while keeping the center transparent
         */}
         <div className="pointer-events-none absolute inset-0 rounded-[40px]
-                        ring-[6px] ring-inset ring-black
+                        ring-[8px] ring-inset ring-black
                         shadow-[inset_0_0_10px_rgba(0,0,0,0.65)]">
 
           {/* 
@@ -97,13 +97,13 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
             - NO ring/border (clean edges)
             - NO gloss overlay (shows parent content directly)
             - overflow-hidden with rounded corners for clean masking
-            - Starts closer to top to minimize bezel thickness
+            - Tighter corner radius to follow bezel curve
             - pointer-events-auto = allows interaction with glass controls
             
             How transparency works:
             1. Parent photo block sits behind entire iPhone
             2. iPhone body is transparent (no bg-black)
-            3. Only the bezel ring is black (ring-[6px])
+            3. Only the bezel ring is black (ring-[8px])
             4. This screen window cuts through showing photo
             5. Children (glass UI controls) float on top of transparent screen
             
@@ -111,9 +111,9 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
           */}
           <div
             className="
-              pointer-events-auto absolute left-[6px] right-[6px]
-              top-[6px] bottom-[6px]
-              rounded-[34px] overflow-hidden
+              pointer-events-auto absolute left-[8px] right-[8px]
+              top-[8px] bottom-[8px]
+              rounded-[32px] overflow-hidden
             "
           >
             {/* 
@@ -121,14 +121,12 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
               - Positioned at top center of screen area
               - left-1/2 -translate-x-1/2 = perfect horizontal centering
               - mt-2 = small margin from top of screen
-              - Width scales: 100px (mobile) → 118px (large screens)
-              - Height scales: 26px (mobile) → 30px (large screens)
+              - Fixed size: 80px width × 24px height (matches reference image)
               - bg-black = creates cutout effect against transparent screen
               - z-10 = floats above any screen content
             */}
             <div className="absolute left-1/2 -translate-x-1/2 top-0 mt-2 z-10
-                            w-[100px] sm:w-[104px] md:w-[110px] lg:w-[118px]
-                            h-[26px] sm:h-[27px] md:h-[28px] lg:h-[30px]
+                            w-[80px] h-[24px]
                             rounded-full bg-black" />
             {/* 
               Children render here (ONLY for glass UI controls - NO background images)
