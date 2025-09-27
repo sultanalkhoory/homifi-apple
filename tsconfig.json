@@ -11,7 +11,10 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["*"]
+    }
   },
   "include": ["app", "components", "lib", "next-env.d.ts"],
   "exclude": ["node_modules"]
