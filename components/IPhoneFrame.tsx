@@ -137,11 +137,15 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
                             h-[26px] sm:h-[27px] md:h-[28px] lg:h-[30px]
                             rounded-full bg-black" />
             {/* 
-              Children render here (optional glass UI controls, or duplicate photo for sync)
-              Examples:
+              Children render here (ONLY for glass UI controls - NO background images)
+              
+              The screen is transparent - the parent photo block shows through naturally.
+              Only add glass UI elements here:
               - Glass buttons (lights toggle, curtains controls)
               - HUD overlays (temperature, doorbell)
-              - Duplicate background photo to ensure visual sync
+              - Status text or indicators
+              
+              DO NOT add background images here - that defeats the transparency!
             */}
             {children}
           </div>
