@@ -2,74 +2,61 @@
 import { motion } from 'framer-motion';
 import { scaleIn } from '@/lib/animations';
 
-/**
- * Apple-accurate CSS iPhone frame
- * - Proper bezel thickness & radii
- * - Correct Dynamic Island size/position
- * - Side buttons (volume, mute, power)
- * - Screen content is clipped to inner rounded rectangle
- * - Responsive widths (mobile → desktop)
- */
-export default function IPhoneFrame({ children }: { children: React.ReactNode }) {
+export default function IPhoneFrame({ children }: { children?: React.ReactNode }) {
   return (
     <motion.div
       variants={scaleIn}
       initial="hidden"
       animate="show"
-      className="relative inline-block
-                 w-[240px] sm:w-[280px] md:w-[320px] lg:w-[380px] xl:w-[420px]"
+      /* Hard cap so it never looks huge on desktop */
+      className="relative inline-block w-[220px] sm:w-[260px] md:w-[300px] lg:w-[320px] xl:w-[340px] max-w-[360px]"
     >
-      {/* Device body */}
-      <div className="relative aspect-[9/19.5] rounded-[40px] bg-black shadow-iphone overflow-hidden">
+      {/* Body */}
+      <div className="relative aspect-[9/19.5] rounded-[40px] bg-black overflow-visible
+                      drop-shadow-[0_14px_40px_rgba(0,0,0,0.35)]">
 
-        {/* Subtle metallic rim/highlight */}
+        {/* Subtle metal rim */}
         <div className="pointer-events-none absolute inset-0 rounded-[40px]
-                        ring-1 ring-white/10 shadow-[inset_0_0_6px_rgba(255,255,255,0.12)]" />
+                        ring-1 ring-white/10 shadow-[inset_0_0_10px_rgba(255,255,255,0.10)]" />
 
-        {/* === Side Buttons === */}
+        {/* === Side buttons (percentage-based so they scale) === */}
+        {/* Mute */}
+        <div className="absolute -left-[3px] top-[12%] w-[4px] h-[7%] rounded-l-[4px]
+                        bg-gradient-to-b from-neutral-700 via-neutral-800 to-neutral-900 shadow-md" />
+        {/* Volume up */}
+        <div className="absolute -left-[3px] top-[22%] w-[4px] h-[9%] rounded-l-[4px]
+                        bg-gradient-to-b from-neutral-700 via-neutral-800 to-neutral-900 shadow-md" />
+        {/* Volume down */}
+        <div className="absolute -left-[3px] top-[33%] w-[4px] h-[9%] rounded-l-[4px]
+                        bg-gradient-to-b from-neutral-700 via-neutral-800 to-neutral-900 shadow-md" />
+        {/* Power */}
+        <div className="absolute -right-[3px] top-[24%] w-[4px] h-[16%] rounded-r-[4px]
+                        bg-gradient-to-b from-neutral-700 via-neutral-800 to-neutral-900 shadow-md" />
 
-        {/* Left side - Volume Up */}
-        <div className="absolute -left-[3px] top-[80px] w-[4px] h-[40px] rounded-l-md bg-neutral-800 shadow-md" />
-        {/* Left side - Volume Down */}
-        <div className="absolute -left-[3px] top-[140px] w-[4px] h-[40px] rounded-l-md bg-neutral-800 shadow-md" />
-        {/* Left side - Mute switch */}
-        <div className="absolute -left-[3px] top-[40px] w-[4px] h-[28px] rounded-l-md bg-neutral-700 shadow-sm" />
-
-        {/* Right side - Power button */}
-        <div className="absolute -right-[3px] top-[100px] w-[4px] h-[70px] rounded-r-md bg-neutral-800 shadow-md" />
-
-        {/* Inner bezel (thin black border around screen) */}
+        {/* Inner bezel (thin black border around the screen) */}
         <div className="absolute inset-[6px] rounded-[34px] bg-black
-                        shadow-[inset_0_0_10px_rgba(0,0,0,0.6)]">
+                        shadow-[inset_0_0_10px_rgba(0,0,0,0.65)]">
 
-          {/* Dynamic Island */}
+          {/* Dynamic Island (accurate size/placement) */}
           <div className="absolute left-1/2 -translate-x-1/2
-                          top-[10px] sm:top-[10px] md:top-[12px]
-                          w-[92px] sm:w-[100px] md:w-[108px] lg:w-[118px]
-                          h-[26px] sm:h-[28px] md:h-[30px] lg:h-[32px]
+                          top-[12px]
+                          w-[100px] sm:w-[104px] md:w-[110px] lg:w-[118px]
+                          h-[30px] sm:h-[30px] md:h-[32px] lg:h-[34px]
                           rounded-full bg-black
                           shadow-[inset_0_-1px_2px_rgba(255,255,255,0.12)]" />
 
-          {/* Screen (clipped area) */}
+          {/* SCREEN WINDOW — TRUE TRANSPARENCY */}
           <div
             className="
-              absolute
-              left-[8px] right-[8px]
-              top-[40px] sm:top-[42px] md:top-[46px] lg:top-[52px]
-              bottom-[14px] sm:bottom-[16px] md:bottom-[18px]
-              rounded-[28px]
-              overflow-hidden bg-black
-              ring-1 ring-white/5
+              absolute left-[9px] right-[9px]
+              top-[50px] sm:top-[52px] md:top-[56px] lg:top-[62px]
+              bottom-[16px] sm:bottom-[16px] md:bottom-[18px]
+              rounded-[28px] overflow-hidden
+              /* IMPORTANT: no bg, no ring, no gloss — so the photo behind shows through */
             "
           >
-            <div className="relative w-full h-full">
-              {/* Your UI / room image */}
-              {children}
-
-              {/* Very subtle screen gloss */}
-              <div className="pointer-events-none absolute inset-0
-                              bg-gradient-to-b from-white/8 via-transparent to-black/10" />
-            </div>
+            {/* Optional: UI inside the phone */}
+            {children}
           </div>
         </div>
       </div>
