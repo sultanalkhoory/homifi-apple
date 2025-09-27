@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export const metadata = {
   title: "HomiFi – Apple‑style Smart Home",
   description: "Seamless Apple‑first smart home integration.",
