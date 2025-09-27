@@ -8,8 +8,7 @@ export default function IPhoneFrame({ children }: { children: React.ReactNode })
       variants={scaleIn}
       initial="hidden"
       animate="show"
-      className="relative inline-block"
-      style={{ width: 320 }}
+      className="relative inline-block w-[240px] sm:w-[280px] md:w-[320px] lg:w-[380px] xl:w-[420px]"
     >
       {/* Outer device frame */}
       <div className="relative aspect-[9/19.5] rounded-[42px] bg-black shadow-iphone overflow-hidden">
