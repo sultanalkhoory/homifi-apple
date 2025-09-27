@@ -40,25 +40,15 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
       className="relative inline-block w-[220px] sm:w-[260px] md:w-[300px] lg:w-[320px] xl:w-[340px] max-w-[360px]"
     >
       {/* 
-        Main iPhone Body
+        Main iPhone Body (TRANSPARENT - shows photo behind)
         - aspect-[9/19.5] = accurate iPhone 15/16 Pro proportions
         - rounded-[40px] = smooth corner radius matching real device
-        - bg-black = device body color
+        - NO bg-black = transparent body to show photo through
         - overflow-visible = allows side buttons to extend outside
         - drop-shadow = creates depth and separation from background
       */}
-      <div className="relative aspect-[9/19.5] rounded-[40px] bg-black overflow-visible
+      <div className="relative aspect-[9/19.5] rounded-[40px] overflow-visible
                       drop-shadow-[0_14px_40px_rgba(0,0,0,0.35)]">
-
-        {/* 
-          Subtle Metal Rim Highlight
-          - Creates a thin light reflection around the edge
-          - ring-1 ring-white/10 = very subtle white border
-          - inset shadow = adds depth to the rim
-          - pointer-events-none = doesn't interfere with clicks
-        */}
-        <div className="pointer-events-none absolute inset-0 rounded-[40px]
-                        ring-1 ring-white/10 shadow-[inset_0_0_10px_rgba(255,255,255,0.10)]" />
 
         {/* 
           ========== SIDE BUTTONS (percentage-based positioning for responsive scaling) ==========
@@ -85,13 +75,16 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
                         bg-gradient-to-b from-neutral-700 via-neutral-800 to-neutral-900 shadow-md" />
 
         {/* 
-          Inner Bezel (thin black border around screen area)
-          - inset-[6px] = creates 6px bezel width around screen
-          - rounded-[34px] = maintains rounded corners (40px outer - 6px = 34px inner)
-          - bg-black = bezel color
-          - inset shadow = adds subtle depth to screen edge
+          BLACK BEZEL FRAME (ring around the edge)
+          - Creates the visible black iPhone frame
+          - ring-[6px] = 6px thick black border
+          - ring-black = bezel color
+          - rounded-[40px] = matches outer body radius
+          - pointer-events-none = doesn't interfere with clicks
+          - This creates the bezel while keeping the center transparent
         */}
-        <div className="absolute inset-[6px] rounded-[34px] bg-black
+        <div className="pointer-events-none absolute inset-0 rounded-[40px]
+                        ring-[6px] ring-inset ring-black
                         shadow-[inset_0_0_10px_rgba(0,0,0,0.65)]">
 
           {/* 
@@ -105,21 +98,22 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
             - NO gloss overlay (shows parent content directly)
             - overflow-hidden with rounded corners for clean masking
             - Starts closer to top to minimize bezel thickness
+            - pointer-events-auto = allows interaction with glass controls
             
             How transparency works:
             1. Parent photo block sits behind entire iPhone
-            2. This screen window has no background
-            3. Photo shows through this "window" naturally
-            4. Children (glass UI controls) float on top of transparent screen
+            2. iPhone body is transparent (no bg-black)
+            3. Only the bezel ring is black (ring-[6px])
+            4. This screen window cuts through showing photo
+            5. Children (glass UI controls) float on top of transparent screen
             
             Result: Same photo visible both outside and "inside" the phone
           */}
           <div
             className="
-              absolute left-[9px] right-[9px]
-              top-[12px] sm:top-[12px] md:top-[14px] lg:top-[16px]
-              bottom-[12px] sm:bottom-[12px] md:bottom-[14px]
-              rounded-[28px] overflow-hidden
+              pointer-events-auto absolute left-[6px] right-[6px]
+              top-[6px] bottom-[6px]
+              rounded-[34px] overflow-hidden
             "
           >
             {/* 
