@@ -95,22 +95,6 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
                         shadow-[inset_0_0_10px_rgba(0,0,0,0.65)]">
 
           {/* 
-            Dynamic Island (notch replacement on iPhone 15/16 Pro)
-            - Positioned at top center with responsive sizing
-            - left-1/2 -translate-x-1/2 = perfect horizontal centering
-            - top-[12px] = distance from top edge
-            - Width scales: 100px (mobile) → 118px (large screens)
-            - Height scales: 30px (mobile) → 34px (large screens)
-            - Subtle inset highlight creates realistic depth
-          */}
-          <div className="absolute left-1/2 -translate-x-1/2
-                          top-[12px]
-                          w-[100px] sm:w-[104px] md:w-[110px] lg:w-[118px]
-                          h-[30px] sm:h-[30px] md:h-[32px] lg:h-[34px]
-                          rounded-full bg-black
-                          shadow-[inset_0_-1px_2px_rgba(255,255,255,0.12)]" />
-
-          {/* 
             ========== SCREEN WINDOW - TRUE TRANSPARENCY ==========
             
             CRITICAL: This is the actual screen area where content displays
@@ -120,7 +104,7 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
             - NO ring/border (clean edges)
             - NO gloss overlay (shows parent content directly)
             - overflow-hidden with rounded corners for clean masking
-            - Positioned below Dynamic Island with responsive spacing
+            - Starts closer to top to minimize bezel thickness
             
             How transparency works:
             1. Parent photo block sits behind entire iPhone
@@ -133,11 +117,25 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
           <div
             className="
               absolute left-[9px] right-[9px]
-              top-[50px] sm:top-[52px] md:top-[56px] lg:top-[62px]
-              bottom-[16px] sm:bottom-[16px] md:bottom-[18px]
+              top-[12px] sm:top-[12px] md:top-[14px] lg:top-[16px]
+              bottom-[12px] sm:bottom-[12px] md:bottom-[14px]
               rounded-[28px] overflow-hidden
             "
           >
+            {/* 
+              Dynamic Island (notch replacement on iPhone 15/16 Pro)
+              - Positioned at top center of screen area
+              - left-1/2 -translate-x-1/2 = perfect horizontal centering
+              - mt-2 = small margin from top of screen
+              - Width scales: 100px (mobile) → 118px (large screens)
+              - Height scales: 26px (mobile) → 30px (large screens)
+              - bg-black = creates cutout effect against transparent screen
+              - z-10 = floats above any screen content
+            */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 mt-2 z-10
+                            w-[100px] sm:w-[104px] md:w-[110px] lg:w-[118px]
+                            h-[26px] sm:h-[27px] md:h-[28px] lg:h-[30px]
+                            rounded-full bg-black" />
             {/* 
               Children render here (optional glass UI controls, or duplicate photo for sync)
               Examples:
