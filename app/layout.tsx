@@ -1,8 +1,8 @@
-import "./globals.css";
+import "./globals.css"; // ensure Tailwind loads
 
 export const metadata = {
-  title: "HomiFi – Apple‑style Smart Home",
-  description: "Seamless Apple‑first smart home integration.",
+  title: "HomiFi – Apple-style Smart Home",
+  description: "Seamless Apple-first smart home integration.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
