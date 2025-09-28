@@ -13,23 +13,35 @@ export default function Page() {
         <div className="mx-auto max-w-6xl px-4 grid md:grid-cols-2 gap-12 items-center">
           
           {/* Left: Text */}
-          <motion.div variants={fadeRise} initial="hidden" animate="show" className="space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs text-gray-600">
-              <span>Seamless Smart Home</span>
+          <motion.div variants={fadeRise} initial="hidden" animate="show" className="space-y-5">
+            {/* Apple HomeKit compatibility indicator replacing the bubble */}
+            <div className="inline-flex items-center gap-2">
+              <svg viewBox="0 0 24 24" className="w-4 h-4 text-gray-600" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+              <span className="text-sm font-medium text-gray-600">
+                Apple HomeKit Compatible
+              </span>
             </div>
+            
+            {/* Enhanced headline with subtle emphasis */}
             <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-black">
-              Your home, perfectly in sync.
+              Your home,{" "}
+              <span className="relative">
+                <span className="relative z-10">perfectly in sync.</span>
+                <span className="absolute bottom-2 left-0 right-0 h-3 bg-gradient-to-r from-gray-50 to-transparent z-0"></span>
+              </span>
             </h1>
+            
             <p className="text-gray-600 text-lg max-w-prose">
               Apple-first integration for lighting, privacy, climate, and security —
               designed to feel invisible until you need it.
             </p>
-            <div className="flex gap-3">
-              <a href="#features" className="rounded-full bg-black text-white px-5 py-3 text-sm">
+            
+            {/* Single, focused CTA */}
+            <div className="pt-2">
+              <a href="#features" className="rounded-full bg-black text-white px-5 py-3 text-sm inline-flex hover:bg-gray-900 transition-colors">
                 Explore Features
-              </a>
-              <a href="#contact" className="rounded-full border px-5 py-3 text-sm">
-                Get Started
               </a>
             </div>
           </motion.div>
