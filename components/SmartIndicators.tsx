@@ -23,7 +23,7 @@ const indicators: SmartIndicator[] = [
     label: 'Smart Lighting',
     detail: 'Adapts to your activity and time of day',
     color: 'rgba(255, 214, 90, 0.85)',
-    popupDirection: 'right'
+    popupDirection: 'bottom'
   },
   {
     id: 'curtains',
