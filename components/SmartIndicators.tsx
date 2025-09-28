@@ -18,7 +18,7 @@ type SmartIndicator = {
 const indicators: SmartIndicator[] = [
   {
     id: 'lights',
-    x: '28%',   // Positioned near the visible lamp
+    x: '24%',   // Positioned near the visible lamp
     y: '38%',
     label: 'Smart Lighting',
     detail: 'Adapts to your activity and time of day',
@@ -36,8 +36,8 @@ const indicators: SmartIndicator[] = [
   },
   {
     id: 'climate',
-    x: '50%',   // Positioned near ceiling AC grill
-    y: '15%',
+    x: '19%',   // Positioned near ceiling AC grill
+    y: '4%',
     label: 'Climate',
     detail: 'Maintains your ideal comfort zone',
     color: 'rgba(110, 190, 255, 0.85)',
@@ -45,8 +45,8 @@ const indicators: SmartIndicator[] = [
   },
   {
     id: 'security',
-    x: '15%',   // Positioned near left side (implied entrance)
-    y: '65%',
+    x: '2%',   // Positioned near left side (implied entrance)
+    y: '52%',
     label: 'Security',
     detail: 'Always protected, never intrusive',
     color: 'rgba(120, 255, 170, 0.85)',
