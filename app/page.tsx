@@ -10,21 +10,10 @@ export default function Page() {
     <main>
       <Header />
       <section className="pt-32 pb-20">
-        <div className="mx-auto max-w-6xl px-4 grid md:grid-cols-2 gap-12 items-center">
+        <div className="mx-auto max-w-6xl px-4 grid md:grid-cols-12 gap-12 items-center">
           
-          {/* Left: Text */}
-          <motion.div variants={fadeRise} initial="hidden" animate="show" className="space-y-5">
-            {/* Apple HomeKit compatibility indicator replacing the bubble */}
-            <div className="inline-flex items-center gap-2">
-              <svg viewBox="0 0 24 24" className="w-4 h-4 text-gray-600" fill="currentColor">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-              </svg>
-              <span className="text-sm font-medium text-gray-600">
-                Apple HomeKit Compatible
-              </span>
-            </div>
-            
-            {/* Enhanced headline with subtle emphasis */}
+          {/* Left: Text - Now taking up less space (5/12) */}
+          <motion.div variants={fadeRise} initial="hidden" animate="show" className="space-y-6 md:col-span-5">
             <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-black">
               Your home,{" "}
               <span className="relative">
@@ -46,9 +35,9 @@ export default function Page() {
             </div>
           </motion.div>
 
-          {/* Right: Room with smart indicators */}
+          {/* Right: Room with smart indicators - Now taking up more space (7/12) */}
           <motion.div 
-            className="relative rounded-3xl overflow-hidden shadow-lg"
+            className="relative rounded-3xl overflow-hidden shadow-lg md:col-span-7"
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
