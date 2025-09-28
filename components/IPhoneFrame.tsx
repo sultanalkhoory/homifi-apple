@@ -1,93 +1,156 @@
 'use client';
+
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { scaleIn } from '@/lib/animations';
+import IPhoneFrame from '@/components/IPhoneFrame';
+import { fadeRise, scaleIn } from '@/lib/animations';
 
 /**
- * iPhone Frame Component - Complete CSS Implementation
- * 
- * Features:
- * - Accurate iPhone 15/16 Pro proportions (9:19.5 aspect ratio)
- * - Black bezel with proper thickness
- * - Dynamic Island cutout at top
- * - Status bar with time, signal, wifi, battery icons
- * - Truly transparent screen area showing parent content
- * - Responsive sizing (180px - 300px max)
- * 
- * Usage:
- * Place optional glass UI controls (toggles, labels) as children
+ * Perfect Light Section
+ * First feature section demonstrating lighting control
  */
 
-export default function IPhoneFrame({ children }: { children?: React.ReactNode }) {
+export default function PerfectLight() {
+  const [lightsOn, setLightsOn] = useState(true);
+
+  const handleToggle = () => {
+    setLightsOn(!lightsOn);
+  };
+
   return (
-    <motion.div
-      variants={scaleIn}
-      initial="hidden"
-      animate="show"
-      className="relative inline-block w-[180px] sm:w-[220px] md:w-[260px] lg:w-[280px] max-w-[300px]"
-    >
-      {/* Main iPhone Body - transparent, only ring creates bezel */}
-      <div className="relative aspect-[9/19.5] rounded-[40px] overflow-visible
-                      drop-shadow-[0_14px_40px_rgba(0,0,0,0.35)]">
-
-        {/* Black bezel ring - creates frame with transparent center */}
-        <div className="absolute inset-0 rounded-[40px] ring-[8px] ring-inset ring-black 
-                        shadow-[inset_0_0_10px_rgba(0,0,0,0.65)]">
-
-          {/* Screen area - transparent center inside bezel */}
-          <div className="absolute inset-[8px] rounded-[32px] overflow-hidden">
-
-            {/* Status bar at top */}
-            <div className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 pt-3 pb-2">
-              {/* Time */}
-              <span className="text-white text-[13px] font-semibold tracking-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
-                9:41
-              </span>
+    <section id="perfect-light" className="py-20 md:py-28 bg-gray-50">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="grid md:grid-cols-12 gap-12 items-center">
+          
+          {/* Left column - Text + Toggle */}
+          <motion.div
+            variants={fadeRise}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-100px" }}
+            className="md:col-span-5 space-y-6"
+          >
+            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-black">
+              Perfect Light
+            </h2>
+            
+            <p className="text-xl md:text-2xl text-gray-700 leading-relaxed">
+              Every room, every moment.<br />
+              Exactly as you want it.
+            </p>
+            
+            <p className="text-gray-600 text-lg">
+              Control your lighting with intuitive controls and automation. 
+              Set the perfect ambiance for any moment.
+            </p>
+            
+            {/* Redesigned iOS-style toggle */}
+            <div className="pt-4">
+              <button 
+                onClick={handleToggle}
+                className="relative inline-flex h-[32px] w-[52px] items-center rounded-full
+                  transition-colors duration-200 ease-in-out
+                  focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                style={{
+                  backgroundColor: lightsOn ? '#34C759' : '#8E8E93'
+                }}
+                aria-pressed={lightsOn}
+                aria-label="Toggle lights"
+              >
+                <span
+                  className={`inline-block h-[28px] w-[28px] transform rounded-full 
+                    bg-white shadow-lg transition-transform duration-200 ease-in-out
+                    ${lightsOn ? 'translate-x-[22px]' : 'translate-x-[2px]'}`}
+                />
+              </button>
               
-              {/* System icons */}
-              <div className="flex items-center gap-1.5">
-                {/* Cellular signal */}
-                <div className="flex gap-[1px] opacity-90">
-                  {[4, 6, 8, 10].map((height, i) => (
-                    <div 
-                      key={i} 
-                      style={{ height: `${height}px` }} 
-                      className="w-[2px] bg-white rounded-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
-                    />
-                  ))}
-                </div>
-                
-                {/* WiFi */}
-                <svg 
-                  viewBox="0 0 20 20" 
-                  className="w-[15px] h-[15px] fill-white opacity-90"
-                  style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}
-                >
-                  <path d="M10 16.5a1.5 1.5 0 1 0 .001 3.001A1.5 1.5 0 0 0 10 16.5Z" />
-                  <path d="M5.3 13.8a6.65 6.65 0 0 1 9.4 0l1.2-1.2a8.35 8.35 0 0 0-11.8 0l1.2 1.2Z" />
-                  <path d="M2.6 11.1a10.9 10.9 0 0 1 14.8 0l1.2-1.2a12.6 12.6 0 0 0-17.2 0l1.2 1.2Z" />
-                </svg>
-                
-                {/* Battery */}
-                <div className="flex items-center" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}>
-                  <div className="w-5 h-2.5 border border-white rounded-[3px] relative opacity-90">
-                    <div className="absolute left-[1px] top-[1px] bottom-[1px] right-[2px] bg-white rounded-[2px]" />
+              <p className="mt-3 text-sm text-gray-500">
+                {lightsOn ? 'Lights On' : 'Lights Off'}
+              </p>
+            </div>
+            
+            <div className="pt-4">
+              <a 
+                href="#" 
+                className="inline-flex rounded-full bg-black text-white px-5 py-3 text-sm 
+                  hover:bg-gray-900 transition-colors"
+              >
+                Learn More
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Right column - Room photo + iPhone */}
+          <motion.div
+            variants={scaleIn}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-100px" }}
+            className="md:col-span-7"
+          >
+            {/* Photo container with proper size */}
+            <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden 
+              shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+              
+              {/* Lights on image */}
+              <img
+                src="/Curtains-Open-Lights-On.png"
+                alt="Room with lights on"
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity 
+                  duration-500 ${lightsOn ? 'opacity-100' : 'opacity-0'}`}
+              />
+              
+              {/* Lights off image */}
+              <img
+                src="/Curtains-Closed-Lights-Off.png"
+                alt="Room with lights off"
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity 
+                  duration-500 ${lightsOn ? 'opacity-0' : 'opacity-100'}`}
+              />
+
+              {/* Subtle glow behind phone */}
+              <div className="pointer-events-none absolute right-0 bottom-0 w-1/2 h-1/2
+                bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.25),transparent_70%)]" />
+
+              {/* iPhone overlay - NO rotation, proper positioning */}
+              <div className="absolute bottom-8 right-8">
+                <IPhoneFrame>
+                  {/* Room name label */}
+                  <div className="absolute top-12 left-0 right-0 text-center z-20">
+                    <span className="text-white text-[9px] font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
+                      Living Room
+                    </span>
                   </div>
-                  <div className="w-[2px] h-2 bg-white ml-[1px] rounded-[1px] opacity-90" />
-                </div>
+
+                  {/* Phone toggle - smaller iOS style */}
+                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1">
+                    <button 
+                      onClick={handleToggle}
+                      className="relative inline-flex h-[24px] w-[40px] items-center rounded-full
+                        transition-colors duration-200 ease-in-out"
+                      style={{
+                        backgroundColor: lightsOn ? 'rgba(52, 199, 89, 0.95)' : 'rgba(142, 142, 147, 0.95)'
+                      }}
+                      aria-pressed={lightsOn}
+                      aria-label="Toggle lights on phone"
+                    >
+                      <span
+                        className={`inline-block h-[20px] w-[20px] transform rounded-full 
+                          bg-white shadow transition-transform duration-200 ease-in-out
+                          ${lightsOn ? 'translate-x-[18px]' : 'translate-x-[2px]'}`}
+                      />
+                    </button>
+                    
+                    <p className="text-[8px] text-white/90 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
+                      {lightsOn ? 'On' : 'Off'}
+                    </p>
+                  </div>
+                </IPhoneFrame>
               </div>
             </div>
-
-            {/* Dynamic Island */}
-            <div className="absolute left-1/2 -translate-x-1/2 top-[6px] z-30
-                            w-[80px] h-[24px] rounded-full bg-black" />
-
-            {/* Transparent content area - children render here */}
-            <div className="absolute inset-0 z-10">
-              {children}
-            </div>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </motion.div>
+    </section>
   );
 }
