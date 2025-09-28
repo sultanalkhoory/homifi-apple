@@ -7,17 +7,19 @@ import { fadeRise, scaleIn } from '@/lib/animations';
 export default function PerfectLight() {
   // Start with lights OFF until user scrolls to section
   const [lightsOn, setLightsOn] = useState(false);
+  const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
   const sectionRef = useRef(null);
 
-  // Auto-trigger lights on when section comes into view
+  // Auto-trigger lights on when section comes into view (only once)
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !lightsOn) {
+          if (entry.isIntersecting && !hasAutoTriggered) {
             // Delay the lights turning on for better effect
             setTimeout(() => {
               setLightsOn(true);
+              setHasAutoTriggered(true); // Prevent future auto-triggers
             }, 800); // 800ms delay after section enters view
           }
         });
@@ -33,7 +35,7 @@ export default function PerfectLight() {
     }
 
     return () => observer.disconnect();
-  }, [lightsOn]); // Only trigger if lights are still off
+  }, [hasAutoTriggered]); // Only check hasAutoTriggered, not lightsOn
 
   const handleToggle = () => {
     setLightsOn(!lightsOn);
