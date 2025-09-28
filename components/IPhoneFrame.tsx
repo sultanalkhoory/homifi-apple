@@ -31,21 +31,31 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
       className="relative inline-block w-[180px] sm:w-[220px] md:w-[260px] lg:w-[280px] max-w-[300px]"
     >
       {/* 
-        Main iPhone Body
+        Main iPhone Body Structure
         - aspect-[9/19.5] = real iPhone proportions
-        - bg-black = solid black body
+        - NO bg-black = body must be transparent
+        - Only the RING creates the bezel frame
         - rounded-[40px] = iPhone corner radius
         - drop-shadow = depth and separation
       */}
-      <div className="relative aspect-[9/19.5] rounded-[40px] bg-black overflow-visible
+      <div className="relative aspect-[9/19.5] rounded-[40px] overflow-visible
                       drop-shadow-[0_14px_40px_rgba(0,0,0,0.35)]">
 
         {/* 
-          ========== SCREEN AREA (TRANSPARENT) ==========
-          This is the cutout that shows the parent photo through
-          8px inset creates the bezel thickness
+          ========== BLACK BEZEL RING ==========
+          Creates the visible iPhone frame as a border only
+          The center remains transparent so room shows through
         */}
-        <div className="absolute inset-[8px] rounded-[32px] overflow-hidden">
+        <div className="absolute inset-0 rounded-[40px] ring-[8px] ring-inset ring-black 
+                        shadow-[inset_0_0_10px_rgba(0,0,0,0.65)]">
+
+          {/* 
+            ========== SCREEN AREA (TRANSPARENT CENTER) ==========
+            This is the cutout inside the bezel ring
+            8px inset matches the ring thickness
+            NO background - fully transparent
+          */}
+          <div className="absolute inset-[8px] rounded-[32px] overflow-hidden">
 
           {/* 
             ========== STATUS BAR ==========
