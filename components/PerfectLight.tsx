@@ -83,10 +83,6 @@ export default function PerfectLight() {
                   duration-500 ${lightsOn ? 'opacity-0' : 'opacity-100'}`}
               />
 
-              {/* Subtle glow behind phone */}
-              <div className="pointer-events-none absolute right-0 bottom-0 w-1/2 h-1/2
-                bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.25),transparent_70%)]" />
-
               {/* iPhone overlay - NO rotation, proper positioning */}
               <div className="absolute bottom-8 right-8">
                 <IPhoneFrame>
