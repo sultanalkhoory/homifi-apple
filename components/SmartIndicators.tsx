@@ -105,11 +105,18 @@ export default function SmartIndicators() {
   
   // Get popup position based on direction and device type
   const getPopupPosition = (direction: string, indicatorId: string) => {
-    // Override direction for climate indicator on mobile
+    // Special case for climate indicator on mobile - custom bottom-right position
     if (isMobile && indicatorId === 'climate') {
-      direction = 'right'; // Use right direction on mobile to avoid edge clipping
+      // Custom position for bottom-right placement
+      return { 
+        top: '100%', 
+        left: '0%', 
+        translateX: '0px', 
+        translateY: '8px'
+      };
     }
     
+    // Standard positions for all other cases
     switch (direction) {
       case 'left': return { right: '100%', top: '50%', translateX: '-8px', translateY: '-50%' };
       case 'right': return { left: '100%', top: '50%', translateX: '8px', translateY: '-50%' };
@@ -134,7 +141,12 @@ export default function SmartIndicators() {
           const popupPosition = getPopupPosition(indicator.popupDirection, indicator.id);
           
           // Determine the actual popup direction for animation transforms
-          const effectiveDirection = isMobile && indicator.id === 'climate' ? 'right' : indicator.popupDirection;
+          let effectiveDirection = indicator.popupDirection;
+          
+          // Special case for climate on mobile - custom animation direction
+          if (isMobile && indicator.id === 'climate') {
+            effectiveDirection = 'bottom-right';
+          }
           
           return (
             <div
@@ -204,7 +216,7 @@ export default function SmartIndicators() {
                       ...popupPosition,
                       transform: `translate(${popupPosition.translateX || 0}, ${popupPosition.translateY || 0})`,
                       transformOrigin: effectiveDirection === 'left' ? 'right center' : 
-                                       effectiveDirection === 'right' ? 'left center' :
+                                       (effectiveDirection === 'right' || effectiveDirection === 'bottom-right') ? 'left center' :
                                        effectiveDirection === 'top' ? 'center bottom' : 
                                        'center top'
                     }}
@@ -212,9 +224,9 @@ export default function SmartIndicators() {
                       opacity: 0, 
                       scale: 0.94, 
                       filter: 'blur(2px)',
-                      y: effectiveDirection === 'bottom' ? -5 : 
+                      y: (effectiveDirection === 'bottom' || effectiveDirection === 'bottom-right') ? -5 : 
                          effectiveDirection === 'top' ? 5 : 0,
-                      x: effectiveDirection === 'right' ? -5 : 
+                      x: (effectiveDirection === 'right' || effectiveDirection === 'bottom-right') ? -5 : 
                          effectiveDirection === 'left' ? 5 : 0, 
                     }}
                     animate={{ 
