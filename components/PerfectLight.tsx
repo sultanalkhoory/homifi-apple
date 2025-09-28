@@ -67,9 +67,9 @@ export default function PerfectLight() {
             <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden 
               shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
               
-              {/* Lights on image */}
+              {/* Lights on image - should show curtains closed with lights on */}
               <img
-                src="/Curtains-Open-Lights-On.png"
+                src="/Curtains-Closed-Lights-On.png"
                 alt="Room with lights on"
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity 
                   duration-500 ${lightsOn ? 'opacity-100' : 'opacity-0'}`}
@@ -104,35 +104,24 @@ export default function PerfectLight() {
                     </span>
                   </div>
 
-                  {/* Liquid glass toggle - bottom */}
-                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
+                  {/* Apple-style pill button - bottom */}
+                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
                     <button 
                       onClick={handleToggle}
-                      className="relative inline-flex h-[28px] w-[46px] items-center rounded-full
-                        backdrop-blur-md border border-white/20 shadow-lg
-                        transition-all duration-200 ease-in-out"
+                      className="px-4 py-2 rounded-full backdrop-blur-md border border-white/20 
+                        shadow-lg transition-all duration-200 ease-in-out"
                       style={{
                         backgroundColor: lightsOn 
-                          ? 'rgba(52, 199, 89, 0.3)' 
-                          : 'rgba(255, 255, 255, 0.15)',
-                        boxShadow: lightsOn 
-                          ? '0 0 20px rgba(52, 199, 89, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2)' 
-                          : '0 4px 12px rgba(0, 0, 0, 0.2)'
+                          ? 'rgba(52, 199, 89, 0.25)' 
+                          : 'rgba(255, 255, 255, 0.15)'
                       }}
                       aria-pressed={lightsOn}
-                      aria-label="Toggle lights on phone"
+                      aria-label="Toggle lights"
                     >
-                      <span
-                        className={`inline-block h-[22px] w-[22px] transform rounded-full 
-                          bg-white/95 backdrop-blur-sm shadow-md
-                          transition-transform duration-200 ease-in-out
-                          ${lightsOn ? 'translate-x-[20px]' : 'translate-x-[3px]'}`}
-                      />
+                      <span className="text-white text-[8px] font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
+                        {lightsOn ? 'Lights On' : 'Lights Off'}
+                      </span>
                     </button>
-                    
-                    <p className="text-[7px] text-white/90 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
-                      {lightsOn ? 'On' : 'Off'}
-                    </p>
                   </div>
                 </IPhoneFrame>
               </div>
