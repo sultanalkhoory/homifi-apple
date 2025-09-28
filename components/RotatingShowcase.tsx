@@ -13,7 +13,7 @@ import {
 
 type Item = {
   id: string;
-  icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; // ✅ FIXED
   label: string;
   status: string;
   glow: string; // tailwind radial bg class
@@ -59,11 +59,14 @@ export default function RotatingShowcase() {
   }, []);
 
   const It = ITEMS[idx];
+  const Icon = It.icon;
 
   return (
     <div className="relative w-full h-full grid place-items-center">
-      {/* ambient glow */}
-      <div className={`absolute -z-10 w-[75%] max-w-[260px] aspect-square rounded-full blur-2xl ${It.glow}`} />
+      {/* Ambient glow */}
+      <div
+        className={`absolute -z-10 w-[75%] max-w-[260px] aspect-square rounded-full blur-2xl ${It.glow}`}
+      />
       <AnimatePresence mode="wait">
         <motion.div
           key={It.id}
@@ -75,7 +78,7 @@ export default function RotatingShowcase() {
           aria-live="polite"
         >
           <div className="rounded-3xl px-6 py-7 backdrop-blur-md bg-white/14 border border-white/25 shadow-[0_10px_35px_rgba(0,0,0,0.25)] text-white/95 flex flex-col items-center">
-            <It.icon className="w-10 h-10 mb-3" />
+            <Icon className="w-10 h-10 mb-3" />
             <div className="text-lg font-semibold">{It.label}</div>
             <div className="text-sm text-white/80 mt-1">{It.status}</div>
           </div>
