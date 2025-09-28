@@ -104,7 +104,7 @@ export default function PerfectLight() {
                       aria-pressed={lightsOn}
                       aria-label="Toggle lights"
                     >
-                      <span className="text-white text-[8px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
+                      <span className="text-white text-[8px] font-medium">
                         {lightsOn ? 'Lights On' : 'Lights Off'}
                       </span>
                     </button>
