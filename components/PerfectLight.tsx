@@ -5,11 +5,6 @@ import { motion } from 'framer-motion';
 import IPhoneFrame from '@/components/IPhoneFrame';
 import { fadeRise, scaleIn } from '@/lib/animations';
 
-/**
- * Perfect Light Section
- * First feature section demonstrating lighting control
- */
-
 export default function PerfectLight() {
   const [lightsOn, setLightsOn] = useState(true);
 
@@ -22,7 +17,7 @@ export default function PerfectLight() {
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid md:grid-cols-12 gap-12 items-center">
           
-          {/* Left column - Text + Toggle */}
+          {/* Left column - Text only */}
           <motion.div
             variants={fadeRise}
             initial="hidden"
@@ -55,19 +50,18 @@ export default function PerfectLight() {
             </div>
           </motion.div>
 
-          {/* Right column - Room photo + iPhone */}
+          {/* Right column - Hybrid approach */}
           <motion.div
             variants={scaleIn}
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, margin: "-100px" }}
-            className="md:col-span-7"
+            className="md:col-span-7 space-y-6"
           >
-            {/* Photo container with proper size */}
-            <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden 
-              shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+            {/* Main photo block with iPhone overlay */}
+            <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden">
               
-              {/* Lights on image - should show curtains closed with lights on */}
+              {/* Lights on image */}
               <img
                 src="/Curtains-Closed-Lights-On.png"
                 alt="Room with lights on"
@@ -83,17 +77,31 @@ export default function PerfectLight() {
                   duration-500 ${lightsOn ? 'opacity-0' : 'opacity-100'}`}
               />
 
-              {/* Subtle glow behind phone */}
-              <div className="pointer-events-none absolute right-0 bottom-0 w-1/2 h-1/2
-                bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.25),transparent_70%)]" />
-
-              {/* iPhone overlay - NO rotation, proper positioning */}
+              {/* iPhone overlay */}
               <div className="absolute bottom-8 right-8">
                 <IPhoneFrame>
-                  {/* Simplified interface - remove the heading/subtitle */}
-                  
-                  {/* Action button - same liquid glass style for both states */}
-                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+                  {/* Top status pill */}
+                  <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
+                    <div className="px-3 py-1 rounded-full backdrop-blur-sm border border-white/20"
+                         style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)' }}>
+                      <span className="text-white text-[8px] font-medium">
+                        Living Room
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Large heading in center */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-20">
+                    <h3 className="text-white text-[16px] font-semibold mb-1">
+                      {lightsOn ? 'Lights On' : 'Lights Off'}
+                    </h3>
+                    <p className="text-white/80 text-[9px] font-normal">
+                      {lightsOn ? 'Perfect ambiance set' : 'Ready to illuminate'}
+                    </p>
+                  </div>
+
+                  {/* Action button at bottom */}
+                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
                     <button 
                       onClick={handleToggle}
                       className="px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 
@@ -105,11 +113,31 @@ export default function PerfectLight() {
                       aria-label="Toggle lights"
                     >
                       <span className="text-white text-[8px] font-medium">
-                        {lightsOn ? 'Lights On' : 'Lights Off'}
+                        {lightsOn ? 'Turn Off' : 'Turn On'}
                       </span>
                     </button>
                   </div>
                 </IPhoneFrame>
+              </div>
+            </div>
+
+            {/* Side-by-side comparison images */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center space-y-3">
+                <img
+                  src="/Curtains-Closed-Lights-Off.png"
+                  alt="Room with lights off"
+                  className="w-full aspect-[16/10] object-cover rounded-xl"
+                />
+                <p className="text-sm text-gray-500">Lights Off</p>
+              </div>
+              <div className="text-center space-y-3">
+                <img
+                  src="/Curtains-Closed-Lights-On.png"
+                  alt="Room with lights on"
+                  className="w-full aspect-[16/10] object-cover rounded-xl"
+                />
+                <p className="text-sm text-gray-500">Lights On</p>
               </div>
             </div>
           </motion.div>
