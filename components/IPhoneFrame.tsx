@@ -23,107 +23,68 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
       variants={scaleIn}
       initial="hidden"
       animate="show"
-      /**
-       * Responsive sizing
-       * Mobile: 180px → Desktop: 280px (max 300px)
-       * Ensures iPhone never overwhelms the layout
-       */
       className="relative inline-block w-[180px] sm:w-[220px] md:w-[260px] lg:w-[280px] max-w-[300px]"
     >
-      {/* 
-        Main iPhone Body Structure
-        - aspect-[9/19.5] = real iPhone proportions
-        - NO bg-black = body must be transparent
-        - Only the RING creates the bezel frame
-        - rounded-[40px] = iPhone corner radius
-        - drop-shadow = depth and separation
-      */}
+      {/* Main iPhone Body - transparent, only ring creates bezel */}
       <div className="relative aspect-[9/19.5] rounded-[40px] overflow-visible
                       drop-shadow-[0_14px_40px_rgba(0,0,0,0.35)]">
 
-        {/* 
-          ========== BLACK BEZEL RING ==========
-          Creates the visible iPhone frame as a border only
-          The center remains transparent so room shows through
-        */}
+        {/* Black bezel ring - creates frame with transparent center */}
         <div className="absolute inset-0 rounded-[40px] ring-[8px] ring-inset ring-black 
                         shadow-[inset_0_0_10px_rgba(0,0,0,0.65)]">
 
-          {/* 
-            ========== SCREEN AREA (TRANSPARENT CENTER) ==========
-            This is the cutout inside the bezel ring
-            8px inset matches the ring thickness
-            NO background - fully transparent
-          */}
+          {/* Screen area - transparent center inside bezel */}
           <div className="absolute inset-[8px] rounded-[32px] overflow-hidden">
 
-          {/* 
-            ========== STATUS BAR ==========
-            Positioned at very top of screen
-            Contains time (left) and system icons (right)
-            White text/icons with drop shadow for legibility
-          */}
-          <div className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 pt-3 pb-2">
-            {/* Time (left side) */}
-            <span className="text-white text-[13px] font-semibold tracking-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
-              9:41
-            </span>
-            
-            {/* System icons (right side) */}
-            <div className="flex items-center gap-1.5">
-              {/* Cellular signal bars */}
-              <div className="flex gap-[1px] opacity-90">
-                {[4, 6, 8, 10].map((height, i) => (
-                  <div 
-                    key={i} 
-                    style={{ height: `${height}px` }} 
-                    className="w-[2px] bg-white rounded-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
-                  />
-                ))}
-              </div>
+            {/* Status bar at top */}
+            <div className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 pt-3 pb-2">
+              {/* Time */}
+              <span className="text-white text-[13px] font-semibold tracking-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
+                9:41
+              </span>
               
-              {/* WiFi icon */}
-              <svg 
-                viewBox="0 0 20 20" 
-                className="w-[15px] h-[15px] fill-white opacity-90"
-                style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}
-              >
-                <path d="M10 16.5a1.5 1.5 0 1 0 .001 3.001A1.5 1.5 0 0 0 10 16.5Z" />
-                <path d="M5.3 13.8a6.65 6.65 0 0 1 9.4 0l1.2-1.2a8.35 8.35 0 0 0-11.8 0l1.2 1.2Z" />
-                <path d="M2.6 11.1a10.9 10.9 0 0 1 14.8 0l1.2-1.2a12.6 12.6 0 0 0-17.2 0l1.2 1.2Z" />
-              </svg>
-              
-              {/* Battery icon */}
-              <div className="flex items-center" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}>
-                {/* Battery body */}
-                <div className="w-5 h-2.5 border border-white rounded-[3px] relative opacity-90">
-                  {/* Battery fill (full charge) */}
-                  <div className="absolute left-[1px] top-[1px] bottom-[1px] right-[2px] bg-white rounded-[2px]" />
+              {/* System icons */}
+              <div className="flex items-center gap-1.5">
+                {/* Cellular signal */}
+                <div className="flex gap-[1px] opacity-90">
+                  {[4, 6, 8, 10].map((height, i) => (
+                    <div 
+                      key={i} 
+                      style={{ height: `${height}px` }} 
+                      className="w-[2px] bg-white rounded-sm drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
+                    />
+                  ))}
                 </div>
-                {/* Battery tip */}
-                <div className="w-[2px] h-2 bg-white ml-[1px] rounded-[1px] opacity-90" />
+                
+                {/* WiFi */}
+                <svg 
+                  viewBox="0 0 20 20" 
+                  className="w-[15px] h-[15px] fill-white opacity-90"
+                  style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}
+                >
+                  <path d="M10 16.5a1.5 1.5 0 1 0 .001 3.001A1.5 1.5 0 0 0 10 16.5Z" />
+                  <path d="M5.3 13.8a6.65 6.65 0 0 1 9.4 0l1.2-1.2a8.35 8.35 0 0 0-11.8 0l1.2 1.2Z" />
+                  <path d="M2.6 11.1a10.9 10.9 0 0 1 14.8 0l1.2-1.2a12.6 12.6 0 0 0-17.2 0l1.2 1.2Z" />
+                </svg>
+                
+                {/* Battery */}
+                <div className="flex items-center" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))' }}>
+                  <div className="w-5 h-2.5 border border-white rounded-[3px] relative opacity-90">
+                    <div className="absolute left-[1px] top-[1px] bottom-[1px] right-[2px] bg-white rounded-[2px]" />
+                  </div>
+                  <div className="w-[2px] h-2 bg-white ml-[1px] rounded-[1px] opacity-90" />
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* 
-            ========== DYNAMIC ISLAND ==========
-            Black pill-shaped cutout at top center
-            Positioned below status bar
-          */}
-          <div className="absolute left-1/2 -translate-x-1/2 top-[6px] z-30
-                          w-[80px] h-[24px] rounded-full bg-black" />
+            {/* Dynamic Island */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-[6px] z-30
+                            w-[80px] h-[24px] rounded-full bg-black" />
 
-          {/* 
-            ========== TRANSPARENT CONTENT AREA ==========
-            This is where the parent photo shows through
-            Children (glass UI controls) render here on top of transparency
-            
-            Important: NO background color or layers here
-            The room photo behind the iPhone shows through naturally
-          */}
-          <div className="absolute inset-0 z-10">
-            {children}
+            {/* Transparent content area - children render here */}
+            <div className="absolute inset-0 z-10">
+              {children}
+            </div>
           </div>
         </div>
       </div>
