@@ -1,6 +1,6 @@
 'use client';
 import Header from "@/components/Header";
-import WorksWith from "@/components/WorksWith"; // Import the new WorksWith component
+import Footer from "@/components/Footer"; // Import the new Footer component
 import { motion } from "framer-motion";
 import { fadeRise } from "@/lib/animations";
 import SmartIndicators from "@/components/SmartIndicators";
@@ -53,7 +53,10 @@ export default function Page() {
           </motion.div>
         </div>
       </section>
-      <WorksWith />
+      {/* Add more content sections here */}
+      
+      {/* Footer at the end of the page */}
+      <Footer />
     </main>
   );
 }
