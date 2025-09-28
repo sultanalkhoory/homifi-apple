@@ -5,7 +5,8 @@ import { motion } from 'framer-motion';
 import { fadeRise, scaleIn } from '@/lib/animations';
 
 export default function PerfectLight() {
-  const [lightsOn, setLightsOn] = useState(true);
+  // Start with lights OFF until user scrolls to section
+  const [lightsOn, setLightsOn] = useState(false);
 
   const handleToggle = () => {
     setLightsOn(!lightsOn);
@@ -38,14 +39,26 @@ export default function PerfectLight() {
               Set the perfect ambiance for any moment.
             </p>
             
-            {/* Interactive Lights Button */}
+            {/* Interactive Liquid Glass Button */}
             <div className="pt-4">
               <button 
                 onClick={handleToggle}
-                className="inline-flex rounded-full bg-black text-white px-5 py-3 text-sm 
-                  hover:bg-gray-900 transition-colors"
+                className="group relative inline-flex rounded-full px-6 py-3 text-sm font-medium
+                  backdrop-blur-md bg-white/20 border border-gray-200/50 
+                  shadow-lg shadow-black/5
+                  transition-all duration-300 ease-out
+                  hover:bg-white/30 hover:border-gray-300/60 hover:shadow-xl hover:shadow-black/10
+                  hover:scale-[1.02] hover:-translate-y-0.5
+                  active:scale-[0.98] active:translate-y-0
+                  text-gray-800"
               >
-                {lightsOn ? 'Lights On' : 'Lights Off'}
+                <span className="relative z-10 transition-all duration-200 group-active:scale-95">
+                  {lightsOn ? 'Lights On' : 'Lights Off'}
+                </span>
+                
+                {/* Subtle inner glow on hover */}
+                <div className="absolute inset-0 rounded-full bg-white/10 opacity-0 
+                  transition-opacity duration-300 group-hover:opacity-100" />
               </button>
             </div>
           </motion.div>
