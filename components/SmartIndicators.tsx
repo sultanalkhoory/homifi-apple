@@ -141,12 +141,11 @@ export default function SmartIndicators() {
           const popupPosition = getPopupPosition(indicator.popupDirection, indicator.id);
           
           // Determine the actual popup direction for animation transforms
-          let effectiveDirection = indicator.popupDirection;
+          // Keep within the allowed types: 'left', 'right', 'top', 'bottom'
+          const effectiveDirection = isMobile && indicator.id === 'climate' ? 'bottom' : indicator.popupDirection;
           
-          // Special case for climate on mobile - custom animation direction
-          if (isMobile && indicator.id === 'climate') {
-            effectiveDirection = 'bottom-right';
-          }
+          // Special flag for the climate-on-mobile case
+          const isClimateOnMobile = isMobile && indicator.id === 'climate';
           
           return (
             <div
@@ -216,18 +215,20 @@ export default function SmartIndicators() {
                       ...popupPosition,
                       transform: `translate(${popupPosition.translateX || 0}, ${popupPosition.translateY || 0})`,
                       transformOrigin: effectiveDirection === 'left' ? 'right center' : 
-                                       (effectiveDirection === 'right' || effectiveDirection === 'bottom-right') ? 'left center' :
+                                       effectiveDirection === 'right' ? 'left center' :
                                        effectiveDirection === 'top' ? 'center bottom' : 
-                                       'center top'
+                                       isClimateOnMobile ? 'left top' : 'center top' // Special origin for climate on mobile
                     }}
                     initial={{ 
                       opacity: 0, 
                       scale: 0.94, 
                       filter: 'blur(2px)',
-                      y: (effectiveDirection === 'bottom' || effectiveDirection === 'bottom-right') ? -5 : 
+                      // For climate on mobile, add a slight horizontal movement too
+                      y: effectiveDirection === 'bottom' ? -5 : 
                          effectiveDirection === 'top' ? 5 : 0,
-                      x: (effectiveDirection === 'right' || effectiveDirection === 'bottom-right') ? -5 : 
-                         effectiveDirection === 'left' ? 5 : 0, 
+                      x: effectiveDirection === 'right' ? -5 : 
+                         effectiveDirection === 'left' ? 5 : 
+                         isClimateOnMobile ? -3 : 0, // Slight x movement for climate on mobile
                     }}
                     animate={{ 
                       opacity: 1, 
