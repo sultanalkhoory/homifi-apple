@@ -90,26 +90,22 @@ export default function PerfectLight() {
               {/* iPhone overlay - NO rotation, proper positioning */}
               <div className="absolute bottom-8 right-8">
                 <IPhoneFrame>
-                  {/* Room name label - top */}
-                  <div className="absolute top-12 left-0 right-0 text-center z-20">
-                    <span className="text-white text-[9px] font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
-                      Living Room
-                    </span>
+                  {/* Main interface - prominent heading and subtitle */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-20 w-full px-4">
+                    <h3 className="text-white text-[14px] font-semibold mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                      {lightsOn ? 'Lights On' : 'Lights Off'}
+                    </h3>
+                    <p className="text-white/80 text-[9px] font-normal drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                      {lightsOn ? 'Perfect ambiance, instantly' : 'Ready for relaxation'}
+                    </p>
                   </div>
 
-                  {/* Status text - middle area */}
-                  <div className="absolute top-[45%] left-0 right-0 text-center z-20">
-                    <span className="text-white/80 text-[8px] font-normal drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
-                      2 lights connected
-                    </span>
-                  </div>
-
-                  {/* Apple-style pill button - bottom */}
-                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
+                  {/* Simple action button at bottom */}
+                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
                     <button 
                       onClick={handleToggle}
-                      className="px-4 py-2 rounded-full backdrop-blur-md border border-white/20 
-                        shadow-lg transition-all duration-200 ease-in-out"
+                      className="px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 
+                        transition-all duration-200 ease-in-out"
                       style={{
                         backgroundColor: lightsOn 
                           ? 'rgba(52, 199, 89, 0.25)' 
@@ -119,7 +115,7 @@ export default function PerfectLight() {
                       aria-label="Toggle lights"
                     >
                       <span className="text-white text-[8px] font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
-                        {lightsOn ? 'Lights On' : 'Lights Off'}
+                        {lightsOn ? 'Turn Off' : 'Turn On'}
                       </span>
                     </button>
                   </div>
