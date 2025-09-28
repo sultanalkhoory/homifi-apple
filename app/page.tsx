@@ -1,37 +1,11 @@
 'use client';
-import { useState } from 'react';
 import Header from "@/components/Header";
 import FeatureStrip from "@/components/FeatureStrip";
 import { motion } from "framer-motion";
 import { fadeRise } from "@/lib/animations";
-
-// Import all our UI options
-import SmartIndicators from "@/components/SmartIndicators";
-import MinimalistOverlay from "@/components/MinimalistOverlay";
-import SequentialReveal from "@/components/SequentialReveal";
-import VisionInspiredUI from "@/components/VisionInspiredUI";
-
-// UI options for the demo
-type UIOption = {
-  id: string;
-  label: string;
-  component: React.ComponentType;
-};
-
-const uiOptions: UIOption[] = [
-  { id: 'indicators', label: 'Smart Indicators', component: SmartIndicators },
-  { id: 'minimalist', label: 'Minimalist Overlay', component: MinimalistOverlay },
-  { id: 'sequential', label: 'Sequential Reveal', component: SequentialReveal },
-  { id: 'vision', label: 'Apple Vision UI', component: VisionInspiredUI },
-];
+import SmartIndicators from "@/components/SmartIndicators"; // Using original component name
 
 export default function Page() {
-  // State to track which UI option is selected
-  const [selectedUiOption, setSelectedUiOption] = useState('indicators');
-  
-  // Get the currently selected component
-  const SelectedComponent = uiOptions.find(opt => opt.id === selectedUiOption)?.component || SmartIndicators;
-  
   return (
     <main>
       <Header />
@@ -58,29 +32,9 @@ export default function Page() {
                 Get Started
               </a>
             </div>
-            
-            {/* UI Option Switcher - Remove this in production */}
-            <div className="pt-6 space-y-2">
-              <p className="text-sm text-gray-500 font-medium">UI Options (Demo Only):</p>
-              <div className="flex flex-wrap gap-2">
-                {uiOptions.map((option) => (
-                  <button
-                    key={option.id}
-                    onClick={() => setSelectedUiOption(option.id)}
-                    className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
-                      selectedUiOption === option.id
-                        ? 'bg-black text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </div>
           </motion.div>
 
-          {/* Right: Room with selected UI overlay */}
+          {/* Right: Room with smart indicators */}
           <motion.div 
             className="relative rounded-3xl overflow-hidden shadow-lg"
             initial={{ opacity: 0, scale: 0.98 }}
@@ -94,8 +48,8 @@ export default function Page() {
               className="w-full h-auto rounded-3xl"
             />
             
-            {/* The selected UI component */}
-            <SelectedComponent />
+            {/* Smart feature indicators overlaid on the room */}
+            <SmartIndicators />
           </motion.div>
         </div>
       </section>
