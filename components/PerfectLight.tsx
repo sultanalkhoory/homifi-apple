@@ -1,19 +1,46 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { fadeRise, scaleIn } from '@/lib/animations';
 
 export default function PerfectLight() {
   // Start with lights OFF until user scrolls to section
   const [lightsOn, setLightsOn] = useState(false);
+  const sectionRef = useRef(null);
+
+  // Auto-trigger lights on when section comes into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !lightsOn) {
+            // Delay the lights turning on for better effect
+            setTimeout(() => {
+              setLightsOn(true);
+            }, 800); // 800ms delay after section enters view
+          }
+        });
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of section is visible
+        rootMargin: '0px 0px -100px 0px' // Start slightly before fully visible
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [lightsOn]); // Only trigger if lights are still off
 
   const handleToggle = () => {
     setLightsOn(!lightsOn);
   };
 
   return (
-    <section id="perfect-light" className="py-20 md:py-28 bg-gray-50">
+    <section ref={sectionRef} id="perfect-light" className="py-20 md:py-28 bg-gray-50">
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid md:grid-cols-12 gap-12 items-center">
           
