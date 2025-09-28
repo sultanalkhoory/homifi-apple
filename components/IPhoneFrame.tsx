@@ -14,9 +14,7 @@ import { scaleIn } from '@/lib/animations';
  * - Responsive sizing (180px - 300px max)
  * 
  * Usage:
- * <IPhoneFrame>
- *   {/* Optional: Glass UI controls (toggles, labels) */}
- * </IPhoneFrame>
+ * Place optional glass UI controls (toggles, labels) as children
  */
 
 export default function IPhoneFrame({ children }: { children?: React.ReactNode }) {
