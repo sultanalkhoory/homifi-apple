@@ -101,20 +101,20 @@ export default function PerfectLight() {
             {/* Photo that changes based on lights state */}
             <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden">
               
-              {/* Lights on image */}
+              {/* Lights on image - slower, smoother transition */}
               <img
                 src="/Curtains-Closed-Lights-On.png"
                 alt="Room with lights on"
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity 
-                  duration-500 ${lightsOn ? 'opacity-100' : 'opacity-0'}`}
+                  duration-[1500ms] ease-in-out ${lightsOn ? 'opacity-100' : 'opacity-0'}`}
               />
               
-              {/* Lights off image */}
+              {/* Lights off image - slower, smoother transition */}
               <img
                 src="/Curtains-Closed-Lights-Off.png"
                 alt="Room with lights off"
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity 
-                  duration-500 ${lightsOn ? 'opacity-0' : 'opacity-100'}`}
+                  duration-[1500ms] ease-in-out ${lightsOn ? 'opacity-0' : 'opacity-100'}`}
               />
             </div>
           </motion.div>
