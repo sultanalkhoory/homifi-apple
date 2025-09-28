@@ -1,9 +1,9 @@
 'use client';
 import Header from "@/components/Header";
-import FeatureStrip from "@/components/FeatureStrip";
+import WorksWith from "@/components/WorksWith"; // Import the new WorksWith component
 import { motion } from "framer-motion";
 import { fadeRise } from "@/lib/animations";
-import SmartIndicators from "@/components/SmartIndicators"; // Using original component name
+import SmartIndicators from "@/components/SmartIndicators";
 
 export default function Page() {
   return (
@@ -53,7 +53,7 @@ export default function Page() {
           </motion.div>
         </div>
       </section>
-      <FeatureStrip />
+      <WorksWith />
     </main>
   );
 }
