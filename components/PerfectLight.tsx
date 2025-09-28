@@ -44,31 +44,6 @@ export default function PerfectLight() {
               Set the perfect ambiance for any moment.
             </p>
             
-            {/* Redesigned iOS-style toggle */}
-            <div className="pt-4">
-              <button 
-                onClick={handleToggle}
-                className="relative inline-flex h-[32px] w-[52px] items-center rounded-full
-                  transition-colors duration-200 ease-in-out
-                  focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
-                style={{
-                  backgroundColor: lightsOn ? '#34C759' : '#8E8E93'
-                }}
-                aria-pressed={lightsOn}
-                aria-label="Toggle lights"
-              >
-                <span
-                  className={`inline-block h-[28px] w-[28px] transform rounded-full 
-                    bg-white shadow-lg transition-transform duration-200 ease-in-out
-                    ${lightsOn ? 'translate-x-[22px]' : 'translate-x-[2px]'}`}
-                />
-              </button>
-              
-              <p className="mt-3 text-sm text-gray-500">
-                {lightsOn ? 'Lights On' : 'Lights Off'}
-              </p>
-            </div>
-            
             <div className="pt-4">
               <a 
                 href="#" 
@@ -115,33 +90,47 @@ export default function PerfectLight() {
               {/* iPhone overlay - NO rotation, proper positioning */}
               <div className="absolute bottom-8 right-8">
                 <IPhoneFrame>
-                  {/* Room name label */}
+                  {/* Room name label - top */}
                   <div className="absolute top-12 left-0 right-0 text-center z-20">
                     <span className="text-white text-[9px] font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
                       Living Room
                     </span>
                   </div>
 
-                  {/* Phone toggle - smaller iOS style */}
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1">
+                  {/* Status text - middle area */}
+                  <div className="absolute top-[45%] left-0 right-0 text-center z-20">
+                    <span className="text-white/80 text-[8px] font-normal drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
+                      2 lights connected
+                    </span>
+                  </div>
+
+                  {/* Liquid glass toggle - bottom */}
+                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
                     <button 
                       onClick={handleToggle}
-                      className="relative inline-flex h-[24px] w-[40px] items-center rounded-full
-                        transition-colors duration-200 ease-in-out"
+                      className="relative inline-flex h-[28px] w-[46px] items-center rounded-full
+                        backdrop-blur-md border border-white/20 shadow-lg
+                        transition-all duration-200 ease-in-out"
                       style={{
-                        backgroundColor: lightsOn ? 'rgba(52, 199, 89, 0.95)' : 'rgba(142, 142, 147, 0.95)'
+                        backgroundColor: lightsOn 
+                          ? 'rgba(52, 199, 89, 0.3)' 
+                          : 'rgba(255, 255, 255, 0.15)',
+                        boxShadow: lightsOn 
+                          ? '0 0 20px rgba(52, 199, 89, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2)' 
+                          : '0 4px 12px rgba(0, 0, 0, 0.2)'
                       }}
                       aria-pressed={lightsOn}
                       aria-label="Toggle lights on phone"
                     >
                       <span
-                        className={`inline-block h-[20px] w-[20px] transform rounded-full 
-                          bg-white shadow transition-transform duration-200 ease-in-out
-                          ${lightsOn ? 'translate-x-[18px]' : 'translate-x-[2px]'}`}
+                        className={`inline-block h-[22px] w-[22px] transform rounded-full 
+                          bg-white/95 backdrop-blur-sm shadow-md
+                          transition-transform duration-200 ease-in-out
+                          ${lightsOn ? 'translate-x-[20px]' : 'translate-x-[3px]'}`}
                       />
                     </button>
                     
-                    <p className="text-[8px] text-white/90 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
+                    <p className="text-[7px] text-white/90 font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
                       {lightsOn ? 'On' : 'Off'}
                     </p>
                   </div>
