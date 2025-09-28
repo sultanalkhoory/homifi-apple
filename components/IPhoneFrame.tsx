@@ -11,34 +11,32 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
       className="relative inline-block w-[180px] sm:w-[220px] md:w-[260px] lg:w-[280px] max-w-[300px]"
     >
       <div className="relative aspect-[9/19.5] rounded-[40px] overflow-visible drop-shadow-[0_14px_40px_rgba(0,0,0,0.35)]">
-        
-        {/* Outer bezel */}
+
+        {/* Bezel */}
         <div className="pointer-events-none absolute inset-0 rounded-[40px] ring-[8px] ring-inset ring-black shadow-[inset_0_0_10px_rgba(0,0,0,0.65)]" />
 
         {/* Screen window */}
         <div className="absolute left-[8px] right-[8px] top-[8px] bottom-[8px] rounded-[32px] overflow-hidden">
-          
-          {/* Subtle tint + reflection */}
-          <div className="absolute inset-0 -z-10">
-            {/* Overall dark tint (lighter than before, not foggy) */}
-            <div className="absolute inset-0 bg-black/12" />
-            {/* Gentle reflection across entire height */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white/3 via-transparent to-black/10" />
-          </div>
 
-          {/* Children (rotating cards etc.) */}
+          {/* --- DISPLAY LAYERS --- */}
+          {/* Uniform OLED-like tint (touch darker; even everywhere) */}
+          <div className="absolute inset-0 z-0 bg-black/20" />
+          {/* Gentle, even reflection (no heavy fog at top) */}
+          <div className="absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03)_0%,transparent_22%,rgba(0,0,0,0.10)_100%)]" />
+
+          {/* Content (showcase etc.) */}
           <div className="absolute inset-0 z-10 grid place-items-center">
             {children}
           </div>
 
-          {/* Status bar */}
+          {/* Status bar (time biased toward Island, right cluster clear of it) */}
           <div className="absolute z-20 top-[16px] left-0 right-0 flex items-center justify-between text-white text-[13px] tracking-tight">
-            <span className="ml-[18px] font-semibold">9:41</span>
-            <div className="mr-[18px] flex items-center gap-2">
-              {/* Cellular bars */}
+            <span className="ml-[28px] font-semibold">9:41</span>
+            <div className="mr-[24px] flex items-center gap-2">
+              {/* Cellular  */}
               <div className="flex gap-[1px] opacity-90">
-                {[4, 6, 8, 10].map((h, i) => (
-                  <div key={i} style={{ height: h }} className="w-[2px] bg-white rounded-sm" />
+                {[4,6,8,10].map((h, i) => (
+                  <div key={i} style={{height: h}} className="w-[2px] bg-white rounded-sm" />
                 ))}
               </div>
               {/* Wi-Fi */}
