@@ -36,8 +36,8 @@ const indicators: SmartIndicator[] = [
   },
   {
     id: 'climate',
-    x: '20%',   // Positioned near ceiling AC grill
-    y: '5%',
+    x: '19%',   // Positioned near ceiling AC grill
+    y: '4%',
     label: 'Climate',
     detail: 'Maintains your ideal comfort zone',
     color: 'rgba(110, 190, 255, 0.85)',
@@ -46,7 +46,7 @@ const indicators: SmartIndicator[] = [
   {
     id: 'security',
     x: '2%',   // Positioned near left side (implied entrance)
-    y: '51%',
+    y: '52%',
     label: 'Security',
     detail: 'Always protected, never intrusive',
     color: 'rgba(120, 255, 170, 0.85)',
