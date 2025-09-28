@@ -90,32 +90,22 @@ export default function PerfectLight() {
               {/* iPhone overlay - NO rotation, proper positioning */}
               <div className="absolute bottom-8 right-8">
                 <IPhoneFrame>
-                  {/* Main interface - prominent heading and subtitle */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center z-20 w-full px-4">
-                    <h3 className="text-white text-[14px] font-semibold mb-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                      {lightsOn ? 'Lights On' : 'Lights Off'}
-                    </h3>
-                    <p className="text-white/80 text-[9px] font-normal drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                      {lightsOn ? 'Perfect ambiance, instantly' : 'Ready for relaxation'}
-                    </p>
-                  </div>
-
-                  {/* Simple action button at bottom */}
+                  {/* Simplified interface - remove the heading/subtitle */}
+                  
+                  {/* Action button - same liquid glass style for both states */}
                   <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
                     <button 
                       onClick={handleToggle}
                       className="px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 
                         transition-all duration-200 ease-in-out"
                       style={{
-                        backgroundColor: lightsOn 
-                          ? 'rgba(52, 199, 89, 0.25)' 
-                          : 'rgba(255, 255, 255, 0.15)'
+                        backgroundColor: 'rgba(255, 255, 255, 0.15)'
                       }}
                       aria-pressed={lightsOn}
                       aria-label="Toggle lights"
                     >
-                      <span className="text-white text-[8px] font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]">
-                        {lightsOn ? 'Turn Off' : 'Turn On'}
+                      <span className="text-white text-[8px] font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
+                        {lightsOn ? 'Lights On' : 'Lights Off'}
                       </span>
                     </button>
                   </div>
