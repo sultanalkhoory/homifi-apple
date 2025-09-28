@@ -18,7 +18,7 @@ type SmartIndicator = {
 const indicators: SmartIndicator[] = [
   {
     id: 'lights',
-    x: '24%',   // Positioned near the visible lamp
+    x: '28%',   // Positioned near the visible lamp
     y: '38%',
     label: 'Smart Lighting',
     detail: 'Adapts to your activity and time of day',
@@ -36,8 +36,8 @@ const indicators: SmartIndicator[] = [
   },
   {
     id: 'climate',
-    x: '19%',   // Positioned near ceiling AC grill
-    y: '4%',
+    x: '50%',   // Positioned near ceiling AC grill
+    y: '15%',
     label: 'Climate',
     detail: 'Maintains your ideal comfort zone',
     color: 'rgba(110, 190, 255, 0.85)',
@@ -45,8 +45,8 @@ const indicators: SmartIndicator[] = [
   },
   {
     id: 'security',
-    x: '2%',   // Positioned near left side (implied entrance)
-    y: '52%',
+    x: '15%',   // Positioned near left side (implied entrance)
+    y: '65%',
     label: 'Security',
     detail: 'Always protected, never intrusive',
     color: 'rgba(120, 255, 170, 0.85)',
@@ -103,8 +103,13 @@ export default function SmartIndicators() {
     }
   };
   
-  // Get popup position based on direction
-  const getPopupPosition = (direction: string) => {
+  // Get popup position based on direction and device type
+  const getPopupPosition = (direction: string, indicatorId: string) => {
+    // Override direction for climate indicator on mobile
+    if (isMobile && indicatorId === 'climate') {
+      direction = 'right'; // Use right direction on mobile to avoid edge clipping
+    }
+    
     switch (direction) {
       case 'left': return { right: '100%', top: '50%', translateX: '-8px', translateY: '-50%' };
       case 'right': return { left: '100%', top: '50%', translateX: '8px', translateY: '-50%' };
@@ -125,7 +130,11 @@ export default function SmartIndicators() {
       <div className="absolute inset-0 pointer-events-none">
         {/* Map through and create each indicator */}
         {indicators.map((indicator) => {
-          const popupPosition = getPopupPosition(indicator.popupDirection);
+          // Get position with responsive direction handling
+          const popupPosition = getPopupPosition(indicator.popupDirection, indicator.id);
+          
+          // Determine the actual popup direction for animation transforms
+          const effectiveDirection = isMobile && indicator.id === 'climate' ? 'right' : indicator.popupDirection;
           
           return (
             <div
@@ -194,19 +203,19 @@ export default function SmartIndicators() {
                     style={{ 
                       ...popupPosition,
                       transform: `translate(${popupPosition.translateX || 0}, ${popupPosition.translateY || 0})`,
-                      transformOrigin: indicator.popupDirection === 'left' ? 'right center' : 
-                                       indicator.popupDirection === 'right' ? 'left center' :
-                                       indicator.popupDirection === 'top' ? 'center bottom' : 
+                      transformOrigin: effectiveDirection === 'left' ? 'right center' : 
+                                       effectiveDirection === 'right' ? 'left center' :
+                                       effectiveDirection === 'top' ? 'center bottom' : 
                                        'center top'
                     }}
                     initial={{ 
                       opacity: 0, 
                       scale: 0.94, 
                       filter: 'blur(2px)',
-                      y: indicator.popupDirection === 'bottom' ? -5 : 
-                         indicator.popupDirection === 'top' ? 5 : 0,
-                      x: indicator.popupDirection === 'right' ? -5 : 
-                         indicator.popupDirection === 'left' ? 5 : 0, 
+                      y: effectiveDirection === 'bottom' ? -5 : 
+                         effectiveDirection === 'top' ? 5 : 0,
+                      x: effectiveDirection === 'right' ? -5 : 
+                         effectiveDirection === 'left' ? 5 : 0, 
                     }}
                     animate={{ 
                       opacity: 1, 
@@ -257,9 +266,9 @@ export default function SmartIndicators() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.08, duration: 0.2 }}
                       >
-                        <p className="text-[13px] font-medium tracking-tight mb-0.5">{indicator.label}</p>
+                        <p className="text-[13px] font-medium tracking-tight mb-0.5 text-white">{indicator.label}</p>
                         <motion.p 
-                          className="text-[11px] font-normal text-white/75 tracking-tight"
+                          className="text-[11px] font-normal text-white/90 tracking-tight"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.15, duration: 0.25 }}
