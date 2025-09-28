@@ -1,7 +1,7 @@
 'use client';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import PerfectControl from "@/components/PerfectControl";
+import PerfectLight from "@/components/PerfectLight";
 import { motion } from "framer-motion";
 import { fadeRise } from "@/lib/animations";
 import SmartIndicators from "@/components/SmartIndicators";
@@ -55,7 +55,7 @@ export default function Page() {
             {/* Single CTA button */}
             <div className="pt-2">
               <a 
-                href="#perfect-control" 
+                href="#perfect-light" 
                 className="rounded-full bg-black text-white px-5 py-3 text-sm inline-flex hover:bg-gray-900 transition-colors"
               >
                 Explore Features
@@ -87,11 +87,11 @@ export default function Page() {
       </section>
       
       {/* 
-        ========== PERFECT CONTROL SECTION ==========
+        ========== PERFECT LIGHT SECTION ==========
         Interactive lights demo with iPhone overlay
         Shows room state changes with synchronized toggles
       */}
-      <PerfectControl />
+      <PerfectLight />
       
       {/* 
         ========== FOOTER ==========
