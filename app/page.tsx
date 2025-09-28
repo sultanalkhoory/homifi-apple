@@ -2,6 +2,7 @@
 import Header from "@/components/Header";
 import IPhoneFrame from "@/components/IPhoneFrame";
 import FeatureStrip from "@/components/FeatureStrip";
+import RotatingIcons from "@/components/RotatingIcons";
 import { motion } from "framer-motion";
 import { fadeRise } from "@/lib/animations";
 
@@ -100,10 +101,7 @@ export default function Page() {
               <div className="absolute bottom-4 right-4 origin-bottom-right
                               scale-90 sm:scale-95 md:scale-100 lg:scale-100">
                 <IPhoneFrame>
-                  {/* 
-                    Screen is transparent - no content here
-                    Later: Add glass UI controls like buttons/HUDs here
-                  */}
+                  <RotatingIcons />
                 </IPhoneFrame>
               </div>
             </div>
