@@ -23,7 +23,7 @@ const indicators: SmartIndicator[] = [
     label: 'Smart Lighting',
     detail: 'Adapts to your activity and time of day',
     color: 'rgba(255, 214, 90, 0.85)',
-    popupDirection: 'bottom'
+    popupDirection: 'bottom'  // Changed from 'right' to 'bottom' as specified
   },
   {
     id: 'curtains',
@@ -116,6 +116,17 @@ export default function SmartIndicators() {
       };
     }
     
+    // Same bottom-right treatment for lights indicator
+    if (isMobile && indicatorId === 'lights') {
+      // Custom position for bottom-right placement
+      return { 
+        top: '100%', 
+        left: '0%', 
+        translateX: '0px', 
+        translateY: '8px'
+      };
+    }
+    
     // Standard positions for all other cases
     switch (direction) {
       case 'left': return { right: '100%', top: '50%', translateX: '-8px', translateY: '-50%' };
@@ -144,8 +155,8 @@ export default function SmartIndicators() {
           // Keep within the allowed types: 'left', 'right', 'top', 'bottom'
           const effectiveDirection = isMobile && indicator.id === 'climate' ? 'bottom' : indicator.popupDirection;
           
-          // Special flag for the climate-on-mobile case
-          const isClimateOnMobile = isMobile && indicator.id === 'climate';
+          // Special flag for the climate/lights on mobile case
+          const isBottomRightOnMobile = isMobile && (indicator.id === 'climate' || indicator.id === 'lights');
           
           return (
             <div
@@ -217,7 +228,7 @@ export default function SmartIndicators() {
                       transformOrigin: effectiveDirection === 'left' ? 'right center' : 
                                        effectiveDirection === 'right' ? 'left center' :
                                        effectiveDirection === 'top' ? 'center bottom' : 
-                                       isClimateOnMobile ? 'left top' : 'center top' // Special origin for climate on mobile
+                                       isBottomRightOnMobile ? 'left top' : 'center top' // Special origin for bottom-right popups on mobile
                     }}
                     initial={{ 
                       opacity: 0, 
@@ -228,7 +239,7 @@ export default function SmartIndicators() {
                          effectiveDirection === 'top' ? 5 : 0,
                       x: effectiveDirection === 'right' ? -5 : 
                          effectiveDirection === 'left' ? 5 : 
-                         isClimateOnMobile ? -3 : 0, // Slight x movement for climate on mobile
+                         isBottomRightOnMobile ? -3 : 0, // Slight x movement for climate/lights on mobile
                     }}
                     animate={{ 
                       opacity: 1, 
