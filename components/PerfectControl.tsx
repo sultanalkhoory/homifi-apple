@@ -6,29 +6,29 @@ import IPhoneFrame from '@/components/IPhoneFrame';
 import { fadeRise, scaleIn } from '@/lib/animations';
 
 /**
- * Perfect Control Section Component
+ * Perfect Control Section
  * 
- * Demonstrates lighting control through HomiFi + iPhone integration
+ * Demonstrates HomiFi lighting control with synchronized iPhone interface
  * 
  * Layout:
- * - Desktop: Two-column (5/7 grid - text left, visual right)
- * - Mobile: Stacked (text above, visual below)
+ * - Desktop: 5/7 grid (text left, photo+iPhone right)
+ * - Mobile: Stacked (text above, photo below)
  * 
- * Key Features:
- * - Interactive toggle control (left column)
- * - Room image swaps based on lights state (on/off)
+ * Features:
+ * - Interactive main toggle (left column)
+ * - Room photo swaps based on lights state
  * - iPhone overlay with transparent screen showing room
- * - Synchronized toggle inside iPhone screen
- * - Smooth transitions between states
+ * - Synchronized phone toggle inside iPhone
+ * - Smooth 500ms transitions
  */
 
 export default function PerfectControl() {
-  // State management for lights on/off
+  // Lights state: true = on, false = off
   const [lightsOn, setLightsOn] = useState(true);
 
   /**
-   * Toggle handler
-   * Switches between lights on/off states
+   * Toggle handler - flips lights state
+   * Updates both room photo and all toggle UIs
    */
   const handleToggle = () => {
     setLightsOn(!lightsOn);
@@ -37,12 +37,13 @@ export default function PerfectControl() {
   return (
     <section id="perfect-control" className="py-20 md:py-28 bg-gray-50">
       <div className="mx-auto max-w-6xl px-4">
+        
         {/* Two-column grid: 5 cols text, 7 cols visual */}
         <div className="grid md:grid-cols-12 gap-12 items-center">
           
           {/* 
-            ========== LEFT COLUMN - Text + Controls ==========
-            Takes 5 columns on desktop
+            ========== LEFT COLUMN - Text + Main Toggle ==========
+            5 columns on desktop, full width on mobile
           */}
           <motion.div
             variants={fadeRise}
@@ -51,34 +52,35 @@ export default function PerfectControl() {
             viewport={{ once: true, margin: "-100px" }}
             className="md:col-span-5 space-y-6"
           >
-            {/* Section Heading */}
+            {/* Section title */}
             <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-black">
               Perfect Control
             </h2>
             
-            {/* Subheading */}
+            {/* Large subheading */}
             <p className="text-xl md:text-2xl text-gray-700 leading-relaxed">
               Every room, every moment.<br />
               Exactly as you want it.
             </p>
             
-            {/* Description */}
+            {/* Description paragraph */}
             <p className="text-gray-600 text-lg">
               Control every aspect of your environment with intuitive controls and automation. 
               Adjust lighting, privacy, and climate from anywhere.
             </p>
             
             {/* 
-              ========== INTERACTIVE TOGGLE CONTROL ==========
-              Large, accessible toggle for lights on/off
-              Apple-style design with smooth animation
+              ========== MAIN TOGGLE CONTROL ==========
+              Large, accessible Apple-style toggle
+              Green when on, dark gray when off
+              Includes sliding indicator with checkmark/minus icons
             */}
             <div className="pt-4">
               <button 
                 onClick={handleToggle}
-                className="relative inline-flex h-14 w-24 flex-shrink-0 cursor-pointer rounded-full 
-                  border-2 border-transparent transition-colors duration-300 ease-in-out 
-                  focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                className="relative inline-flex h-14 w-24 flex-shrink-0 cursor-pointer 
+                  rounded-full border-2 border-transparent transition-colors duration-300 
+                  ease-in-out focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
                 style={{
                   backgroundColor: lightsOn ? '#4ade80' : '#1f2937'
                 }}
@@ -87,13 +89,13 @@ export default function PerfectControl() {
               >
                 <span className="sr-only">Toggle lights</span>
                 
-                {/* Sliding indicator */}
+                {/* Sliding white circle indicator */}
                 <span
                   className={`pointer-events-none relative inline-block h-[52px] w-[52px] 
-                    transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out 
-                    ${lightsOn ? 'translate-x-10' : 'translate-x-0'}`}
+                    transform rounded-full bg-white shadow-lg ring-0 transition duration-300 
+                    ease-in-out ${lightsOn ? 'translate-x-10' : 'translate-x-0'}`}
                 >
-                  {/* Icon when OFF (minus/line) */}
+                  {/* Icon when OFF (minus line) */}
                   <span
                     className={`absolute inset-0 flex h-full w-full items-center justify-center 
                       transition-opacity ${lightsOn ? 'opacity-0' : 'opacity-100'}`}
@@ -117,13 +119,13 @@ export default function PerfectControl() {
                 </span>
               </button>
               
-              {/* Toggle label */}
+              {/* Status label below toggle */}
               <p className="mt-3 text-sm text-gray-500">
                 {lightsOn ? 'Lights On' : 'Lights Off'}
               </p>
             </div>
             
-            {/* CTA Button */}
+            {/* CTA button */}
             <div className="pt-4">
               <a 
                 href="#" 
@@ -136,8 +138,8 @@ export default function PerfectControl() {
           </motion.div>
 
           {/* 
-            ========== RIGHT COLUMN - Room + iPhone Overlay ==========
-            Takes 7 columns on desktop
+            ========== RIGHT COLUMN - Room Photo + iPhone Overlay ==========
+            7 columns on desktop, full width on mobile
           */}
           <motion.div
             variants={scaleIn}
@@ -147,40 +149,41 @@ export default function PerfectControl() {
             className="md:col-span-7"
           >
             {/* 
-              PHOTO BLOCK - Room visualization
-              Contains two images that swap based on lights state
-              iPhone overlays on this block with transparent screen
+              PHOTO BLOCK - Container for room images
+              aspect-[16/10] = landscape photo ratio
+              Contains two overlapping images that cross-fade
             */}
             <div className="relative aspect-[16/10] rounded-3xl overflow-hidden 
               shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
               
               {/* 
-                LIGHTS ON Image
+                LIGHTS ON IMAGE
                 Visible when lightsOn is true
-                Smooth opacity transition
+                500ms opacity transition for smooth cross-fade
               */}
               <img
                 src="/Curtains-Open-Lights-On.png"
                 alt="Room with lights on"
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 
-                  ${lightsOn ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity 
+                  duration-500 ${lightsOn ? 'opacity-100' : 'opacity-0'}`}
               />
               
               {/* 
-                LIGHTS OFF Image
+                LIGHTS OFF IMAGE
                 Visible when lightsOn is false
-                Smooth opacity transition
+                500ms opacity transition for smooth cross-fade
               */}
               <img
                 src="/Curtains-Closed-Lights-Off.png"
                 alt="Room with lights off"
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 
-                  ${lightsOn ? 'opacity-0' : 'opacity-100'}`}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity 
+                  duration-500 ${lightsOn ? 'opacity-0' : 'opacity-100'}`}
               />
 
               {/* 
-                Subtle separation glow behind iPhone
-                Adds depth to iPhone overlay
+                Subtle glow behind iPhone
+                Adds depth/separation for iPhone overlay
+                Positioned bottom-right where iPhone sits
               */}
               <div className="pointer-events-none absolute right-0 bottom-0 w-2/3 h-2/3
                 bg-[radial-gradient(60%_60%_at_75%_75%,rgba(255,255,255,0.35),transparent_60%)]" />
@@ -188,29 +191,30 @@ export default function PerfectControl() {
               {/* 
                 ========== IPHONE OVERLAY ==========
                 Positioned bottom-right with slight rotation
-                Screen is transparent showing room behind
-                Contains synchronized toggle control
+                iPhone screen is transparent showing room photo
+                Contains glass UI controls (room name, toggle)
               */}
               <div className="absolute bottom-6 right-6 origin-bottom-right
                 scale-85 sm:scale-90 md:scale-95
-                rotate-[8deg]">
+                rotate-[10deg]">
                 <IPhoneFrame>
                   {/* 
-                    ========== PHONE SCREEN CONTENT ==========
-                    Glass UI elements floating on transparent screen
+                    ========== GLASS UI CONTROLS ==========
+                    Floating on top of transparent iPhone screen
                   */}
                   
-                  {/* Room name label at top */}
+                  {/* Room name label - top center of phone screen */}
                   <div className="absolute top-16 left-0 right-0 text-center z-20">
-                    <span className="text-white text-xs font-medium drop-shadow-md">
+                    <span className="text-white text-xs font-medium drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
                       Living Room
                     </span>
                   </div>
 
                   {/* 
-                    Synchronized toggle at bottom
-                    Smaller version matching the main toggle
-                    Same onClick handler for sync behavior
+                    PHONE TOGGLE - bottom center of screen
+                    Synchronized with main toggle
+                    Smaller size appropriate for phone screen
+                    Same green/gray color scheme
                   */}
                   <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
                     <button 
@@ -228,13 +232,14 @@ export default function PerfectControl() {
                       {/* Sliding indicator (smaller for phone) */}
                       <span
                         className={`pointer-events-none relative inline-block h-[36px] w-[36px] 
-                          transform rounded-full bg-white shadow ring-0 transition duration-300 ease-in-out 
-                          ${lightsOn ? 'translate-x-7' : 'translate-x-0'}`}
+                          transform rounded-full bg-white shadow ring-0 transition duration-300 
+                          ease-in-out ${lightsOn ? 'translate-x-7' : 'translate-x-0'}`}
                       />
                     </button>
                     
-                    {/* Status text below toggle */}
-                    <p className="mt-2 text-center text-[10px] text-white/80 font-medium drop-shadow">
+                    {/* Status text below phone toggle */}
+                    <p className="mt-2 text-center text-[10px] text-white/80 font-medium 
+                      drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
                       {lightsOn ? 'On' : 'Off'}
                     </p>
                   </div>
