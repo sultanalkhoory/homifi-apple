@@ -54,7 +54,7 @@ const indicators: SmartIndicator[] = [
   }
 ];
 
-export default function RefinedSmartIndicators() {
+export default function SmartIndicators() {
   // Track which indicator is active (hovered/tapped)
   const [activeId, setActiveId] = useState<string | null>(null);
   // Mobile detection
