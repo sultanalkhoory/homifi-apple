@@ -72,16 +72,23 @@ export default function SmartIndicators() {
     window.addEventListener('resize', checkMobile);
     
     // Auto-pulse animation on page load to draw attention
-    setTimeout(() => {
+    const revealTimer = setTimeout(() => {
       setIndicatorsRevealed(true);
-      // Auto-hide after 2.5 seconds on desktop
+      
+      // Auto-hide after a delay on desktop only
       if (!isMobile) {
-        setTimeout(() => setIndicatorsRevealed(false), 2500);
+        const hideTimer = setTimeout(() => {
+          setIndicatorsRevealed(false);
+        }, 2500);
+        return () => clearTimeout(hideTimer);
       }
-    }, 1500);
+    }, 1800); // Slightly longer initial delay for better page load experience
     
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      clearTimeout(revealTimer);
+    };
+  }, [isMobile]);
 
   // Handle room image click for mobile "tap to reveal" functionality
   const handleRoomClick = () => {
@@ -146,40 +153,41 @@ export default function SmartIndicators() {
                 aria-label={`${indicator.label} control`}
               />
               
-              {/* Visible indicator dot */}
+              {/* Visible indicator dot with refined animations */}
               <motion.div 
                 className="absolute w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full"
                 style={{ backgroundColor: indicator.color }}
                 animate={{ 
-                  scale: indicatorsRevealed || activeId === indicator.id ? 1.5 : 1,
+                  scale: indicatorsRevealed || activeId === indicator.id ? 1.35 : 1,
                   boxShadow: (indicatorsRevealed || activeId === indicator.id)
-                    ? `0 0 8px ${indicator.color}`
+                    ? `0 0 10px ${indicator.color}`
                     : `0 0 0 transparent`,
                 }}
                 transition={{
-                  duration: 0.35,
-                  ease: 'easeOut'
+                  duration: indicatorsRevealed ? 0.7 : 0.35,
+                  ease: [0.19, 1, 0.22, 1], // Apple's cubic-bezier easing
+                  delay: indicatorsRevealed && !activeId ? 0.1 * parseInt(indicator.id.length.toString()) : 0 // Stagger reveal
                 }}
               >
-                {/* Pulsing animation */}
+                {/* Pulsing animation - more subtle and elegant */}
                 <motion.div 
                   className="absolute inset-0 rounded-full"
                   style={{ backgroundColor: indicator.color }}
                   animate={{ 
-                    scale: [1, 2, 1],
-                    opacity: [0.7, 0, 0.7]
+                    scale: [1, 1.8, 1],
+                    opacity: [0.7, 0.1, 0.7]
                   }}
                   transition={{
-                    duration: 3,
+                    duration: 4,  // Slower, more gentle pulse
                     ease: "easeInOut",
                     repeat: Infinity,
-                    repeatDelay: 0.5
+                    repeatDelay: 1
                   }}
                 />
               </motion.div>
 
               {/* Apple-style glass popup on hover/tap */}
-              <AnimatePresence>
+              <AnimatePresence mode="popLayout">
                 {activeId === indicator.id && (
                   <motion.div
                     className="absolute z-30 whitespace-nowrap"
@@ -191,29 +199,75 @@ export default function SmartIndicators() {
                                        indicator.popupDirection === 'top' ? 'center bottom' : 
                                        'center top'
                     }}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
+                    initial={{ 
+                      opacity: 0, 
+                      scale: 0.94, 
+                      filter: 'blur(2px)',
+                      y: indicator.popupDirection === 'bottom' ? -5 : 
+                         indicator.popupDirection === 'top' ? 5 : 0,
+                      x: indicator.popupDirection === 'right' ? -5 : 
+                         indicator.popupDirection === 'left' ? 5 : 0, 
+                    }}
+                    animate={{ 
+                      opacity: 1, 
+                      scale: 1, 
+                      filter: 'blur(0px)',
+                      y: 0,
+                      x: 0
+                    }}
+                    exit={{ 
+                      opacity: 0, 
+                      scale: 0.97,
+                      transition: { duration: 0.15, ease: [0.32, 0.72, 0, 1] } 
+                    }}
                     transition={{ 
                       type: 'spring', 
-                      stiffness: 500, 
-                      damping: 30,
-                      mass: 1
+                      stiffness: 350,  // More gentle spring 
+                      damping: 25,     // Slight bounciness
+                      mass: 0.5,       // Lighter feel
+                      restDelta: 0.001 // Higher precision for smoother end
                     }}
                   >
-                    {/* Apple-style glass card */}
-                    <div className="rounded-xl px-3.5 py-2.5 backdrop-blur-md shadow-lg text-white"
-                      style={{
+                    {/* Apple-style glass card with staged animations */}
+                    <motion.div 
+                      className="rounded-xl px-3.5 py-2.5 backdrop-blur-md shadow-lg text-white overflow-hidden"
+                      initial={{ 
+                        background: 'linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0))',
+                        boxShadow: '0 0 0 rgba(0,0,0,0)'
+                      }}
+                      animate={{ 
                         background: 'linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.08) 100%)',
+                        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.1)'
+                      }}
+                      transition={{ 
+                        delay: 0.05,  // Slight delay for staged effect
+                        duration: 0.25,
+                        ease: [0.22, 1, 0.36, 1]  // Apple-like custom easing
+                      }}
+                      style={{
                         borderTop: '0.5px solid rgba(255,255,255,0.3)',
                         borderLeft: '0.5px solid rgba(255,255,255,0.2)',
                         borderRight: '0.5px solid rgba(255,255,255,0.1)',
                         borderBottom: '0.5px solid rgba(255,255,255,0.05)',
-                        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.1)',
-                      }}>
-                      <p className="text-[13px] font-medium tracking-tight mb-0.5">{indicator.label}</p>
-                      <p className="text-[11px] font-normal text-white/75 tracking-tight">{indicator.detail}</p>
-                    </div>
+                      }}
+                    >
+                      {/* Content with staggered fade-in */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 2 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.08, duration: 0.2 }}
+                      >
+                        <p className="text-[13px] font-medium tracking-tight mb-0.5">{indicator.label}</p>
+                        <motion.p 
+                          className="text-[11px] font-normal text-white/75 tracking-tight"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.15, duration: 0.25 }}
+                        >
+                          {indicator.detail}
+                        </motion.p>
+                      </motion.div>
+                    </motion.div>
                   </motion.div>
                 )}
               </AnimatePresence>
