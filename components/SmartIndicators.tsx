@@ -116,8 +116,8 @@ export default function SmartIndicators() {
       };
     }
     
-    // Same bottom-right treatment for lights indicator
-    if (isMobile && indicatorId === 'lights') {
+    // Bottom-right treatment for lights indicator on both mobile and desktop
+    if (indicatorId === 'lights') {
       // Custom position for bottom-right placement
       return { 
         top: '100%', 
@@ -155,8 +155,8 @@ export default function SmartIndicators() {
           // Keep within the allowed types: 'left', 'right', 'top', 'bottom'
           const effectiveDirection = isMobile && indicator.id === 'climate' ? 'bottom' : indicator.popupDirection;
           
-          // Special flag for the climate/lights on mobile case
-          const isBottomRightOnMobile = isMobile && (indicator.id === 'climate' || indicator.id === 'lights');
+          // Special flag for bottom-right popup positioning
+          const isBottomRightPopup = (isMobile && indicator.id === 'climate') || indicator.id === 'lights';
           
           return (
             <div
@@ -228,7 +228,7 @@ export default function SmartIndicators() {
                       transformOrigin: effectiveDirection === 'left' ? 'right center' : 
                                        effectiveDirection === 'right' ? 'left center' :
                                        effectiveDirection === 'top' ? 'center bottom' : 
-                                       isBottomRightOnMobile ? 'left top' : 'center top' // Special origin for bottom-right popups on mobile
+                                       isBottomRightPopup ? 'left top' : 'center top' // Special origin for bottom-right popups
                     }}
                     initial={{ 
                       opacity: 0, 
@@ -239,7 +239,7 @@ export default function SmartIndicators() {
                          effectiveDirection === 'top' ? 5 : 0,
                       x: effectiveDirection === 'right' ? -5 : 
                          effectiveDirection === 'left' ? 5 : 
-                         isBottomRightOnMobile ? -3 : 0, // Slight x movement for climate/lights on mobile
+                         isBottomRightPopup ? -3 : 0, // Slight x movement for bottom-right popups
                     }}
                     animate={{ 
                       opacity: 1, 
