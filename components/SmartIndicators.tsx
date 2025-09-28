@@ -18,7 +18,7 @@ type SmartIndicator = {
 const indicators: SmartIndicator[] = [
   {
     id: 'lights',
-    x: '28%',   // Positioned near the visible lamp
+    x: '25%',   // Positioned near the visible lamp
     y: '38%',
     label: 'Smart Lighting',
     detail: 'Adapts to your activity and time of day',
@@ -36,8 +36,8 @@ const indicators: SmartIndicator[] = [
   },
   {
     id: 'climate',
-    x: '50%',   // Positioned near ceiling AC grill
-    y: '15%',
+    x: '20%',   // Positioned near ceiling AC grill
+    y: '10%',
     label: 'Climate',
     detail: 'Maintains your ideal comfort zone',
     color: 'rgba(110, 190, 255, 0.85)',
@@ -45,8 +45,8 @@ const indicators: SmartIndicator[] = [
   },
   {
     id: 'security',
-    x: '15%',   // Positioned near left side (implied entrance)
-    y: '65%',
+    x: '8%',   // Positioned near left side (implied entrance)
+    y: '60%',
     label: 'Security',
     detail: 'Always protected, never intrusive',
     color: 'rgba(120, 255, 170, 0.85)',
@@ -230,14 +230,14 @@ export default function SmartIndicators() {
                   >
                     {/* Apple-style glass card with staged animations */}
                     <motion.div 
-                      className="rounded-xl px-3.5 py-2.5 backdrop-blur-md shadow-lg text-white overflow-hidden"
+                      className="rounded-xl px-3.5 py-2.5 backdrop-blur-xl shadow-lg text-white overflow-hidden"
                       initial={{ 
                         background: 'linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0))',
                         boxShadow: '0 0 0 rgba(0,0,0,0)'
                       }}
                       animate={{ 
-                        background: 'linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.08) 100%)',
-                        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.1)'
+                        background: 'linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%)',
+                        boxShadow: '0 10px 25px -3px rgba(0,0,0,0.15), 0 4px 6px -2px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.15)'
                       }}
                       transition={{ 
                         delay: 0.05,  // Slight delay for staged effect
@@ -245,10 +245,10 @@ export default function SmartIndicators() {
                         ease: [0.22, 1, 0.36, 1]  // Apple-like custom easing
                       }}
                       style={{
-                        borderTop: '0.5px solid rgba(255,255,255,0.3)',
-                        borderLeft: '0.5px solid rgba(255,255,255,0.2)',
-                        borderRight: '0.5px solid rgba(255,255,255,0.1)',
-                        borderBottom: '0.5px solid rgba(255,255,255,0.05)',
+                        borderTop: '0.5px solid rgba(255,255,255,0.5)',
+                        borderLeft: '0.5px solid rgba(255,255,255,0.3)',
+                        borderRight: '0.5px solid rgba(255,255,255,0.2)',
+                        borderBottom: '0.5px solid rgba(255,255,255,0.1)',
                       }}
                     >
                       {/* Content with staggered fade-in */}
