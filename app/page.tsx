@@ -1,118 +1,63 @@
 'use client';
 import Header from "@/components/Header";
-import IPhoneFrame from "@/components/IPhoneFrame";
-import PerfectControl from "@/components/PerfectControl";
+import Footer from "@/components/Footer"; // Import the new Footer component
 import { motion } from "framer-motion";
 import { fadeRise } from "@/lib/animations";
+import SmartIndicators from "@/components/SmartIndicators";
 
 export default function Page() {
   return (
     <main>
       <Header />
-
-      {/* 
-        ========== HERO SECTION ==========
-        
-        Layout:
-        - Desktop: Two-column grid (text left, visual right)
-        - Mobile: Stacked vertically (text first, visual below)
-        
-        Key Implementation:
-        - Single photo source (background image in photo block)
-        - iPhone overlays with TRANSPARENT screen
-        - Photo shows through iPhone naturally (no duplicate images)
-        - iPhone capped at ≤45% viewport width on desktop
-      */}
-      <section className="pt-36 md:pt-44 pb-16 md:pb-20">
+      <section className="pt-32 pb-20">
         <div className="mx-auto max-w-6xl px-4 grid md:grid-cols-12 gap-12 items-center">
           
-          {/* LEFT COLUMN - Copy Block */}
-          <motion.div
-            variants={fadeRise}
-            initial="hidden"
-            animate="show"
-            className="md:col-span-6 space-y-6"
-          >
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs text-gray-600">
-              <span>Seamless Smart Home</span>
-            </div>
-            
-            {/* Headline */}
+          {/* Left: Text - Now taking up less space (5/12) */}
+          <motion.div variants={fadeRise} initial="hidden" animate="show" className="space-y-6 md:col-span-5">
             <h1 className="text-5xl md:text-6xl font-semibold tracking-tight text-black">
-              Your home, perfectly in sync.
+              Your home,{" "}
+              <span className="relative">
+                <span className="relative z-10">perfectly in sync.</span>
+                <span className="absolute bottom-2 left-0 right-0 h-3 bg-gradient-to-r from-gray-50 to-transparent z-0"></span>
+              </span>
             </h1>
             
-            {/* Subhead */}
             <p className="text-gray-600 text-lg max-w-prose">
-              Apple-first integration for lighting, privacy, climate, and security — designed to feel invisible until you need it.
+              Apple-first integration for lighting, privacy, climate, and security —
+              designed to feel invisible until you need it.
             </p>
             
-            {/* CTA Buttons */}
-            <div className="flex gap-3">
-              <a href="#features" className="rounded-full bg-black text-white px-5 py-3 text-sm">
+            {/* Single, focused CTA */}
+            <div className="pt-2">
+              <a href="#features" className="rounded-full bg-black text-white px-5 py-3 text-sm inline-flex hover:bg-gray-900 transition-colors">
                 Explore Features
-              </a>
-              <a href="#contact" className="rounded-full border px-5 py-3 text-sm">
-                Get Started
               </a>
             </div>
           </motion.div>
 
-          {/* 
-            RIGHT COLUMN - Visual Block
-            - Self-aligns to right on desktop
-            - Max width 45vw to maintain balance with text
-          */}
-          <div className="md:col-span-6 md:justify-self-end w-full md:max-w-[45vw]">
+          {/* Right: Room with smart indicators - Now taking up more space (7/12) */}
+          <motion.div 
+            className="relative rounded-3xl overflow-hidden shadow-lg md:col-span-7"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+          >
+            {/* The room image */}
+            <img
+              src="/Curtains-Open-Lights-On.png"
+              alt="Smart home living room"
+              className="w-full h-auto rounded-3xl"
+            />
             
-            {/* 
-              PHOTO BLOCK - Single source of truth
-              - Contains background photo
-              - iPhone overlays on this block
-              - iPhone screen is transparent, shows this photo through it
-            */}
-            <div className="relative aspect-[9/16] rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-              
-              {/* Background Photo - THE ONLY IMAGE SOURCE */}
-              <img
-                src="/Curtains-Open-Lights-On.png"
-                alt="Living room with lights on and curtains open"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-
-              {/* 
-                Subtle Separation Glow
-                - Soft light behind iPhone for depth
-                - Bottom-right radial gradient
-                - Very subtle (35% opacity)
-              */}
-              <div className="pointer-events-none absolute right-0 bottom-0 w-2/3 h-2/3
-                              bg-[radial-gradient(60%_60%_at_75%_75%,rgba(255,255,255,0.35),transparent_60%)]" />
-
-              {/* 
-                IPHONE OVERLAY
-                - Positioned bottom-right
-                - Reduced scaling for better desktop proportions (85% → 95%)
-                - NO CHILDREN = transparent screen shows photo through it
-                - Glass UI controls can be added inside IPhoneFrame later
-              */}
-              <div className="absolute bottom-4 right-4 origin-bottom-right
-                              scale-85 sm:scale-90 md:scale-95">
-                <IPhoneFrame>
-                  {/* 
-                    Screen is transparent - no content here
-                    Later: Add glass UI controls like buttons/HUDs here
-                  */}
-                </IPhoneFrame>
-              </div>
-            </div>
-          </div>
+            {/* Smart feature indicators overlaid on the room */}
+            <SmartIndicators />
+          </motion.div>
         </div>
       </section>
-
-      {/* Perfect Control Section */}
-      <PerfectControl />
+      {/* Add more content sections here */}
+      
+      {/* Footer at the end of the page */}
+      <Footer />
     </main>
   );
 }
