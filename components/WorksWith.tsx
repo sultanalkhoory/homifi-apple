@@ -3,12 +3,13 @@ import { motion } from "framer-motion";
 import { staggerUp, childUp } from "@/lib/animations";
 
 /**
- * WorksWithExactStyle Component
+ * WorksWith Component
  * 
- * Closely replicates the exact styling of official smart home compatibility badges
- * as shown in the screenshot, while maintaining proper spacing and animations.
+ * Displays official compatibility badges for major smart home platforms
+ * in an elegant, Apple-inspired layout. Uses subtle animations and clean 
+ * spacing to maintain a premium aesthetic while showcasing official partnerships.
  */
-export default function WorksWithExactStyle() {
+export default function WorksWith() {
   return (
     <section className="py-16 bg-gray-50">
       <div className="mx-auto max-w-6xl px-4">
@@ -23,30 +24,29 @@ export default function WorksWithExactStyle() {
           Compatible with all major smart home platforms
         </motion.h2>
 
-        {/* Badge layout container */}
+        {/* Official partnership badges with staggered animation */}
         <motion.div 
           variants={staggerUp}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+          className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-10"
         >
           {/* Apple HomeKit Badge */}
           <motion.div
             variants={childUp}
-            whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+            whileHover={{ y: -3, transition: { duration: 0.2 } }}
+            className="w-full max-w-[280px]"
           >
-            <div className="bg-white rounded-full py-3 px-5 flex items-center gap-3 shadow-sm border border-gray-100">
-              {/* HomeKit Icon */}
-              <div className="flex-shrink-0">
-                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18 5L4 14V28L18 37L32 28V14L18 5Z" fill="#FFCC00" stroke="#FF9900" strokeWidth="2"/>
-                  <path d="M18 5V19M18 37V19M18 19L32 14M18 19L4 14" stroke="#FF9900" strokeWidth="2"/>
+            <div className="bg-white rounded-full py-4 px-6 shadow-sm flex items-center gap-4 border border-gray-100">
+              <div className="text-amber-500">
+                <svg viewBox="0 0 24 24" className="w-12 h-12 fill-current" aria-hidden="true">
+                  <path d="M17.66 7.32l-1 1.74c-.66-1.21-1.91-2.06-3.41-2.06-2.19 0-3.94 1.65-3.94 4s1.75 4 3.94 4c1.5 0 2.75-.85 3.41-2.06l1 1.74c-1.12 1.62-2.94 2.56-5.06 2.56-3.72 0-6.19-2.4-6.19-6.25 0-3.86 2.47-6.25 6.19-6.25 2.12 0 3.94.94 5.06 2.56M17.87 12c0 1.5-.76 3-2.19 3-1.44 0-2.2-1.5-2.2-3s.76-3 2.2-3c1.43 0 2.19 1.5 2.19 3z" />
                 </svg>
               </div>
-              <div className="flex flex-col">
-                <span className="text-xs text-gray-500">Works with</span>
-                <span className="text-xl font-semibold tracking-tight">Apple HomeKit</span>
+              <div>
+                <div className="text-xs font-normal text-gray-500">Works with</div>
+                <div className="text-xl font-semibold tracking-tight">Apple HomeKit</div>
               </div>
             </div>
           </motion.div>
@@ -54,23 +54,19 @@ export default function WorksWithExactStyle() {
           {/* Google Assistant Badge */}
           <motion.div
             variants={childUp}
-            whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+            whileHover={{ y: -3, transition: { duration: 0.2 } }}
+            className="w-full max-w-[280px]"
           >
-            <div className="bg-white rounded-full py-3 px-5 flex items-center gap-3 shadow-sm border border-gray-100">
-              {/* Google Assistant Icon */}
-              <div className="flex-shrink-0 flex items-center">
-                <div className="flex flex-col gap-[2px]">
-                  <div className="w-8 h-8 rounded-full bg-[#4285F4] flex-shrink-0"></div>
-                </div>
-                <div className="flex flex-col ml-1 gap-[2px]">
-                  <div className="w-3 h-3 rounded-full bg-[#EA4335]"></div>
-                  <div className="w-3 h-3 rounded-full bg-[#FBBC05]"></div>
-                  <div className="w-3 h-3 rounded-full bg-[#34A853]"></div>
-                </div>
+            <div className="bg-white rounded-full py-4 px-6 shadow-sm flex items-center gap-4 border border-gray-100">
+              <div className="flex flex-shrink-0">
+                <span className="w-3 h-3 rounded-full bg-blue-500 mr-[2px]"></span>
+                <span className="w-3 h-3 rounded-full bg-red-500 mr-[2px]"></span>
+                <span className="w-3 h-3 rounded-full bg-amber-400 mr-[2px]"></span>
+                <span className="w-3 h-3 rounded-full bg-green-500 mr-[2px]"></span>
               </div>
-              <div className="flex flex-col">
-                <span className="text-xs text-gray-500">works with the</span>
-                <span className="text-xl font-semibold tracking-tight">Google Assistant</span>
+              <div>
+                <div className="text-xs font-normal text-gray-500">works with the</div>
+                <div className="text-xl font-semibold tracking-tight">Google Assistant</div>
               </div>
             </div>
           </motion.div>
@@ -78,20 +74,18 @@ export default function WorksWithExactStyle() {
           {/* Amazon Alexa Badge */}
           <motion.div
             variants={childUp}
-            whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+            whileHover={{ y: -3, transition: { duration: 0.2 } }}
+            className="w-full max-w-[280px]"
           >
-            <div className="bg-white rounded-full py-3 px-5 flex items-center gap-3 shadow-sm border border-gray-100">
-              {/* Alexa Icon */}
-              <div className="flex-shrink-0">
-                <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M18 33C26.2843 33 33 26.2843 33 18C33 9.71573 26.2843 3 18 3C9.71573 3 3 9.71573 3 18C3 26.2843 9.71573 33 18 33Z" stroke="#31C4F3" strokeWidth="2.5" fill="none"/>
-                  <circle cx="18" cy="12" r="3" fill="#31C4F3"/>
-                  <path d="M25 26C23 22.5 21 21 18 21C15 21 13 22.5 11 26" stroke="#31C4F3" strokeWidth="2.5" strokeLinecap="round"/>
+            <div className="bg-white rounded-full py-4 px-6 shadow-sm flex items-center gap-4 border border-gray-100">
+              <div className="text-[#31C4F3]">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-10 h-10 fill-current">
+                  <path d="M24 5C13.52 5 5 13.52 5 24s8.52 19 19 19 19-8.52 19-19S34.48 5 24 5zm0 7.5c2.07 0 3.75 1.68 3.75 3.75S26.07 20 24 20s-3.75-1.68-3.75-3.75S21.93 12.5 24 12.5zm0 24.29c-4.96 0-9.27-2.54-11.77-6.38 1.56-2.83 7.4-4.29 11.77-4.29s10.21 1.46 11.77 4.29c-2.5 3.84-6.81 6.38-11.77 6.38z" />
                 </svg>
               </div>
-              <div className="flex flex-col">
-                <span className="text-xs text-gray-500 uppercase">Works with</span>
-                <span className="text-xl font-semibold tracking-tight lowercase">amazon alexa</span>
+              <div>
+                <div className="text-xs font-normal text-gray-500 uppercase">Works with</div>
+                <div className="text-xl font-semibold tracking-tight lowercase">amazon alexa</div>
               </div>
             </div>
           </motion.div>
