@@ -3,9 +3,7 @@ import Header from "@/components/Header";
 import FeatureStrip from "@/components/FeatureStrip";
 import { motion } from "framer-motion";
 import { fadeRise } from "@/lib/animations";
-import FloatingCard from "@/components/FloatingCard";
-import { MicrophoneIcon, KeyIcon, LockClosedIcon } from "@heroicons/react/24/outline";
-import { SparklesIcon } from "@heroicons/react/24/solid";
+import SmartIndicators from "@/components/SmartIndicators"; // Import our new component
 
 export default function Page() {
   return (
@@ -36,44 +34,23 @@ export default function Page() {
             </div>
           </motion.div>
 
-          {/* Right: Room with floating cards */}
-          <div className="relative">
+          {/* Right: Room with smart indicators */}
+          <motion.div 
+            className="relative rounded-3xl overflow-hidden shadow-lg"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+          >
+            {/* The room image */}
             <img
               src="/Curtains-Open-Lights-On.png"
-              alt="Room Lights On"
-              className="rounded-3xl shadow-lg"
+              alt="Smart home living room"
+              className="w-full h-auto rounded-3xl"
             />
-
-            {/* Floating cards with stagger */}
-            <FloatingCard
-              icon={<MicrophoneIcon className="w-5 h-5 text-blue-600" />}
-              title="Voice Control"
-              subtitle="Just ask Siri"
-              className="top-4 left-4"
-              delay={0.1}
-            />
-            <FloatingCard
-              icon={<KeyIcon className="w-5 h-5 text-green-600" />}
-              title="HomeKey"
-              subtitle="Tap. You're home."
-              className="top-4 right-4"
-              delay={0.2}
-            />
-            <FloatingCard
-              icon={<LockClosedIcon className="w-5 h-5 text-red-600" />}
-              title="Security"
-              subtitle="See who's here"
-              className="bottom-6 left-4"
-              delay={0.3}
-            />
-            <FloatingCard
-              icon={<SparklesIcon className="w-5 h-5 text-purple-600" />}
-              title="Automation"
-              subtitle="Set the mood"
-              className="bottom-6 right-4"
-              delay={0.4}
-            />
-          </div>
+            
+            {/* Smart feature indicators overlaid on the room */}
+            <SmartIndicators />
+          </motion.div>
         </div>
       </section>
       <FeatureStrip />
