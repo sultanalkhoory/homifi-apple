@@ -20,8 +20,8 @@ export default function IPhoneFrame({ children }: { children?: React.ReactNode }
       variants={scaleIn}
       initial="hidden"
       animate="show"
-      // MUCH smaller sizes - 120px mobile to 200px desktop max
-      className="relative inline-block w-[120px] sm:w-[150px] md:w-[180px] lg:w-[200px]"
+      // MUCH smaller sizes - 100px mobile to 160px desktop max
+      className="relative inline-block w-[100px] sm:w-[120px] md:w-[140px] lg:w-[160px]"
     >
       {/* iPhone body - transparent with thin border bezel */}
       <div className="relative aspect-[9/19.5] rounded-[32px] overflow-hidden
