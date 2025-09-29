@@ -54,7 +54,7 @@ const indicators: SmartIndicator[] = [
   },
   {
    id: 'voice',
-   x: '57%',   // Center horizontally
+   x: '55%',   // Center horizontally
    y: '73%',   // Bottom area where HomePod is
    label: 'Voice Control',
    detail: 'Just ask Siri',
