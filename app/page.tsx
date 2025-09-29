@@ -27,8 +27,9 @@ export default function Page() {
         5/7 grid layout
         Left: Text content
         Right: Room photo with interactive SmartIndicators overlay
+        Full viewport height for proper hero presence
       */}
-      <section className="pt-32 pb-20">
+      <section className="min-h-screen flex items-center py-20">
         <div className="mx-auto max-w-6xl px-4 grid md:grid-cols-12 gap-12 items-center">
           
           {/* Left column - Text content (5/12) */}
