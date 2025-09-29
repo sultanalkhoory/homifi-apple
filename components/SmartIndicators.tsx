@@ -59,7 +59,7 @@ const indicators: SmartIndicator[] = [
    label: 'Voice Control',
    detail: 'Just ask Siri',
    color: 'rgba(139, 146, 234, 0.85)',
-   popupDirection: 'top'  // Opens upward since it's near bottom
+   popupDirection: 'right'
   }
 ];
 
