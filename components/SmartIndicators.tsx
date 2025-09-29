@@ -54,11 +54,11 @@ const indicators: SmartIndicator[] = [
   },
   {
    id: 'voice',
-   x: '57%',   // Center horizontally
-   y: '66%',   // Bottom area where HomePod is
+   x: '55%',   // Center horizontally
+   y: '64%',   // Bottom area where HomePod is
    label: 'Voice Control',
    detail: 'Just ask Siri',
-   color: 'rgba(175, 82, 222, 0.85)', // Light blue color
+   color: 'rgba(251, 191, 36, 0.85)',
    popupDirection: 'top'  // Opens upward since it's near bottom
   }
 ];
