@@ -70,9 +70,9 @@ export default function Page() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
-            {/* Room background image */}
+            {/* Room background image - updated with HomePod */}
             <img
-              src="/Curtains-Open-Lights-On.png"
+              src="/Curtains-Open-Lights-On-Homepod.png"
               alt="Smart home living room"
               className="w-full h-auto rounded-3xl"
             />
