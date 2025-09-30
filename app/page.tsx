@@ -11,7 +11,7 @@ import SmartIndicators from "@/components/SmartIndicators";
  * 
  * Structure:
  * 1. Header (fixed navigation)
- * 2. Hero Section (3/9 ASYMMETRIC FULL-BLEED with SmartIndicators)
+ * 2. Hero Section (4/8 BALANCED LAYOUT with SmartIndicators)
  * 3. Perfect Light Section (lights demo with Control Center card)
  * 4. Footer (with Works With badges)
  */
@@ -23,85 +23,102 @@ export default function Page() {
       <Header />
       
       {/* 
-        ========== HERO SECTION (ASYMMETRIC FULL-BLEED) ==========
+        ========== HERO SECTION (4/8 BALANCED LAYOUT) ==========
         
         Design Strategy:
-        - Text: 3 columns (25% width) - compact, left-aligned
-        - Photo: 9 columns (75% width) - dominant, bleeds off right edge
-        - Photo extends beyond container (no right margin/padding)
-        - Creates dramatic "photo breaking out" effect
-        - SmartIndicators have maximum clean canvas
-        - No overlay on photo - keeps it crisp and interactive
+        - Text: 4 columns (33% width) - comfortable reading width
+        - Photo: 8 columns (67% width) - dominant but not overwhelming
+        - Both elements properly contained within grid
+        - Clean separation between text and interactive photo
+        - Photo has rounded corners and proper shadow
+        - SmartIndicators get ample, unobstructed space
         
-        Key Principles:
-        - Photo is the hero, not the text
-        - Text supports but doesn't compete
-        - Bleeding edge creates visual drama without full-screen overlay
-        - SmartIndicators are unobstructed and prominent
+        Why 4/8 Works:
+        - Photo is significantly larger than original 5/7 (67% vs 58%)
+        - Text has enough room to breathe
+        - SmartIndicators aren't cramped
+        - Professional, balanced, clear hierarchy
+        - No gimmicks - just good proportions
       */}
-      <section className="relative min-h-screen flex items-center py-20 overflow-hidden">
-        <div className="w-full">
+      <section className="min-h-screen flex items-center py-20">
+        <div className="mx-auto max-w-7xl px-4 w-full">
           {/* 
-            Asymmetric Grid Container
-            - Uses negative margin on right to allow photo bleed
-            - 3/9 column split (not centered, photo-dominant)
-            - Gap is minimal to let photo feel connected to text
+            Grid Container
+            - 12-column grid system
+            - Responsive gap (smaller on mobile, larger on desktop)
+            - Items vertically centered
           */}
-          <div className="grid md:grid-cols-12 gap-8 lg:gap-12">
+          <div className="grid md:grid-cols-12 gap-8 lg:gap-12 items-center">
             
             {/* 
-              ===== LEFT COLUMN: TEXT CONTENT (3 columns) =====
-              - Compact but comfortable width for reading
-              - Left-aligned for natural reading flow
-              - Generous left padding for breathing room from edge
-              - Vertical centering via flex
+              ===== LEFT COLUMN: TEXT CONTENT (4 columns / 33%) =====
+              
+              Content Hierarchy:
+              1. Headline - Large, attention-grabbing
+              2. Subheading - Clear value proposition
+              3. Description - Supporting details
+              4. CTA - Single clear action
+              
+              Spacing:
+              - Generous vertical spacing between elements
+              - Comfortable line height for readability
+              - Left-aligned for natural flow
             */}
             <motion.div 
               variants={fadeRise} 
               initial="hidden" 
               animate="show" 
-              className="md:col-span-3 flex flex-col justify-center space-y-6 px-6 md:px-8 lg:px-12"
+              className="md:col-span-4 space-y-6"
             >
               {/* 
                 Main Headline
-                - Large and bold but not overwhelming
-                - Gradient underline on key phrase for emphasis
-                - Responsive sizing (smaller on mobile, larger on desktop)
+                - Bold and prominent
+                - Gradient underline emphasizes key phrase
+                - Responsive text sizing
+                - Tight tracking for modern look
               */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-black leading-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-black leading-tight">
                 Your home,{" "}
                 <span className="relative inline-block">
                   <span className="relative z-10">perfectly in sync.</span>
-                  {/* Subtle gradient underline effect */}
-                  <span className="absolute bottom-1 md:bottom-2 left-0 right-0 h-2 md:h-3 bg-gradient-to-r from-gray-200 to-transparent z-0"></span>
+                  {/* 
+                    Gradient Underline Effect
+                    - Subtle highlight beneath key phrase
+                    - Gray gradient for understated elegance
+                    - Positioned absolutely below text baseline
+                  */}
+                  <span className="absolute bottom-1 sm:bottom-2 left-0 right-0 h-2 sm:h-3 bg-gradient-to-r from-gray-200 to-transparent z-0"></span>
                 </span>
               </h1>
               
               {/* 
                 Value Proposition / Subheading
-                - Clear, concise description
-                - Good contrast without being too dark
-                - Max width keeps lines readable
+                - One clear sentence explaining what this is
+                - Good color contrast (gray-600)
+                - Comfortable font size for scanning
+                - Max-width prose keeps line length optimal
               */}
-              <p className="text-gray-600 text-base md:text-lg max-w-prose leading-relaxed">
+              <p className="text-gray-600 text-base sm:text-lg lg:text-xl max-w-prose leading-relaxed">
                 Apple-first integration for lighting, privacy, climate, and security — designed to feel invisible until you need it.
               </p>
               
               {/* 
                 Primary CTA Button
-                - Single clear call-to-action
-                - Black button for strong contrast
-                - Links to feature showcase below
-                - Smooth hover/active states
+                - Single, focused call-to-action
+                - Black background for strong contrast
+                - Rounded-full for modern, friendly appearance
+                - Smooth hover and active states
+                - Links to feature demonstration section below
               */}
               <div className="pt-2">
                 <a 
                   href="#perfect-light" 
-                  className="inline-flex items-center rounded-full bg-black text-white px-6 py-3 text-sm md:text-base font-medium
-                    hover:bg-gray-900 hover:scale-[1.02] 
+                  className="inline-flex items-center rounded-full bg-black text-white 
+                    px-5 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-medium
+                    hover:bg-gray-900 hover:scale-[1.02] hover:shadow-lg
                     active:scale-[0.98]
                     transition-all duration-200 ease-out
-                    shadow-lg hover:shadow-xl"
+                    shadow-md"
                 >
                   Explore Features
                 </a>
@@ -109,48 +126,63 @@ export default function Page() {
             </motion.div>
 
             {/* 
-              ===== RIGHT COLUMN: PHOTO WITH FULL-BLEED (9 columns) =====
+              ===== RIGHT COLUMN: PHOTO WITH SMART INDICATORS (8 columns / 67%) =====
               
-              Key Techniques:
-              1. Takes 9 columns (75% of grid width)
-              2. Negative right margin extends photo beyond container
-              3. On mobile, full width with small negative margins
-              4. Creates "breaking out" visual effect
-              5. SmartIndicators overlay on clean, unobstructed photo
+              Photo Strategy:
+              - Takes up 67% of horizontal space (vs 58% in original)
+              - Contained within grid (no bleeding)
+              - Clean rounded corners all around
+              - Proper shadow for depth
+              - SmartIndicators overlaid on unobstructed photo
+              
+              Why This Works:
+              - Photo is clearly the visual focus
+              - SmartIndicators have plenty of room
+              - No text overlay competition
+              - Clean, professional presentation
             */}
             <motion.div 
-              className="md:col-span-9 relative -mx-4 md:mx-0 md:-mr-8 lg:-mr-16 xl:-mr-24"
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
+              className="md:col-span-8"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.7, ease: 'easeOut' }}
             >
               {/* 
                 Photo Container
-                - Relative positioning for SmartIndicators overlay
-                - Rounded corners on left side only (right bleeds off)
-                - Shadow for depth and separation
-                - Aspect ratio maintains photo proportions
+                - Relative positioning for SmartIndicators absolute overlay
+                - Rounded-3xl for modern, premium feel
+                - Overflow hidden to clip image to border radius
+                - Shadow-2xl for depth and visual separation
+                - Aspect ratio maintains proper proportions
               */}
-              <div className="relative aspect-[16/10] rounded-l-3xl overflow-hidden shadow-2xl">
+              <div className="relative aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl">
                 {/* 
                   Room Background Image
-                  - High-quality lifestyle photo
-                  - Object-cover ensures proper cropping on all screens
-                  - Full width and height of container
+                  - High-quality lifestyle photo showing the smart home
+                  - Features: living room with furniture, lighting, curtains, HomePod
+                  - Object-cover ensures image fills container without distortion
+                  - Alt text for accessibility
                 */}
                 <img
                   src="/Curtains-Open-Lights-On-Homepod.png"
-                  alt="Smart home living room with integrated controls"
+                  alt="Modern smart home living room featuring integrated lighting, automated curtains, and voice control"
                   className="w-full h-full object-cover"
                 />
                 
                 {/* 
-                  SmartIndicators Overlay
-                  - Interactive hotspots showing features
-                  - Positioned absolutely over clean photo
-                  - No text overlay competition
-                  - Maximum space and visibility
-                  - Users can click to learn about lights, curtains, climate, security, voice
+                  SmartIndicators Component Overlay
+                  - Interactive hotspots positioned over photo features
+                  - Shows: Lights, Curtains, Climate, Security, Voice Control
+                  - Users can hover (desktop) or tap (mobile) to learn about each feature
+                  - Positioned absolutely to overlay the photo
+                  - Full inset (covers entire photo area)
+                  - z-index allows interaction above photo
+                  
+                  Features:
+                  - Pulsing animated dots
+                  - Glass-morphic info popups on interaction
+                  - Smooth animations
+                  - Mobile-friendly tap-to-reveal mode
                 */}
                 <div className="absolute inset-0">
                   <SmartIndicators />
@@ -163,14 +195,22 @@ export default function Page() {
       
       {/* 
         ========== PERFECT LIGHT SECTION ==========
-        Interactive lights demo with Control Center card
-        Shows room state changes with synchronized toggles
+        Interactive lights demo with iOS Control Center-style card
+        Shows room state changes with synchronized photo transitions
+        Features:
+        - Control Center card (compact on mobile, full size on desktop)
+        - Smooth crossfade between lights on/off photos
+        - Auto-trigger animation on scroll into view
       */}
       <PerfectLight />
       
       {/* 
         ========== FOOTER ==========
-        Works With badges + navigation + legal links
+        Site footer with multiple components:
+        - Works With platform badges (HomeKit, Google, Alexa)
+        - Navigation links
+        - Legal links (Privacy, Terms, Cookies)
+        - Copyright notice
       */}
       <Footer />
     </main>
