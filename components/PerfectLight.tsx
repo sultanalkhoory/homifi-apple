@@ -112,9 +112,9 @@ export default function PerfectLight() {
                 onClick={handleToggle}
                 className={`
                   group relative overflow-hidden
-                  rounded-2xl 
-                  w-full max-w-[200px] sm:max-w-[220px] md:max-w-[240px] lg:max-w-[256px]
-                  p-4 sm:p-5 md:p-6
+                  rounded-xl sm:rounded-2xl
+                  w-full max-w-[160px] sm:max-w-[200px] md:max-w-[240px] lg:max-w-[256px]
+                  p-3 sm:p-4 md:p-5 lg:p-6
                   transition-all duration-500 ease-out
                   hover:scale-[1.02] active:scale-[0.98]
                   ${lightsOn
@@ -125,17 +125,17 @@ export default function PerfectLight() {
                 aria-label={`Toggle lights ${lightsOn ? 'off' : 'on'}`}
               >
                 {/* Top Row: Icon + Status Indicator */}
-                <div className="flex items-start justify-between mb-3 sm:mb-4">
+                <div className="flex items-start justify-between mb-2 sm:mb-3 md:mb-4">
                   {/* Light bulb icon with background circle */}
                   <div className={`
-                    p-2 sm:p-2.5 md:p-3 rounded-full transition-all duration-300
+                    p-1.5 sm:p-2 md:p-2.5 lg:p-3 rounded-full transition-all duration-300
                     ${lightsOn 
                       ? 'bg-white/20 backdrop-blur-sm' 
                       : 'bg-white/60'
                     }
                   `}>
                     <LightBulbIcon className={`
-                      w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 
+                      w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 
                       transition-colors duration-300
                       ${lightsOn ? 'text-white' : 'text-gray-500'}
                     `} />
@@ -155,7 +155,7 @@ export default function PerfectLight() {
                 <div className="text-left">
                   {/* Room name */}
                   <p className={`
-                    text-sm sm:text-base font-semibold transition-colors duration-300
+                    text-xs sm:text-sm md:text-base font-semibold transition-colors duration-300
                     ${lightsOn ? 'text-white' : 'text-gray-700'}
                   `}>
                     Living Room
@@ -163,7 +163,7 @@ export default function PerfectLight() {
                   
                   {/* Status text (On/Off) */}
                   <p className={`
-                    text-xs sm:text-sm mt-0.5 transition-colors duration-300
+                    text-[10px] sm:text-xs md:text-sm mt-0.5 transition-colors duration-300
                     ${lightsOn ? 'text-white/90' : 'text-gray-500'}
                   `}>
                     {lightsOn ? 'Lights On' : 'Lights Off'}
