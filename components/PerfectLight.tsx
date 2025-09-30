@@ -3,20 +3,45 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { fadeRise, scaleIn } from '@/lib/animations';
+import { LightBulbIcon } from '@heroicons/react/24/outline';
 
+/**
+ * PerfectLight Section Component
+ * 
+ * Demonstrates smart lighting control with an iOS Control Center-style card.
+ * Features:
+ * - Auto-triggers lights on when section enters viewport (once only)
+ * - Beautiful gradient animation on toggle (gray → vibrant amber/orange)
+ * - Synchronized room photo changes (lights on/off)
+ * - Smooth 750ms transitions for professional feel
+ * 
+ * Layout:
+ * - Left column (5/12): Heading, description, Control Center card
+ * - Right column (7/12): Room photo that changes based on light state
+ */
 export default function PerfectLight() {
-  // Start with lights OFF until user scrolls to section
+  // Track whether lights are currently on or off
   const [lightsOn, setLightsOn] = useState(false);
+  
+  // Track if we've already auto-triggered lights (prevent multiple triggers)
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
+  
+  // Reference to the section for intersection observer
   const sectionRef = useRef(null);
 
-  // Auto-trigger lights on when section comes into view (only once)
+  /**
+   * Auto-trigger Effect
+   * Uses IntersectionObserver to detect when section enters viewport.
+   * When 30% of section is visible, waits 800ms then turns lights on.
+   * Only triggers once (controlled by hasAutoTriggered flag).
+   */
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          // Only trigger if section is visible AND we haven't triggered before
           if (entry.isIntersecting && !hasAutoTriggered) {
-            // Delay the lights turning on for better effect
+            // Delay the lights turning on for dramatic effect
             setTimeout(() => {
               setLightsOn(true);
               setHasAutoTriggered(true); // Prevent future auto-triggers
@@ -34,19 +59,29 @@ export default function PerfectLight() {
       observer.observe(sectionRef.current);
     }
 
+    // Cleanup observer on component unmount
     return () => observer.disconnect();
-  }, [hasAutoTriggered]); // Only check hasAutoTriggered, not lightsOn
+  }, [hasAutoTriggered]); // Only re-run if hasAutoTriggered changes
 
+  /**
+   * Toggle Handler
+   * Manually toggles lights on/off when user clicks the Control Center card
+   */
   const handleToggle = () => {
     setLightsOn(!lightsOn);
   };
 
   return (
-    <section ref={sectionRef} id="perfect-light" className="py-20 md:py-28 bg-gray-50">
+    <section 
+      ref={sectionRef} 
+      id="perfect-light" 
+      className="py-20 md:py-28 bg-gray-50"
+    >
       <div className="mx-auto max-w-6xl px-4">
+        {/* Two-column grid: Text + Control on left, Photo on right */}
         <div className="grid md:grid-cols-12 gap-12 items-center">
           
-          {/* Left column - Text + Interactive Button */}
+          {/* ===== LEFT COLUMN: Text + Control Center Card ===== */}
           <motion.div
             variants={fadeRise}
             initial="hidden"
@@ -54,45 +89,98 @@ export default function PerfectLight() {
             viewport={{ once: true, margin: "-100px" }}
             className="md:col-span-5 space-y-6"
           >
+            {/* Section Heading */}
             <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-black">
               Perfect Light
             </h2>
             
+            {/* Subheading */}
             <p className="text-xl md:text-2xl text-gray-700 leading-relaxed">
               Every room, every moment.<br />
               Exactly as you want it.
             </p>
             
+            {/* Description */}
             <p className="text-gray-600 text-lg">
               Control your lighting with intuitive controls and automation. 
               Set the perfect ambiance for any moment.
             </p>
             
-            {/* Interactive Liquid Glass Button */}
+            {/* ===== CONTROL CENTER CARD ===== */}
             <div className="pt-4">
-              <button 
+              <button
                 onClick={handleToggle}
-                className="group relative inline-flex rounded-full px-6 py-3 text-sm font-medium
-                  backdrop-blur-md bg-white/20 border border-gray-200/50 
-                  shadow-lg shadow-black/5
-                  transition-all duration-300 ease-out
-                  hover:bg-white/30 hover:border-gray-300/60 hover:shadow-xl hover:shadow-black/10
-                  hover:scale-[1.02] hover:-translate-y-0.5
-                  active:scale-[0.98] active:translate-y-0
-                  text-gray-800"
+                className={`
+                  group relative overflow-hidden
+                  rounded-2xl p-6 w-64
+                  transition-all duration-500 ease-out
+                  hover:scale-[1.02] active:scale-[0.98]
+                  ${lightsOn
+                    ? 'bg-gradient-to-br from-amber-400 via-orange-400 to-orange-500 shadow-xl shadow-amber-500/20'
+                    : 'bg-gray-200 shadow-lg'
+                  }
+                `}
+                aria-label={`Toggle lights ${lightsOn ? 'off' : 'on'}`}
               >
-                <span className="relative z-10 transition-all duration-200 group-active:scale-95">
-                  {lightsOn ? 'Lights On' : 'Lights Off'}
-                </span>
+                {/* Top Row: Icon + Status Indicator */}
+                <div className="flex items-start justify-between mb-4">
+                  {/* Light bulb icon with background circle */}
+                  <div className={`
+                    p-3 rounded-full transition-all duration-300
+                    ${lightsOn 
+                      ? 'bg-white/20 backdrop-blur-sm' 
+                      : 'bg-white/60'
+                    }
+                  `}>
+                    <LightBulbIcon className={`
+                      w-7 h-7 transition-colors duration-300
+                      ${lightsOn ? 'text-white' : 'text-gray-500'}
+                    `} />
+                  </div>
+                  
+                  {/* Status indicator dot (top-right corner) */}
+                  <div className={`
+                    h-2 w-2 rounded-full transition-all duration-300
+                    ${lightsOn 
+                      ? 'bg-white shadow-lg shadow-white/50' 
+                      : 'bg-gray-400'
+                    }
+                  `} />
+                </div>
                 
-                {/* Subtle inner glow on hover */}
-                <div className="absolute inset-0 rounded-full bg-white/10 opacity-0 
-                  transition-opacity duration-300 group-hover:opacity-100" />
+                {/* Bottom Row: Room name + Status text */}
+                <div className="text-left">
+                  {/* Room name */}
+                  <p className={`
+                    text-base font-semibold transition-colors duration-300
+                    ${lightsOn ? 'text-white' : 'text-gray-700'}
+                  `}>
+                    Living Room
+                  </p>
+                  
+                  {/* Status text (On/Off) */}
+                  <p className={`
+                    text-sm mt-0.5 transition-colors duration-300
+                    ${lightsOn ? 'text-white/90' : 'text-gray-500'}
+                  `}>
+                    {lightsOn ? 'Lights On' : 'Lights Off'}
+                  </p>
+                </div>
+                
+                {/* Subtle inner glow effect when lights are on */}
+                {lightsOn && (
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                  />
+                )}
               </button>
             </div>
           </motion.div>
 
-          {/* Right column - Single Photo */}
+          {/* ===== RIGHT COLUMN: Room Photo ===== */}
           <motion.div
             variants={scaleIn}
             initial="hidden"
@@ -100,23 +188,33 @@ export default function PerfectLight() {
             viewport={{ once: true, margin: "-100px" }}
             className="md:col-span-7"
           >
-            {/* Photo that changes based on lights state */}
+            {/* 
+              Photo Container
+              Contains two images that crossfade based on lightsOn state.
+              Both images are positioned absolutely to enable smooth opacity transitions.
+            */}
             <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden">
               
-              {/* Lights on image - 750ms duration */}
+              {/* Lights ON image - visible when lightsOn === true */}
               <img
                 src="/Curtains-Closed-Lights-On.png"
                 alt="Room with lights on"
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity 
-                  duration-[750ms] ease-out ${lightsOn ? 'opacity-100' : 'opacity-0'}`}
+                className={`
+                  absolute inset-0 w-full h-full object-cover 
+                  transition-opacity duration-[750ms] ease-out 
+                  ${lightsOn ? 'opacity-100' : 'opacity-0'}
+                `}
               />
               
-              {/* Lights off image - 750ms duration */}
+              {/* Lights OFF image - visible when lightsOn === false */}
               <img
                 src="/Curtains-Closed-Lights-Off.png"
                 alt="Room with lights off"
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity 
-                  duration-[750ms] ease-out ${lightsOn ? 'opacity-0' : 'opacity-100'}`}
+                className={`
+                  absolute inset-0 w-full h-full object-cover 
+                  transition-opacity duration-[750ms] ease-out 
+                  ${lightsOn ? 'opacity-0' : 'opacity-100'}
+                `}
               />
             </div>
           </motion.div>
