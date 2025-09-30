@@ -2,6 +2,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PerfectLight from "@/components/PerfectLight";
+import PerfectPrivacy from "@/components/PerfectPrivacy";
 import { motion } from "framer-motion";
 import { fadeRise } from "@/lib/animations";
 import SmartIndicators from "@/components/SmartIndicators";
