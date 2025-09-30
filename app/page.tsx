@@ -1,112 +1,208 @@
 'use client';
-import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import PerfectLight from "@/components/PerfectLight";
+import { motion } from "framer-motion";
+import { fadeRise } from "@/lib/animations";
+import SmartIndicators from "@/components/SmartIndicators";
 
 /**
- * Header Component
+ * Main Page Component
  * 
- * Apple-style frosted glass navigation with responsive behavior:
- * - Desktop: Full horizontal nav with links and refined CTA
- * - Mobile: Hamburger menu with simplified controls
- * 
- * Design Philosophy:
- * - Fixed at top with subtle offset for breathing room
- * - Frosted glass effect (backdrop-blur) for premium feel
- * - Minimal and clean - lets content shine
- * - CTA is subtle (white with border) - not competing with hero
- * 
- * The header is fixed at the top with z-index to ensure it stays above 
- * all content while scrolling, with a slight top-6 offset to create 
- * visual breathing room.
+ * Structure:
+ * 1. Header (fixed navigation)
+ * 2. Hero Section (4/8 BALANCED LAYOUT with SmartIndicators)
+ * 3. Perfect Light Section (lights demo with Control Center card)
+ * 4. Footer (with Works With badges)
  */
-export default function Header() {
+
+export default function Page() {
   return (
-    <header className="fixed top-6 inset-x-0 z-50">
-      <div className="mx-auto max-w-6xl px-4">
-        {/* 
-          Frosted Glass Navigation Container
-          - Rounded-full pill shape (modern, friendly)
-          - Frosted glass effect with backdrop-blur
-          - Semi-transparent white background
-          - Subtle border for definition
-          - Horizontal flex layout with proper spacing
-        */}
-        <div className="frosted rounded-full flex items-center gap-2 px-3 py-2">
-          
+    <main>
+      {/* Fixed header navigation */}
+      <Header />
+      
+      {/* 
+        ========== HERO SECTION (4/8 BALANCED LAYOUT) ==========
+        
+        Design Strategy:
+        - Text: 4 columns (33% width) - comfortable reading width
+        - Photo: 8 columns (67% width) - dominant but not overwhelming
+        - Both elements properly contained within grid
+        - Clean separation between text and interactive photo
+        - Photo has rounded corners and proper shadow
+        - SmartIndicators get ample, unobstructed space
+        
+        Why 4/8 Works:
+        - Photo is significantly larger than original 5/7 (67% vs 58%)
+        - Text has enough room to breathe
+        - SmartIndicators aren't cramped
+        - Professional, balanced, clear hierarchy
+        - No gimmicks - just good proportions
+      */}
+      <section className="min-h-screen flex items-center py-20">
+        <div className="mx-auto max-w-7xl px-4 w-full">
           {/* 
-            Logo / Brand
-            - Left-aligned
-            - Links to home page
-            - Includes HomiFi logo image
-            - Padding for comfortable tap target
+            Grid Container
+            - 12-column grid system
+            - Responsive gap (smaller on mobile, larger on desktop)
+            - Items vertically centered
           */}
-          <Link href="#" className="pl-2 flex items-center gap-2">
-            <img src="/homifi-logo.png" alt="HomiFi" className="h-7" />
-          </Link>
-          
-          {/* 
-            Main Navigation Links
-            - Centered horizontally (mx-auto)
-            - Hidden on mobile (md:flex)
-            - Even spacing between links
-            - Hover state darkens text
-            - Links to main sections via anchor tags
-          */}
-          <nav className="mx-auto hidden md:flex items-center gap-8 text-sm text-gray-600">
-            <a href="#features" className="hover:text-black transition-colors duration-200">
-              Features
-            </a>
-            <a href="#works" className="hover:text-black transition-colors duration-200">
-              Works
-            </a>
-            <a href="#ecosystem" className="hover:text-black transition-colors duration-200">
-              Ecosystem
-            </a>
-            <a href="#pricing" className="hover:text-black transition-colors duration-200">
-              Pricing
-            </a>
-          </nav>
-          
-          {/* 
-            Desktop CTA Button - "Get Started"
-            - Right-aligned (ml-auto)
-            - Hidden on mobile (hidden md:inline-flex)
-            - White background with subtle border (refined, secondary style)
-            - Black text for contrast
-            - Rounded-full to match navigation pill
-            - Smooth hover states (slight scale and shadow)
-            - Intentionally subtle - hero CTA is the primary action
-          */}
-          <a 
-            href="#contact" 
-            className="ml-auto hidden md:inline-flex items-center rounded-full 
-              bg-white border border-black/20 text-black text-sm px-4 py-2
-              hover:bg-gray-50 hover:border-black/30 hover:scale-[1.02]
-              active:scale-[0.98]
-              transition-all duration-200 ease-out
-              shadow-sm hover:shadow-md"
-          >
-            Get Started
-          </a>
-          
-          {/* 
-            Mobile Menu Button (Hamburger)
-            - Only visible on mobile (md:hidden)
-            - Right-aligned (ml-auto)
-            - Black circular button with hamburger icon
-            - aria-label for accessibility
-            - TODO: Connect to mobile menu drawer/dropdown
-          */}
-          <button 
-            aria-label="Menu" 
-            className="md:hidden ml-auto inline-flex items-center justify-center 
-              rounded-full w-10 h-10 bg-black text-white
-              hover:bg-gray-900 active:scale-95
-              transition-all duration-200"
-          >
-            ≡
-          </button>
+          <div className="grid md:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            {/* 
+              ===== LEFT COLUMN: TEXT CONTENT (4 columns / 33%) =====
+              
+              Content Hierarchy:
+              1. Headline - Large, attention-grabbing
+              2. Subheading - Clear value proposition
+              3. Description - Supporting details
+              4. CTA - Single clear action
+              
+              Spacing:
+              - Generous vertical spacing between elements
+              - Comfortable line height for readability
+              - Left-aligned for natural flow
+            */}
+            <motion.div 
+              variants={fadeRise} 
+              initial="hidden" 
+              animate="show" 
+              className="md:col-span-4 space-y-6"
+            >
+              {/* 
+                Main Headline
+                - Bold and prominent
+                - Clean, no decorative elements
+                - Responsive text sizing
+                - Tight tracking for modern look
+              */}
+              <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-black leading-tight">
+                Your home, perfectly in sync.
+              </h1>
+              
+              {/* 
+                Value Proposition / Subheading
+                - Ultra-minimal, confident statement
+                - "Just works" is Apple-coded language
+                - Lets SmartIndicators and sections explain the details
+                - Good color contrast (gray-600)
+              */}
+              <p className="text-gray-600 text-base sm:text-lg lg:text-xl leading-relaxed">
+                The smart home that just works.
+              </p>
+              
+              {/* 
+                Primary CTA Button
+                - Single, focused call-to-action
+                - Black background for strong contrast
+                - Rounded-full for modern, friendly appearance
+                - Smooth hover and active states
+                - Links to feature demonstration section below
+              */}
+              <div className="pt-2">
+                <a 
+                  href="#perfect-light" 
+                  className="inline-flex items-center rounded-full bg-black text-white 
+                    px-5 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-medium
+                    hover:bg-gray-900 hover:scale-[1.02] hover:shadow-lg
+                    active:scale-[0.98]
+                    transition-all duration-200 ease-out
+                    shadow-md"
+                >
+                  Explore Features
+                </a>
+              </div>
+            </motion.div>
+
+            {/* 
+              ===== RIGHT COLUMN: PHOTO WITH SMART INDICATORS (8 columns / 67%) =====
+              
+              Photo Strategy:
+              - Takes up 67% of horizontal space (vs 58% in original)
+              - Contained within grid (no bleeding)
+              - Clean rounded corners all around
+              - Proper shadow for depth
+              - SmartIndicators overlaid on unobstructed photo
+              
+              Why This Works:
+              - Photo is clearly the visual focus
+              - SmartIndicators have plenty of room
+              - No text overlay competition
+              - Clean, professional presentation
+            */}
+            <motion.div 
+              className="md:col-span-8"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
+            >
+              {/* 
+                Photo Container
+                - Relative positioning for SmartIndicators absolute overlay
+                - Rounded-3xl for modern, premium feel
+                - Overflow hidden to clip image to border radius
+                - Shadow-2xl for depth and visual separation
+                - Aspect ratio maintains proper proportions
+              */}
+              <div className="relative aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl">
+                {/* 
+                  Room Background Image
+                  - High-quality lifestyle photo showing the smart home
+                  - Features: living room with furniture, lighting, curtains, HomePod
+                  - Object-cover ensures image fills container without distortion
+                  - Alt text for accessibility
+                */}
+                <img
+                  src="/Curtains-Open-Lights-On-Homepod.png"
+                  alt="Modern smart home living room featuring integrated lighting, automated curtains, and voice control"
+                  className="w-full h-full object-cover"
+                />
+                
+                {/* 
+                  SmartIndicators Component Overlay
+                  - Interactive hotspots positioned over photo features
+                  - Shows: Lights, Curtains, Climate, Security, Voice Control
+                  - Users can hover (desktop) or tap (mobile) to learn about each feature
+                  - Positioned absolutely to overlay the photo
+                  - Full inset (covers entire photo area)
+                  - z-index allows interaction above photo
+                  
+                  Features:
+                  - Pulsing animated dots
+                  - Glass-morphic info popups on interaction
+                  - Smooth animations
+                  - Mobile-friendly tap-to-reveal mode
+                */}
+                <div className="absolute inset-0">
+                  <SmartIndicators />
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
-      </div>
-    </header>
+      </section>
+      
+      {/* 
+        ========== PERFECT LIGHT SECTION ==========
+        Interactive lights demo with iOS Control Center-style card
+        Shows room state changes with synchronized photo transitions
+        Features:
+        - Control Center card (compact on mobile, full size on desktop)
+        - Smooth crossfade between lights on/off photos
+        - Auto-trigger animation on scroll into view
+      */}
+      <PerfectLight />
+      
+      {/* 
+        ========== FOOTER ==========
+        Site footer with multiple components:
+        - Works With platform badges (HomeKit, Google, Alexa)
+        - Navigation links
+        - Legal links (Privacy, Terms, Cookies)
+        - Copyright notice
+      */}
+      <Footer />
+    </main>
   );
 }
