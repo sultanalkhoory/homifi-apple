@@ -7,163 +7,111 @@ import { fadeRise, scaleIn } from '@/lib/animations';
 /**
  * PerfectPrivacy Section Component
  * 
- * Demonstrates smart curtain control with an iOS Control Center-style card.
- * Uses proven video playback logic with canvas frame capture for seamless transitions.
+ * Simplified curtain control with video-only approach.
+ * No static images, no canvas - just clean video playback.
  * 
  * Features:
  * - Auto-plays opening video when section enters viewport (once only)
- * - Canvas frame capture for seamless video source swapping
- * - Video preloading for smooth transitions
+ * - Video pauses on last frame after playback
  * - Control Center card that matches PerfectLight styling
- * - Button ignores clicks during video playback
+ * - Button ignores clicks during video playback (silently)
  * 
  * Layout:
  * - Left column (7/12): Video showing curtain states
  * - Right column (5/12): Heading, description, Control Center card
- * - ALTERNATES from PerfectLight section (photo left, text right)
+ * - ALTERNATES from PerfectLight section (video left, text right)
  */
 export default function PerfectPrivacy() {
-  // Refs for DOM elements
+  // Track whether curtains are currently open or closed
+  const [curtainsOpen, setCurtainsOpen] = useState(false);
+  
+  // Track if video is currently playing (used to ignore button clicks)
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+  // Track if we've already auto-triggered the opening (prevent multiple triggers)
+  const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
+  
+  // Reference to the section for intersection observer
   const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Reference to the video element for playback control
   const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // State management
-  const [curtainsState, setCurtainsState] = useState<'open' | 'closed'>('closed');
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [manualControl, setManualControl] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [showCanvas, setShowCanvas] = useState(false);
-
-  // Track when section comes into view (once only)
+  // Track when section comes into view (once only, 30% threshold)
   const isInView = useInView(containerRef, { once: true, amount: 0.3 });
 
   /**
-   * Preload initial video (closed state)
-   * Loads the closing video first so we have something to show
+   * Auto-trigger Effect
+   * When section enters viewport, wait 800ms then play opening video
+   * Only triggers once (controlled by hasAutoTriggered flag)
    */
   useEffect(() => {
-    if (!videoRef.current) return;
-    const video = videoRef.current;
-    video.src = '/video/curtains-closing.mp4';
-    
-    const onLoad = () => {
-      video.currentTime = video.duration; // Show last frame (closed state)
-      video.pause();
-      setVideoLoaded(true);
-    };
-    
-    video.addEventListener('loadeddata', onLoad, { once: true });
-    video.load();
-    
-    return () => video.removeEventListener('loadeddata', onLoad);
-  }, []);
-
-  /**
-   * Auto-play opening video when section comes into view
-   * Only triggers once, and only if user hasn't manually controlled yet
-   */
-  useEffect(() => {
-    if (isInView && !manualControl && curtainsState === 'closed' && videoLoaded) {
-      const timer = setTimeout(() => playCurtainVideo('opening'), 800);
-      return () => clearTimeout(timer);
+    if (isInView && !hasAutoTriggered) {
+      setTimeout(() => {
+        playVideo('opening');
+        setHasAutoTriggered(true);
+      }, 800);
     }
-  }, [isInView, manualControl, curtainsState, videoLoaded]);
+  }, [isInView, hasAutoTriggered]);
 
   /**
-   * Capture Current Frame to Canvas
-   * This allows seamless transition when switching video sources
-   * Shows the current frame while new video loads
-   */
-  const captureCurrentFrame = () => {
-    if (!videoRef.current || !canvasRef.current) return;
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    
-    canvas.width = video.videoWidth || 1920;
-    canvas.height = video.videoHeight || 1080;
-    
-    try {
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      setShowCanvas(true);
-    } catch {
-      // Ignore draw errors
-    }
-  };
-
-  /**
-   * Play Curtain Video (Opening or Closing)
-   * Handles video source switching with seamless canvas transitions
+   * Play Video Function
+   * Loads and plays the specified video (opening or closing)
    * 
    * @param action - 'opening' or 'closing'
    */
-  const playCurtainVideo = (action: 'opening' | 'closing') => {
-    if (!videoRef.current || isAnimating || !videoLoaded) return;
-    setIsAnimating(true);
-
+  const playVideo = (action: 'opening' | 'closing') => {
+    if (!videoRef.current) return;
+    
     const video = videoRef.current;
-    const newSrc = action === 'opening' 
-      ? '/video/curtains-opening.mp4' 
+    setIsPlaying(true);
+    
+    // Set video source
+    video.src = action === 'opening' 
+      ? '/video/curtains-opening.mp4'
       : '/video/curtains-closing.mp4';
     
-    const currentName = (video.src.split('/').pop() || '').toLowerCase();
-    const newName = (newSrc.split('/').pop() || '').toLowerCase();
-
-    // If same video, just replay from start
-    if (currentName === newName) {
-      setShowCanvas(false);
-      video.currentTime = 0;
-      video.play().catch(() => {});
-    } else {
-      // Different video - capture frame and preload new video
-      captureCurrentFrame();
-      
-      // Create invisible preload video element
-      const preload = document.createElement('video');
-      preload.src = newSrc;
-      preload.muted = true;
-      preload.playsInline = true;
-      preload.preload = 'auto';
-      document.body.appendChild(preload);
-
-      const onReady = () => {
-        video.src = newSrc;
-        video.currentTime = 0;
-        
-        const onLoaded = () => {
-          setShowCanvas(false); // Hide canvas, show video
-          video.play().catch(() => {});
-          document.body.removeChild(preload);
-        };
-        
-        video.addEventListener('loadeddata', onLoaded, { once: true });
-        video.load();
-      };
-
-      preload.addEventListener('canplaythrough', onReady, { once: true });
-      preload.load();
-    }
-
-    // Handle video end
-    video.onended = () => {
-      video.pause();
-      setCurtainsState(action === 'opening' ? 'open' : 'closed');
-      video.currentTime = Math.max(video.duration - 0.1, 0); // Show last frame
-      setIsAnimating(false);
-    };
+    // Load and play
+    video.load();
+    video.play().catch((error) => {
+      console.error('Video play failed:', error);
+      setIsPlaying(false);
+    });
   };
 
   /**
-   * Handle User Toggle
+   * Video End Handler
+   * Called when video finishes playing
+   * Updates state and pauses on last frame
+   */
+  const handleVideoEnd = () => {
+    if (!videoRef.current) return;
+    
+    setIsPlaying(false);
+    
+    // Update curtain state based on which video just played
+    const videoSrc = videoRef.current.src;
+    if (videoSrc.includes('opening')) {
+      setCurtainsOpen(true);
+    } else {
+      setCurtainsOpen(false);
+    }
+    
+    // Video naturally pauses on last frame
+    // No need to manually set currentTime
+  };
+
+  /**
+   * Toggle Handler
    * User clicks Control Center card to open/close curtains
-   * Silently ignores clicks during animation (no visual disabled state)
+   * Silently ignores clicks during video playback (no visual feedback)
    */
   const handleToggle = () => {
-    if (isAnimating || !videoLoaded) return; // Silently ignore
-    setManualControl(true);
-    playCurtainVideo(curtainsState === 'open' ? 'closing' : 'opening');
+    // Silently ignore clicks while video is playing
+    if (isPlaying) return;
+    
+    // Play appropriate video based on current state
+    playVideo(curtainsOpen ? 'closing' : 'opening');
   };
 
   /**
@@ -171,10 +119,10 @@ export default function PerfectPrivacy() {
    * Shows current state or animating state
    */
   const getStatusText = () => {
-    if (isAnimating) {
-      return curtainsState === 'open' ? 'Closing...' : 'Opening...';
+    if (isPlaying) {
+      return curtainsOpen ? 'Closing...' : 'Opening...';
     }
-    return curtainsState === 'open' ? 'Curtains Open' : 'Curtains Closed';
+    return curtainsOpen ? 'Curtains Open' : 'Curtains Closed';
   };
 
   return (
@@ -195,28 +143,23 @@ export default function PerfectPrivacy() {
             viewport={{ once: true, margin: "-100px" }}
             className="md:col-span-7"
           >
-            <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl bg-gray-100">
-              {/* Loading spinner */}
-              {!videoLoaded && (
-                <div className="absolute inset-0 bg-gray-200 flex items-center justify-center z-30">
-                  <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-                </div>
-              )}
-
-              {/* Canvas for frame capture (seamless transitions) */}
-              <canvas
-                ref={canvasRef}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-100 ${
-                  showCanvas ? 'opacity-100 z-20' : 'opacity-0 z-10'
-                }`}
-              />
-
-              {/* Video element */}
+            {/* 
+              Video Container
+              Simple container with video element
+              Starts with gray background, video appears when loaded
+            */}
+            <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl bg-gray-800">
+              {/* 
+                Video Element
+                - Plays opening/closing videos
+                - Pauses on last frame after playback
+                - No controls (user interacts via card button)
+                - Muted for autoplay compatibility
+              */}
               <video
                 ref={videoRef}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-                  videoLoaded ? 'opacity-100' : 'opacity-0'
-                } ${showCanvas ? 'z-10' : 'z-20'}`}
+                className="absolute inset-0 w-full h-full object-cover"
+                onEnded={handleVideoEnd}
                 muted
                 playsInline
                 preload="auto"
@@ -253,19 +196,19 @@ export default function PerfectPrivacy() {
                   p-3 sm:p-4 md:p-5 lg:p-6
                   transition-all duration-500 ease-out
                   hover:scale-[1.02] active:scale-[0.98]
-                  ${curtainsState === 'open' && !isAnimating
+                  ${curtainsOpen && !isPlaying
                     ? 'bg-gradient-to-br from-teal-400 via-cyan-400 to-teal-500 shadow-xl shadow-teal-500/20'
                     : 'bg-gray-200 shadow-lg'
                   }
                 `}
-                aria-label={`Toggle curtains ${curtainsState === 'open' ? 'closed' : 'open'}`}
+                aria-label={`Toggle curtains ${curtainsOpen ? 'closed' : 'open'}`}
               >
                 {/* Top Row: Icon + Status Indicator */}
                 <div className="flex items-start justify-between mb-2 sm:mb-3 md:mb-4">
-                  {/* Window icon */}
+                  {/* Window icon with background circle */}
                   <div className={`
                     p-1.5 sm:p-2 md:p-2.5 lg:p-3 rounded-full transition-all duration-300
-                    ${curtainsState === 'open' && !isAnimating
+                    ${curtainsOpen && !isPlaying
                       ? 'bg-white/20 backdrop-blur-sm' 
                       : 'bg-white/60'
                     }
@@ -274,7 +217,7 @@ export default function PerfectPrivacy() {
                       className={`
                         w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 
                         transition-colors duration-300
-                        ${curtainsState === 'open' && !isAnimating ? 'text-white' : 'text-gray-500'}
+                        ${curtainsOpen && !isPlaying ? 'text-white' : 'text-gray-500'}
                       `}
                       fill="none" 
                       stroke="currentColor" 
@@ -289,35 +232,37 @@ export default function PerfectPrivacy() {
                     </svg>
                   </div>
                   
-                  {/* Status dot */}
+                  {/* Status indicator dot (top-right corner) */}
                   <div className={`
                     h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full transition-all duration-300
-                    ${curtainsState === 'open' && !isAnimating
+                    ${curtainsOpen && !isPlaying
                       ? 'bg-white shadow-lg shadow-white/50' 
                       : 'bg-gray-400'
                     }
                   `} />
                 </div>
                 
-                {/* Bottom Row: Room name + Status */}
+                {/* Bottom Row: Room name + Status text */}
                 <div className="text-left">
+                  {/* Room name */}
                   <p className={`
                     text-xs sm:text-sm md:text-base font-semibold transition-colors duration-300
-                    ${curtainsState === 'open' && !isAnimating ? 'text-white' : 'text-gray-700'}
+                    ${curtainsOpen && !isPlaying ? 'text-white' : 'text-gray-700'}
                   `}>
                     Living Room
                   </p>
                   
+                  {/* Status text (Open/Closed/Opening.../Closing...) */}
                   <p className={`
                     text-[10px] sm:text-xs md:text-sm mt-0.5 transition-colors duration-300
-                    ${curtainsState === 'open' && !isAnimating ? 'text-white/90' : 'text-gray-500'}
+                    ${curtainsOpen && !isPlaying ? 'text-white/90' : 'text-gray-500'}
                   `}>
                     {getStatusText()}
                   </p>
                 </div>
                 
-                {/* Inner glow when open */}
-                {curtainsState === 'open' && !isAnimating && (
+                {/* Subtle inner glow effect when curtains are open */}
+                {curtainsOpen && !isPlaying && (
                   <motion.div 
                     className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent"
                     initial={{ opacity: 0 }}
