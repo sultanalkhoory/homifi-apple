@@ -89,7 +89,8 @@ export default function Page() {
                 - Good color contrast (gray-600)
               */}
               <p className="text-gray-600 text-base sm:text-lg lg:text-xl leading-relaxed">
-                The smart home that just works.
+                Premium smart home integration that just works. 
+                Apple Home with support for all major platforms.
               </p>
               
               {/* 
