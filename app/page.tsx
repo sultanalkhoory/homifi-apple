@@ -194,6 +194,17 @@ export default function Page() {
         - Auto-trigger animation on scroll into view
       */}
       <PerfectLight />
+
+      {/* 
+  ========== PERFECT PRIVACY SECTION ==========
+  Interactive curtains demo with video playback
+  Shows curtains opening/closing with Control Center card
+  Layout alternates: Photo LEFT, Text RIGHT (opposite of PerfectLight)
+  Auto-plays opening video once when section comes into view
+      */}
+      <PerfectPrivacy />
+
+
       
       {/* 
         ========== FOOTER ==========
