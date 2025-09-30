@@ -83,20 +83,19 @@ export default function Page() {
               
               {/* 
                 Value Proposition / Subheading
-                - Premium positioning with inclusive platform support
-                - "Just works" is Apple-coded language
-                - Mentions Apple Home as foundation
-                - Acknowledges other platforms (Google, Alexa)
+                - Designed for Apple Home (premium positioning)
+                - Seamless integration messaging
+                - Acknowledges all major platforms (inclusive)
                 - Good color contrast (gray-600)
               */}
               <p className="text-gray-600 text-base sm:text-lg lg:text-xl leading-relaxed">
-                Premium smart home integration that just works. Apple Home with support for all major platforms.
+                Designed for Apple Home. Seamless integration with every major platform.
               </p>
               
               {/* 
                 Primary CTA Button
                 - Single, focused call-to-action
-                - Blue background (iOS action color - Apple-like)
+                - Black background for strong contrast
                 - Rounded-full for modern, friendly appearance
                 - Smooth hover and active states
                 - Links to feature demonstration section below
@@ -104,9 +103,9 @@ export default function Page() {
               <div className="pt-2">
                 <a 
                   href="#perfect-light" 
-                  className="inline-flex items-center rounded-full bg-blue-600 text-white 
+                  className="inline-flex items-center rounded-full bg-black text-white 
                     px-5 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-medium
-                    hover:bg-blue-700 hover:scale-[1.02] hover:shadow-lg
+                    hover:bg-gray-900 hover:scale-[1.02] hover:shadow-lg
                     active:scale-[0.98]
                     transition-all duration-200 ease-out
                     shadow-md"
