@@ -166,34 +166,38 @@ export default function PerfectPrivacy() {
               Rounded corners and shadow for premium feel
             */}
             <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl bg-gray-100">
+              
+              {/* 
+                Fallback Image (shown before any video plays)
+                Only visible initially, gets replaced by video
+              */}
+              {!hasAutoTriggered && !isPlaying && (
+                <img
+                  src="/Curtains-Closed-Lights-On.png"
+                  alt="Room with curtains closed"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              )}
+              
               {/* 
                 Video Element
                 - Plays opening/closing videos
                 - Shows last frame after playback ends (not poster, not static image)
                 - No controls (user interacts via card button)
                 - Preload metadata for smooth playback
+                - Only shown after auto-trigger starts or user interacts
               */}
-              <video
-                ref={videoRef}
-                className="w-full h-full object-cover"
-                onEnded={handleVideoEnd}
-                playsInline
-                preload="metadata"
-              >
-                <source src="/video/curtains-opening.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-              
-              {/* 
-                Fallback Image (shown before any video plays)
-                Only visible initially, gets replaced by video last frame
-              */}
-              {!hasAutoTriggered && (
-                <img
-                  src="/Curtains-Closed-Lights-On.png"
-                  alt="Room with curtains closed"
+              {(hasAutoTriggered || isPlaying) && (
+                <video
+                  ref={videoRef}
                   className="absolute inset-0 w-full h-full object-cover"
-                />
+                  onEnded={handleVideoEnd}
+                  playsInline
+                  preload="auto"
+                >
+                  <source type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
               )}
             </div>
           </motion.div>
