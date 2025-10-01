@@ -276,10 +276,8 @@ export default function PerfectClimate() {
                         px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium
                         transition-all duration-300
                         ${mode === 'comfort'
-                          ? mode === 'cool' || mode === 'warm'
-                            ? 'bg-white/25 text-white backdrop-blur-sm'
-                            : 'bg-white text-gray-700'
-                          : mode === 'cool' || mode === 'warm'
+                          ? 'bg-white text-gray-700'
+                          : (mode === 'cool' || mode === 'warm')
                           ? 'bg-white/10 text-white/70 hover:bg-white/15'
                           : 'bg-white/60 text-gray-600 hover:bg-white/80'
                         }
