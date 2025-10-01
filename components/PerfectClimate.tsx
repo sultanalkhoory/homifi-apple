@@ -98,9 +98,9 @@ export default function PerfectClimate() {
       };
     } else {
       return {
-        primary: 'rgba(156, 163, 175, 0.15)',
-        secondary: 'rgba(209, 213, 219, 0.2)',
-        particle: 'bg-gray-200',
+        primary: 'rgba(20, 184, 166, 0.15)',
+        secondary: 'rgba(16, 185, 129, 0.2)',
+        particle: 'bg-teal-200',
       };
     }
   };
@@ -202,7 +202,7 @@ export default function PerfectClimate() {
                       ? 'bg-gradient-to-br from-cyan-500 via-sky-500 to-cyan-600 shadow-xl shadow-cyan-500/20'
                       : mode === 'warm'
                       ? 'bg-gradient-to-br from-amber-400 via-orange-300 to-amber-500 shadow-xl shadow-amber-500/20'
-                      : 'bg-gradient-to-br from-emerald-400 via-teal-400 to-emerald-500 shadow-xl shadow-emerald-500/20'
+                      : 'bg-gradient-to-br from-teal-500 via-emerald-500 to-teal-600 shadow-xl shadow-teal-500/20'
                     }
                   `}
                 >
@@ -236,7 +236,7 @@ export default function PerfectClimate() {
                       onClick={() => handleModeChange('cool')}
                       className={`
                         flex-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-full text-[10px] sm:text-xs font-medium
-                        transition-all duration-300 cursor-pointer
+                        transition-all duration-200 cursor-pointer
                         ${mode === 'cool'
                           ? 'bg-white/30 text-white'
                           : 'bg-white/10 text-white/70 hover:bg-white/20'
@@ -342,9 +342,9 @@ export default function PerfectClimate() {
                   ))}
                 </motion.div>
 
-                <div className="absolute top-[12%] left-[8%] z-30">
+                <div className="absolute top-[15%] left-[10%] z-30">
                   <div className="relative">
-                    <div className="w-12 h-12 backdrop-blur-xl bg-white/20 rounded-full shadow-lg border border-white/30">
+                    <div className="w-10 h-10 backdrop-blur-xl bg-white/20 rounded-full shadow-lg border border-white/30">
                       <div
                         className="absolute inset-0.5 rounded-full border transition-all duration-500"
                         style={{
@@ -368,7 +368,7 @@ export default function PerfectClimate() {
                           initial={{ scale: 1.2, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           transition={{ duration: 0.3 }}
-                          className="text-sm font-medium text-white"
+                          className="text-xs font-medium text-white"
                         >
                           {temperature}°
                         </motion.div>
