@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PerfectLight from "@/components/PerfectLight";
 import PerfectPrivacy from "@/components/PerfectPrivacy";
+import PerfectClimate from "@/components/PerfectClimate";
 import { motion } from "framer-motion";
 import { fadeRise } from "@/lib/animations";
 import SmartIndicators from "@/components/SmartIndicators";
@@ -193,6 +194,9 @@ export default function Page() {
         Auto-plays opening video once when section comes into view
       */}
       <PerfectPrivacy />
+
+      {/* ========== PERFECT CLIMATE SECTION ========== */}
+      <PerfectClimate />
       
       {/* 
         ========== FOOTER ==========
