@@ -342,7 +342,7 @@ export default function PerfectClimate() {
                   ))}
                 </motion.div>
 
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
+                <div className="absolute top-[45%] left-[40%] z-30">
                   <div className="relative">
                     <div className="w-8 h-8 backdrop-blur-xl bg-white/20 rounded-full shadow-lg border border-white/30">
                       <div
