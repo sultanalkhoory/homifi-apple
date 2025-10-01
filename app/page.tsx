@@ -14,7 +14,8 @@ import SmartIndicators from "@/components/SmartIndicators";
  * 1. Header (fixed navigation)
  * 2. Hero Section (4/8 BALANCED LAYOUT with SmartIndicators)
  * 3. Perfect Light Section (lights demo with Control Center card)
- * 4. Footer (with Works With badges)
+ * 4. Perfect Privacy Section (curtains demo with Control Center card)
+ * 5. Footer (with Works With badges)
  */
 
 export default function Page() {
@@ -26,22 +27,11 @@ export default function Page() {
       {/* 
         ========== HERO SECTION (4/8 BALANCED LAYOUT) ==========
         
-        Design Strategy:
-        - Text: 4 columns (33% width) - comfortable reading width
-        - Photo: 8 columns (67% width) - dominant but not overwhelming
-        - Both elements properly contained within grid
-        - Clean separation between text and interactive photo
-        - Photo has rounded corners and proper shadow
-        - SmartIndicators get ample, unobstructed space
-        
-        Why 4/8 Works:
-        - Photo is significantly larger than original 5/7 (67% vs 58%)
-        - Text has enough room to breathe
-        - SmartIndicators aren't cramped
-        - Professional, balanced, clear hierarchy
-        - No gimmicks - just good proportions
+        Mobile spacing fix: md:min-h-screen instead of min-h-screen
+        - Mobile: Content-driven height (no forced white space)
+        - Desktop: Full-screen hero effect (dramatic impact)
       */}
-      <section className="min-h-screen flex items-center py-20">
+      <section className="md:min-h-screen flex items-center pt-12 md:py-20">
         <div className="mx-auto max-w-7xl px-4 w-full">
           {/* 
             Grid Container
@@ -196,15 +186,13 @@ export default function Page() {
       <PerfectLight />
 
       {/* 
-  ========== PERFECT PRIVACY SECTION ==========
-  Interactive curtains demo with video playback
-  Shows curtains opening/closing with Control Center card
-  Layout alternates: Photo LEFT, Text RIGHT (opposite of PerfectLight)
-  Auto-plays opening video once when section comes into view
+        ========== PERFECT PRIVACY SECTION ==========
+        Interactive curtains demo with video playback
+        Shows curtains opening/closing with Control Center card
+        Layout alternates: Video LEFT, Text RIGHT (opposite of PerfectLight)
+        Auto-plays opening video once when section comes into view
       */}
       <PerfectPrivacy />
-
-
       
       {/* 
         ========== FOOTER ==========
