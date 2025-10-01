@@ -4,20 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { fadeRise, scaleIn } from '@/lib/animations';
 
-/**
- * PerfectClimate Section Component
- * 
- * Demonstrates smart climate control with animated temperature effects.
- * Features:
- * - Auto-triggers cooling animation when section enters viewport (26° → 22°)
- * - Control Center card with 3 modes (Cool/Comfort/Warm)
- * - Animated thermostat display on wall in photo
- * - Dynamic air flow effects and particles based on temperature mode
- * 
- * Layout:
- * - Left column (5/12): Heading, description, Control Center card
- * - Right column (7/12): Room photo with animated effects
- */
 export default function PerfectClimate() {
   const containerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -25,7 +11,6 @@ export default function PerfectClimate() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
 
-  // Determine current mode based on temperature
   const getMode = () => {
     if (temperature <= 20) return 'cool';
     if (temperature >= 24) return 'warm';
@@ -34,10 +19,6 @@ export default function PerfectClimate() {
 
   const mode = getMode();
 
-  /**
-   * Auto-trigger Effect using IntersectionObserver
-   * When section enters viewport, animates from 26° down to 22° (comfort mode)
-   */
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -63,11 +44,7 @@ export default function PerfectClimate() {
     return () => observer.disconnect();
   }, [hasAutoTriggered]);
 
-  /**
-   * Animate temperature change with counting effect
-   */
   const animateToTemperature = (targetTemp: number) => {
-    // Clear any existing animation
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -99,9 +76,6 @@ export default function PerfectClimate() {
     }, 400);
   };
 
-  /**
-   * Handle mode button clicks
-   */
   const handleModeChange = (targetMode: 'cool' | 'comfort' | 'warm') => {
     const targetTemp = targetMode === 'cool' ? 18 : targetMode === 'warm' ? 26 : 22;
     if (targetTemp !== temperature) {
@@ -109,9 +83,6 @@ export default function PerfectClimate() {
     }
   };
 
-  /**
-   * Get colors for effects based on temperature
-   */
   const getEffectColors = () => {
     if (temperature >= 24) {
       return {
@@ -136,9 +107,6 @@ export default function PerfectClimate() {
 
   const colors = getEffectColors();
 
-  /**
-   * Get status text for card
-   */
   const getStatusText = () => {
     if (isAnimating) {
       if (mode === 'cool') return 'Cooling...';
@@ -152,7 +120,6 @@ export default function PerfectClimate() {
 
   return (
     <>
-      {/* Keyframe animations for air flow and particles */}
       <style jsx global>{`
         @keyframes airFlow {
           0% {
@@ -209,7 +176,6 @@ export default function PerfectClimate() {
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid md:grid-cols-12 gap-12 items-center">
             
-            {/* ===== LEFT COLUMN: Text + Control Center Card ===== */}
             <motion.div
               variants={fadeRise}
               initial="hidden"
@@ -225,53 +191,55 @@ export default function PerfectClimate() {
                 The perfect temperature, automatically. Always comfortable, exactly as you want it.
               </p>
               
-              {/* ===== CONTROL CENTER CARD ===== */}
               <div className="pt-4">
                 <div
                   className={`
-                    relative overflow-hidden
-                    rounded-xl sm:rounded-2xl
-                    w-full max-w-[160px] sm:max-w-[200px] md:max-w-[240px] lg:max-w-[256px]
-                    p-4 sm:p-5 md:p-6 lg:p-7
+                    relative overflow-hidden rounded-xl sm:rounded-2xl
+                    w-full max-w-[200px] sm:max-w-[200px] md:max-w-[240px] lg:max-w-[256px]
+                    p-3 sm:p-4 md:p-5 lg:p-6
                     transition-all duration-500 ease-out
                     ${mode === 'cool'
                       ? 'bg-gradient-to-br from-cyan-500 via-sky-500 to-cyan-600 shadow-xl shadow-cyan-500/20'
                       : mode === 'warm'
                       ? 'bg-gradient-to-br from-amber-400 via-orange-300 to-amber-500 shadow-xl shadow-amber-500/20'
-                      : 'bg-gray-200 shadow-lg'
+                      : 'bg-gradient-to-br from-emerald-400 via-teal-400 to-emerald-500 shadow-xl shadow-emerald-500/20'
                     }
                   `}
                 >
-                  {/* Temperature Display */}
-                  <div className="text-center mb-4 sm:mb-5 md:mb-6">
-                    <motion.div 
-                      key={temperature}
-                      initial={{ scale: 1.1, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                      className={`text-5xl sm:text-6xl md:text-7xl font-bold transition-colors duration-300 ${
-                        mode === 'cool' || mode === 'warm' ? 'text-white' : 'text-gray-700'
-                      }`}
-                    >
-                      {temperature}°
-                    </motion.div>
-                    <p className={`text-xs sm:text-sm mt-2 transition-colors duration-300 ${
-                      mode === 'cool' || mode === 'warm' ? 'text-white/90' : 'text-gray-500'
-                    }`}>
+                  <div className="flex items-start justify-between mb-2 sm:mb-3 md:mb-4">
+                    <div className="p-1.5 sm:p-2 md:p-2.5 lg:p-3 rounded-full bg-white/20 backdrop-blur-sm">
+                      <svg 
+                        className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 text-white"
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                      >
+                        <circle cx="12" cy="16" r="2" fill="currentColor" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v8" strokeWidth={2.5} />
+                      </svg>
+                    </div>
+                    <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-white shadow-lg shadow-white/50" />
+                  </div>
+                  
+                  <div className="text-left mb-3 sm:mb-4">
+                    <p className="text-xs sm:text-sm md:text-base font-semibold text-white">
+                      Living Room
+                    </p>
+                    <p className="text-[10px] sm:text-xs md:text-sm mt-0.5 text-white/90">
                       {getStatusText()}
                     </p>
                   </div>
 
-                  {/* Mode Buttons */}
-                  <div className="flex gap-2 justify-center">
+                  <div className="flex gap-1.5 sm:gap-2">
                     <button
                       onClick={() => handleModeChange('cool')}
                       className={`
-                        px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium
-                        transition-all duration-300
+                        flex-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-full text-[10px] sm:text-xs font-medium
+                        transition-all duration-300 cursor-pointer
                         ${mode === 'cool'
-                          ? 'bg-white/25 text-white backdrop-blur-sm'
-                          : 'bg-white/10 text-white/70 hover:bg-white/15'
+                          ? 'bg-white/30 text-white'
+                          : 'bg-white/10 text-white/70 hover:bg-white/20'
                         }
                       `}
                     >
@@ -281,13 +249,11 @@ export default function PerfectClimate() {
                     <button
                       onClick={() => handleModeChange('comfort')}
                       className={`
-                        px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium
-                        transition-all duration-300
+                        flex-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-full text-[10px] sm:text-xs font-medium
+                        transition-all duration-300 cursor-pointer
                         ${mode === 'comfort'
-                          ? 'bg-white text-gray-700'
-                          : (mode === 'cool' || mode === 'warm')
-                          ? 'bg-white/10 text-white/70 hover:bg-white/15'
-                          : 'bg-white/60 text-gray-600 hover:bg-white/80'
+                          ? 'bg-white/30 text-white'
+                          : 'bg-white/10 text-white/70 hover:bg-white/20'
                         }
                       `}
                     >
@@ -297,11 +263,11 @@ export default function PerfectClimate() {
                     <button
                       onClick={() => handleModeChange('warm')}
                       className={`
-                        px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium
-                        transition-all duration-300
+                        flex-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-full text-[10px] sm:text-xs font-medium
+                        transition-all duration-300 cursor-pointer
                         ${mode === 'warm'
-                          ? 'bg-white/25 text-white backdrop-blur-sm'
-                          : 'bg-white/10 text-white/70 hover:bg-white/15'
+                          ? 'bg-white/30 text-white'
+                          : 'bg-white/10 text-white/70 hover:bg-white/20'
                         }
                       `}
                     >
@@ -309,20 +275,16 @@ export default function PerfectClimate() {
                     </button>
                   </div>
 
-                  {/* Subtle inner glow effect */}
-                  {(mode === 'cool' || mode === 'warm') && (
-                    <motion.div 
-                      className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    />
-                  )}
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                  />
                 </div>
               </div>
             </motion.div>
 
-            {/* ===== RIGHT COLUMN: Room Photo with Effects ===== */}
             <motion.div
               variants={scaleIn}
               initial="hidden"
@@ -331,21 +293,18 @@ export default function PerfectClimate() {
               className="md:col-span-7"
             >
               <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl">
-                {/* Room photo */}
                 <img
                   src="/Curtains-Open-Lights-On-Homepod.png"
                   alt="Smart climate controlled room"
                   className="w-full h-full object-cover"
                 />
 
-                {/* Dynamic Effects Overlay */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1.5 }}
                   className="absolute inset-0 pointer-events-none"
                 >
-                  {/* Air streams */}
                   {[...Array(4)].map((_, i) => (
                     <div
                       key={`airstream-${i}`}
@@ -370,7 +329,6 @@ export default function PerfectClimate() {
                     />
                   ))}
 
-                  {/* Particles */}
                   {[...Array(3)].map((_, i) => (
                     <div
                       key={`particle-${i}`}
@@ -384,7 +342,6 @@ export default function PerfectClimate() {
                   ))}
                 </motion.div>
 
-                {/* Wall-mounted thermostat display */}
                 <div className="absolute top-[12%] left-[8%] z-30">
                   <div className="relative">
                     <div className="w-12 h-12 backdrop-blur-xl bg-white/20 rounded-full shadow-lg border border-white/30">
@@ -396,13 +353,13 @@ export default function PerfectClimate() {
                               ? 'rgba(59, 130, 246, 0.6)'
                               : mode === 'warm'
                               ? 'rgba(245, 158, 11, 0.6)'
-                              : 'rgba(107, 114, 128, 0.6)',
+                              : 'rgba(16, 185, 129, 0.6)',
                           boxShadow:
                             mode === 'cool'
                               ? '0 0 8px rgba(59, 130, 246, 0.3)'
                               : mode === 'warm'
                               ? '0 0 8px rgba(245, 158, 11, 0.3)'
-                              : '0 0 8px rgba(107, 114, 128, 0.2)',
+                              : '0 0 8px rgba(16, 185, 129, 0.3)',
                         }}
                       />
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
