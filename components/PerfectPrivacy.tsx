@@ -8,12 +8,12 @@ import { fadeRise, scaleIn } from '@/lib/animations';
  * PerfectPrivacy Section Component
  * 
  * Simplified curtain control with video-only approach.
- * No static images, no canvas - just clean video playback.
+ * Uses dual video elements for smooth transitions without black flash.
  * 
  * Features:
  * - Auto-plays opening video when section enters viewport (once only)
- * - Video pauses on last frame after playback
- * - Control Center card that matches PerfectLight styling
+ * - Smooth video transitions with no black flash
+ * - Control Center card with muted teal gradient
  * - Button ignores clicks during video playback (silently)
  * 
  * Layout:
@@ -31,11 +31,15 @@ export default function PerfectPrivacy() {
   // Track if we've already auto-triggered the opening (prevent multiple triggers)
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
   
+  // Track which video is currently visible (for smooth crossfade)
+  const [activeVideo, setActiveVideo] = useState<'opening' | 'closing' | null>(null);
+  
   // Reference to the section for intersection observer
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Reference to the video element for playback control
-  const videoRef = useRef<HTMLVideoElement>(null);
+  // References to both video elements for seamless switching
+  const openingVideoRef = useRef<HTMLVideoElement>(null);
+  const closingVideoRef = useRef<HTMLVideoElement>(null);
 
   /**
    * Auto-trigger Effect using IntersectionObserver
@@ -72,23 +76,19 @@ export default function PerfectPrivacy() {
 
   /**
    * Play Video Function
-   * Loads and plays the specified video (opening or closing)
+   * Plays the specified video (opening or closing) smoothly
    * 
    * @param action - 'opening' or 'closing'
    */
   const playVideo = (action: 'opening' | 'closing') => {
-    if (!videoRef.current) return;
+    const video = action === 'opening' ? openingVideoRef.current : closingVideoRef.current;
+    if (!video) return;
     
-    const video = videoRef.current;
     setIsPlaying(true);
+    setActiveVideo(action);
     
-    // Set video source
-    video.src = action === 'opening' 
-      ? '/video/curtains-opening.mp4'
-      : '/video/curtains-closing.mp4';
-    
-    // Load and play
-    video.load();
+    // Reset video to start and play
+    video.currentTime = 0;
     video.play().catch((error) => {
       console.error('Video play failed:', error);
       setIsPlaying(false);
@@ -98,23 +98,17 @@ export default function PerfectPrivacy() {
   /**
    * Video End Handler
    * Called when video finishes playing
-   * Updates state and pauses on last frame
+   * Updates state
    */
-  const handleVideoEnd = () => {
-    if (!videoRef.current) return;
-    
+  const handleVideoEnd = (action: 'opening' | 'closing') => {
     setIsPlaying(false);
     
     // Update curtain state based on which video just played
-    const videoSrc = videoRef.current.src;
-    if (videoSrc.includes('opening')) {
+    if (action === 'opening') {
       setCurtainsOpen(true);
     } else {
       setCurtainsOpen(false);
     }
-    
-    // Video naturally pauses on last frame
-    // No need to manually set currentTime
   };
 
   /**
@@ -161,24 +155,33 @@ export default function PerfectPrivacy() {
           >
             {/* 
               Video Container
-              Simple container with video element
-              Starts with gray background, video appears when loaded
+              Contains both videos, switches visibility smoothly
             */}
             <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl bg-gray-800">
-              {/* 
-                Video Element
-                - Plays opening/closing videos
-                - Pauses on last frame after playback
-                - No controls (user interacts via card button)
-                - Muted for autoplay compatibility
-              */}
+              {/* Opening video */}
               <video
-                ref={videoRef}
-                className="absolute inset-0 w-full h-full object-cover"
-                onEnded={handleVideoEnd}
+                ref={openingVideoRef}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                  activeVideo === 'opening' ? 'opacity-100' : 'opacity-0'
+                }`}
+                onEnded={() => handleVideoEnd('opening')}
                 muted
                 playsInline
                 preload="auto"
+                src="/video/curtains-opening.mp4"
+              />
+              
+              {/* Closing video */}
+              <video
+                ref={closingVideoRef}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                  activeVideo === 'closing' ? 'opacity-100' : 'opacity-0'
+                }`}
+                onEnded={() => handleVideoEnd('closing')}
+                muted
+                playsInline
+                preload="auto"
+                src="/video/curtains-closing.mp4"
               />
             </div>
           </motion.div>
@@ -213,7 +216,7 @@ export default function PerfectPrivacy() {
                   transition-all duration-500 ease-out
                   hover:scale-[1.02] active:scale-[0.98]
                   ${curtainsOpen && !isPlaying
-                    ? 'bg-gradient-to-br from-teal-400 via-cyan-400 to-teal-500 shadow-xl shadow-teal-500/20'
+                    ? 'bg-gradient-to-br from-cyan-600 via-teal-600 to-cyan-700 shadow-xl shadow-teal-500/20'
                     : 'bg-gray-200 shadow-lg'
                   }
                 `}
