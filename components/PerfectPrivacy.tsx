@@ -51,9 +51,9 @@ export default function PerfectPrivacy() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAutoTriggered && curtainsState === 'open' && videoLoaded) {
+          if (entry.isIntersecting && !hasAutoTriggered && curtainsState === 'closed' && videoLoaded) {
             setTimeout(() => {
-              playCurtainVideo('closing');
+              playCurtainVideo('opening');
               setHasAutoTriggered(true);
             }, 800);
           }
@@ -70,7 +70,7 @@ export default function PerfectPrivacy() {
     }
 
     return () => observer.disconnect();
-  }, [hasAutoTriggered, curtainsState, videoLoaded]);
+  }, [hasAutoTriggered, videoLoaded]);
 
   // Capture current frame for seamless source swap
   const captureCurrentFrame = () => {
