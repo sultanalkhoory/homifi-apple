@@ -371,7 +371,7 @@ export default function PerfectClimate() {
                           initial={{ scale: 1.2, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           transition={{ duration: 0.3 }}
-                          className="text-[8px] sm:text-[10px] font-medium text-white leading-none flex items-center justify-center"
+                          className="text-[7px] sm:text-[10px] font-medium text-white leading-none flex items-center justify-center"
                         >
                           {temperature}°
                         </motion.div>
