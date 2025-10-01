@@ -75,7 +75,7 @@ export default function PerfectLight() {
     <section 
       ref={sectionRef} 
       id="perfect-light" 
-      className="py-12 md:py-28 bg-gray-50"
+      className="py-20 md:py-28 bg-gray-50"
     >
       <div className="mx-auto max-w-6xl px-4">
         {/* Two-column grid: Text + Control on left, Photo on right */}
