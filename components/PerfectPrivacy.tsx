@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { fadeRise, scaleIn } from '@/lib/animations';
 
 /**
@@ -37,22 +37,38 @@ export default function PerfectPrivacy() {
   // Reference to the video element for playback control
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Track when section comes into view (once only, 30% threshold)
-  const isInView = useInView(containerRef, { once: true, amount: 0.3 });
-
   /**
-   * Auto-trigger Effect
+   * Auto-trigger Effect using IntersectionObserver
    * When section enters viewport, wait 800ms then play opening video
    * Only triggers once (controlled by hasAutoTriggered flag)
    */
   useEffect(() => {
-    if (isInView && !hasAutoTriggered) {
-      setTimeout(() => {
-        playVideo('opening');
-        setHasAutoTriggered(true);
-      }, 800);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Only trigger if section is visible AND we haven't triggered before
+          if (entry.isIntersecting && !hasAutoTriggered) {
+            // Delay the curtains opening for dramatic effect
+            setTimeout(() => {
+              playVideo('opening');
+              setHasAutoTriggered(true); // Prevent future auto-triggers
+            }, 800); // 800ms delay after section enters view
+          }
+        });
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of section is visible
+        rootMargin: '0px 0px -100px 0px' // Start slightly before fully visible
+      }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
     }
-  }, [isInView, hasAutoTriggered]);
+
+    // Cleanup observer on component unmount
+    return () => observer.disconnect();
+  }, [hasAutoTriggered]); // Only re-run if hasAutoTriggered changes
 
   /**
    * Play Video Function
