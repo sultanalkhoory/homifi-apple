@@ -199,8 +199,8 @@ export default function Page() {
       {/* ========== PERFECT CLIMATE SECTION ========== */}
       <PerfectClimate />
       
-      {/* ========== PERFECT CLIMATE SECTION ========== */}
-      <PerfectClimate />
+      {/* ========== PERFECT SECURITY SECTION ========== */}
+      <PerfectSecurity />
       
       {/*
         ========== FOOTER ==========
