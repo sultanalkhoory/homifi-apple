@@ -347,7 +347,7 @@ export default function PerfectClimate() {
 
                 <div className="absolute top-[42%] left-[37%] z-30">
                   <div className="relative">
-                    <div className="w-7 h-7 backdrop-blur-xl bg-white/20 rounded-full shadow-lg border border-white/30">
+                    <div className="w-6 h-6 sm:w-7 sm:h-7 backdrop-blur-xl bg-white/20 rounded-full shadow-lg border border-white/30">
                       <div
                         className="absolute inset-0.5 rounded-full border transition-all duration-500"
                         style={{
@@ -371,7 +371,7 @@ export default function PerfectClimate() {
                           initial={{ scale: 1.2, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           transition={{ duration: 0.3 }}
-                          className="text-[10px] font-medium text-white"
+                          className="text-[9px] sm:text-[10px] font-medium text-white leading-none"
                         >
                           {temperature}°
                         </motion.div>
