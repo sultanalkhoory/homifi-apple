@@ -31,7 +31,7 @@ export default function Page() {
         - Mobile: Content-driven height (no forced white space)
         - Desktop: Full-screen hero effect (dramatic impact)
       */}
-      <section className="md:min-h-screen flex items-center py-20">
+      <section className="md:min-h-screen flex items-center pt-12 md:py-20">
         <div className="mx-auto max-w-7xl px-4 w-full">
           {/* 
             Grid Container
