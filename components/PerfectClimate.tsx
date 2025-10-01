@@ -199,7 +199,7 @@ export default function PerfectClimate() {
                     p-3 sm:p-4 md:p-5 lg:p-6
                     transition-all duration-500 ease-out
                     ${mode === 'cool'
-                      ? 'bg-gradient-to-br from-cyan-500 via-sky-500 to-cyan-600 shadow-xl shadow-cyan-500/20'
+                      ? 'bg-gradient-to-br from-slate-400 via-cyan-500 to-slate-500 shadow-xl shadow-slate-500/20'
                       : mode === 'warm'
                       ? 'bg-gradient-to-br from-amber-400 via-orange-300 to-amber-500 shadow-xl shadow-amber-500/20'
                       : 'bg-gradient-to-br from-teal-500 via-emerald-500 to-teal-600 shadow-xl shadow-teal-500/20'
@@ -342,9 +342,9 @@ export default function PerfectClimate() {
                   ))}
                 </motion.div>
 
-                <div className="absolute top-[15%] left-[10%] z-30">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
                   <div className="relative">
-                    <div className="w-10 h-10 backdrop-blur-xl bg-white/20 rounded-full shadow-lg border border-white/30">
+                    <div className="w-8 h-8 backdrop-blur-xl bg-white/20 rounded-full shadow-lg border border-white/30">
                       <div
                         className="absolute inset-0.5 rounded-full border transition-all duration-500"
                         style={{
@@ -368,7 +368,7 @@ export default function PerfectClimate() {
                           initial={{ scale: 1.2, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
                           transition={{ duration: 0.3 }}
-                          className="text-xs font-medium text-white"
+                          className="text-[10px] font-medium text-white"
                         >
                           {temperature}°
                         </motion.div>
