@@ -46,7 +46,7 @@ const indicators: SmartIndicator[] = [
   {
     id: 'security',
     x: '2%',   // Positioned near left side (implied entrance)
-    y: '52%',
+    y: '50%',
     label: 'Security',
     detail: 'Always protected, never intrusive',
     color: 'rgba(120, 255, 170, 0.85)',
@@ -55,7 +55,7 @@ const indicators: SmartIndicator[] = [
   {
    id: 'voice',
    x: '55%',   // Center horizontally
-   y: '73%',   // Bottom area where HomePod is
+   y: '74%',   // Bottom area where HomePod is
    label: 'Voice Control',
    detail: 'Just ask Siri',
    color: 'rgba(139, 146, 234, 0.85)',
