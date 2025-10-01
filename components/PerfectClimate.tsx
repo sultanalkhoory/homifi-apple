@@ -9,6 +9,7 @@ export default function PerfectClimate() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [temperature, setTemperature] = useState(26);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [animatingDirection, setAnimatingDirection] = useState<'warming' | 'cooling' | null>(null);
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
 
   const getMode = () => {
@@ -59,6 +60,9 @@ export default function PerfectClimate() {
     const current = temperature;
     const steps = Math.abs(targetTemp - current);
     const direction = targetTemp > current ? 1 : -1;
+    
+    // Set animating direction text
+    setAnimatingDirection(direction > 0 ? 'warming' : 'cooling');
 
     let step = 0;
     intervalRef.current = setInterval(() => {
@@ -72,6 +76,7 @@ export default function PerfectClimate() {
           intervalRef.current = null;
         }
         setIsAnimating(false);
+        setAnimatingDirection(null);
       }
     }, 400);
   };
@@ -108,10 +113,8 @@ export default function PerfectClimate() {
   const colors = getEffectColors();
 
   const getStatusText = () => {
-    if (isAnimating) {
-      if (mode === 'cool') return 'Cooling...';
-      if (mode === 'warm') return 'Warming...';
-      return 'Adjusting...';
+    if (isAnimating && animatingDirection) {
+      return animatingDirection === 'warming' ? 'Warming...' : 'Cooling...';
     }
     if (mode === 'cool') return 'Cool Mode';
     if (mode === 'warm') return 'Warm Mode';
@@ -342,9 +345,9 @@ export default function PerfectClimate() {
                   ))}
                 </motion.div>
 
-                <div className="absolute top-[45%] left-[40%] z-30">
+                <div className="absolute top-[42%] left-[37%] z-30">
                   <div className="relative">
-                    <div className="w-8 h-8 backdrop-blur-xl bg-white/20 rounded-full shadow-lg border border-white/30">
+                    <div className="w-7 h-7 backdrop-blur-xl bg-white/20 rounded-full shadow-lg border border-white/30">
                       <div
                         className="absolute inset-0.5 rounded-full border transition-all duration-500"
                         style={{
