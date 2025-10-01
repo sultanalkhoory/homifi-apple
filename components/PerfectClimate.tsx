@@ -20,6 +20,7 @@ import { fadeRise, scaleIn } from '@/lib/animations';
  */
 export default function PerfectClimate() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [temperature, setTemperature] = useState(26);
   const [isAnimating, setIsAnimating] = useState(false);
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
@@ -66,7 +67,16 @@ export default function PerfectClimate() {
    * Animate temperature change with counting effect
    */
   const animateToTemperature = (targetTemp: number) => {
-    if (isAnimating) return;
+    // Clear any existing animation
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    
+    if (isAnimating) {
+      setIsAnimating(false);
+    }
+    
     setIsAnimating(true);
 
     const current = temperature;
@@ -74,13 +84,16 @@ export default function PerfectClimate() {
     const direction = targetTemp > current ? 1 : -1;
 
     let step = 0;
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       step++;
       const newTemp = current + direction * step;
       setTemperature(newTemp);
 
       if (step >= steps) {
-        clearInterval(interval);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
         setIsAnimating(false);
       }
     }, 400);
@@ -90,8 +103,6 @@ export default function PerfectClimate() {
    * Handle mode button clicks
    */
   const handleModeChange = (targetMode: 'cool' | 'comfort' | 'warm') => {
-    if (isAnimating) return;
-    
     const targetTemp = targetMode === 'cool' ? 18 : targetMode === 'warm' ? 26 : 22;
     if (targetTemp !== temperature) {
       animateToTemperature(targetTemp);
@@ -220,13 +231,13 @@ export default function PerfectClimate() {
                   className={`
                     relative overflow-hidden
                     rounded-xl sm:rounded-2xl
-                    w-full max-w-[200px] sm:max-w-[240px] md:max-w-[280px] lg:max-w-[320px]
+                    w-full max-w-[160px] sm:max-w-[200px] md:max-w-[240px] lg:max-w-[256px]
                     p-4 sm:p-5 md:p-6 lg:p-7
                     transition-all duration-500 ease-out
                     ${mode === 'cool'
-                      ? 'bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 shadow-xl shadow-blue-500/20'
+                      ? 'bg-gradient-to-br from-cyan-500 via-sky-500 to-cyan-600 shadow-xl shadow-cyan-500/20'
                       : mode === 'warm'
-                      ? 'bg-gradient-to-br from-orange-400 via-amber-400 to-orange-500 shadow-xl shadow-orange-500/20'
+                      ? 'bg-gradient-to-br from-amber-400 via-orange-300 to-amber-500 shadow-xl shadow-amber-500/20'
                       : 'bg-gray-200 shadow-lg'
                     }
                   `}
@@ -255,7 +266,6 @@ export default function PerfectClimate() {
                   <div className="flex gap-2 justify-center">
                     <button
                       onClick={() => handleModeChange('cool')}
-                      disabled={isAnimating}
                       className={`
                         px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium
                         transition-all duration-300
@@ -263,7 +273,6 @@ export default function PerfectClimate() {
                           ? 'bg-white/25 text-white backdrop-blur-sm'
                           : 'bg-white/10 text-white/70 hover:bg-white/15'
                         }
-                        ${isAnimating ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
                       `}
                     >
                       Cool
@@ -271,7 +280,6 @@ export default function PerfectClimate() {
                     
                     <button
                       onClick={() => handleModeChange('comfort')}
-                      disabled={isAnimating}
                       className={`
                         px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium
                         transition-all duration-300
@@ -281,7 +289,6 @@ export default function PerfectClimate() {
                           ? 'bg-white/10 text-white/70 hover:bg-white/15'
                           : 'bg-white/60 text-gray-600 hover:bg-white/80'
                         }
-                        ${isAnimating ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
                       `}
                     >
                       Comfort
@@ -289,7 +296,6 @@ export default function PerfectClimate() {
                     
                     <button
                       onClick={() => handleModeChange('warm')}
-                      disabled={isAnimating}
                       className={`
                         px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium
                         transition-all duration-300
@@ -297,7 +303,6 @@ export default function PerfectClimate() {
                           ? 'bg-white/25 text-white backdrop-blur-sm'
                           : 'bg-white/10 text-white/70 hover:bg-white/15'
                         }
-                        ${isAnimating ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
                       `}
                     >
                       Warm
