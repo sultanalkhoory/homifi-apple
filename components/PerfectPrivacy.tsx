@@ -25,17 +25,17 @@ export default function PerfectPrivacy() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [curtainsState, setCurtainsState] = useState<'open' | 'closed'>('open');
+  const [curtainsState, setCurtainsState] = useState<'open' | 'closed'>('closed');
   const [isAnimating, setIsAnimating] = useState(false);
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [showCanvas, setShowCanvas] = useState(false);
 
-  // Preload initial video (closing)
+  // Preload initial video (opening)
   useEffect(() => {
     if (!videoRef.current) return;
     const video = videoRef.current;
-    video.src = '/video/curtains-closing.mp4';
+    video.src = '/video/curtains-opening.mp4';
     const onLoad = () => {
       video.currentTime = 0;
       video.pause();
