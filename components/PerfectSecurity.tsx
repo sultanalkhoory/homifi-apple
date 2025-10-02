@@ -218,7 +218,7 @@ export default function PerfectSecurity() {
                           </div>
                         </div>
 
-                        {/* Content: Thumbnail + Message */}
+                        {/* Content: Thumbnail + Message (text hidden on mobile) */}
                         <div className="flex flex-col sm:flex-row gap-2.5 md:gap-3 mb-3">
                           {/* Doorbell Camera Thumbnail */}
                           <div className="flex-shrink-0 mx-auto sm:mx-0">
@@ -231,8 +231,8 @@ export default function PerfectSecurity() {
                             </div>
                           </div>
 
-                          {/* Message text */}
-                          <div className="flex-1 flex flex-col justify-center text-center sm:text-left">
+                          {/* Message text - Hidden on mobile, visible on sm+ */}
+                          <div className="hidden sm:flex flex-1 flex-col justify-center text-left">
                             <p className="text-white font-semibold text-sm md:text-base leading-tight mb-1">
                               Front Door
                             </p>
