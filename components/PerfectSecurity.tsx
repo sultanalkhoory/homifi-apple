@@ -11,17 +11,17 @@ type SecurityState = 'clear' | 'alert' | 'notification';
  * 
  * Cinematic centered layout showcasing instant security notifications on Apple TV.
  * Features:
- * - Large floating TV with thin bezels (Apple product page style)
+ * - Large floating TV with ultra-thin bezels and sharp corners
  * - Apple TV UI displayed on screen
- * - iOS-style rich notification slides down over TV content
+ * - Compact notification (40% TV width) slides from top-right
+ * - Responsive sizing for mobile devices
  * - Synchronized Control Center card below
  * - Auto-triggers when section enters viewport
- * - Spring physics animations throughout
  * 
  * Layout:
- * - Centered hero layout (breaks from side-by-side pattern for impact)
+ * - Centered hero layout
  * - Heading and description centered above
- * - Large TV (70-80% width) as focal point
+ * - Large TV (75% desktop, 95% mobile) as focal point
  * - Control Center card centered below
  */
 export default function PerfectSecurity() {
@@ -156,18 +156,18 @@ export default function PerfectSecurity() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-12"
         >
-          {/* TV Container - 75% width, centered */}
-          <div className="mx-auto w-full max-w-[75%]">
+          {/* TV Container - 75% width on desktop, 95% on mobile */}
+          <div className="mx-auto w-[95%] md:w-[85%] lg:w-[75%]">
             
-            {/* TV Frame with thin bezels */}
-            <div className="relative bg-black rounded-2xl p-2.5 shadow-2xl">
+            {/* TV Frame with ultra-thin bezels and sharp corners */}
+            <div className="relative bg-black rounded-lg p-1 md:p-1.5 shadow-2xl">
               
               {/* TV Screen */}
-              <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-black">
+              <div className="relative aspect-[16/9] rounded-md overflow-hidden bg-black">
                 
                 {/* Apple TV UI Background */}
                 <img
-                  src="/apple-tv-ui.PNG"
+                  src="/apple-tv-ui.png"
                   alt="Apple TV Home Screen"
                   className="w-full h-full object-cover"
                 />
@@ -175,14 +175,15 @@ export default function PerfectSecurity() {
                 {/* Subtle screen glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5 pointer-events-none" />
 
-                {/* iOS-Style Rich Notification Overlay */}
+                {/* Compact iOS-Style Rich Notification - Top Right, 40% width */}
                 <AnimatePresence>
                   {securityState === 'notification' && (
                     <motion.div
-                      initial={{ opacity: 0, y: -120, scale: 0.9 }}
+                      initial={{ opacity: 0, y: -80, x: 20, scale: 0.9 }}
                       animate={{ 
                         opacity: 1, 
                         y: 0, 
+                        x: 0,
                         scale: 1,
                         transition: {
                           type: 'spring',
@@ -193,41 +194,37 @@ export default function PerfectSecurity() {
                       }}
                       exit={{ 
                         opacity: 0, 
-                        y: -100, 
+                        y: -60, 
+                        x: 20,
                         scale: 0.95,
                         transition: { duration: 0.3, ease: [0.32, 0.72, 0, 1] }
                       }}
-                      className="absolute top-8 left-1/2 -translate-x-1/2 z-40 w-[85%] max-w-[700px]"
+                      className="absolute top-3 right-3 md:top-6 md:right-6 z-40 w-[85%] sm:w-[70%] md:w-[40%]"
                     >
-                      {/* Notification Card - Frosted Glass (tvOS style - larger) */}
-                      <div className="backdrop-blur-2xl bg-white/30 rounded-3xl p-6 md:p-8 border border-white/50 shadow-2xl">
+                      {/* Notification Card - Compact frosted glass */}
+                      <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-3 md:p-4 border border-white/50 shadow-2xl">
                         
-                        {/* Header: App Icon + Title */}
-                        <div className="flex items-center gap-4 mb-5">
-                          {/* Home App Icon (rounded square) */}
-                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-lg flex-shrink-0">
-                            <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        {/* Header: App Icon + Title + Badge */}
+                        <div className="flex items-center gap-2 mb-3">
+                          {/* Home App Icon (smaller, rounded square) */}
+                          <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md flex-shrink-0">
+                            <svg className="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
                           </div>
                           
                           {/* Title and timestamp */}
-                          <div className="flex-1">
-                            <p className="text-white font-semibold text-base md:text-lg">Home</p>
-                            <p className="text-white/80 text-sm">Just now</p>
-                          </div>
-
-                          {/* HomeKit Secure Video badge */}
-                          <div className="px-3 py-1.5 rounded-full bg-white/25 backdrop-blur-sm flex-shrink-0">
-                            <p className="text-white/95 text-xs font-medium whitespace-nowrap">HomeKit Secure Video</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-white font-semibold text-xs md:text-sm truncate">Home</p>
+                            <p className="text-white/80 text-[10px] md:text-xs">Just now</p>
                           </div>
                         </div>
 
-                        {/* Content: Thumbnail + Message */}
-                        <div className="flex gap-5 md:gap-6 mb-6">
-                          {/* Doorbell Camera Thumbnail - Larger for TV display */}
-                          <div className="flex-shrink-0">
-                            <div className="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden shadow-xl border-2 border-white/40">
+                        {/* Content: Thumbnail + Message (horizontal on desktop, vertical on mobile) */}
+                        <div className="flex flex-col sm:flex-row gap-2.5 md:gap-3 mb-3">
+                          {/* Doorbell Camera Thumbnail - Compact */}
+                          <div className="flex-shrink-0 mx-auto sm:mx-0">
+                            <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden shadow-lg border-2 border-white/40">
                               <img 
                                 src="/doorbell-visitor.png" 
                                 alt="Front door camera view"
@@ -236,32 +233,32 @@ export default function PerfectSecurity() {
                             </div>
                           </div>
 
-                          {/* Message text - Larger for TV readability */}
-                          <div className="flex-1 flex flex-col justify-center">
-                            <p className="text-white font-semibold text-xl md:text-2xl leading-tight mb-2">
-                              Front Door Camera
+                          {/* Message text - Compact for 40% width */}
+                          <div className="flex-1 flex flex-col justify-center text-center sm:text-left">
+                            <p className="text-white font-semibold text-sm md:text-base leading-tight mb-1">
+                              Front Door
                             </p>
-                            <p className="text-white/95 text-base md:text-lg leading-snug">
-                              Someone's at your front door
+                            <p className="text-white/95 text-xs md:text-sm leading-snug">
+                              Someone's at your door
                             </p>
                           </div>
                         </div>
 
-                        {/* Action Buttons - Staggered entrance, TV-sized */}
-                        <div className="flex gap-3">
+                        {/* Action Buttons - Compact, stacked on mobile */}
+                        <div className="flex flex-col sm:flex-row gap-2">
                           {/* Answer Button (Green) */}
                           <motion.button
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.1, type: 'spring', stiffness: 380, damping: 25 }}
                             onClick={handleAnswer}
-                            className="flex-1 py-4 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 
-                              text-white font-semibold text-base md:text-lg shadow-xl
+                            className="flex-1 py-2 md:py-2.5 rounded-xl bg-gradient-to-br from-green-500 to-green-600 
+                              text-white font-semibold text-xs md:text-sm shadow-lg
                               hover:scale-[1.02] active:scale-[0.98]
                               transition-transform duration-150"
                           >
-                            <div className="flex items-center justify-center gap-2">
-                              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                            <div className="flex items-center justify-center gap-1.5">
+                              <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                               </svg>
                               Answer
@@ -274,27 +271,27 @@ export default function PerfectSecurity() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.25, type: 'spring', stiffness: 380, damping: 25 }}
                             onClick={handleUnlock}
-                            className="flex-1 py-4 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 
-                              text-white font-semibold text-base md:text-lg shadow-xl
+                            className="flex-1 py-2 md:py-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 
+                              text-white font-semibold text-xs md:text-sm shadow-lg
                               hover:scale-[1.02] active:scale-[0.98]
                               transition-transform duration-150"
                           >
-                            <div className="flex items-center justify-center gap-2">
-                              <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                            <div className="flex items-center justify-center gap-1.5">
+                              <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
                               </svg>
                               Unlock
                             </div>
                           </motion.button>
 
-                          {/* Dismiss Button (Gray) */}
+                          {/* Dismiss Button (Gray) - Full width on mobile */}
                           <motion.button
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.4, type: 'spring', stiffness: 380, damping: 25 }}
                             onClick={handleDismiss}
-                            className="px-6 py-4 rounded-2xl bg-white/25 backdrop-blur-sm
-                              text-white font-semibold text-base md:text-lg
+                            className="sm:flex-shrink-0 py-2 md:py-2.5 px-4 rounded-xl bg-white/25 backdrop-blur-sm
+                              text-white font-semibold text-xs md:text-sm
                               hover:bg-white/35 hover:scale-[1.02] active:scale-[0.98]
                               transition-all duration-150"
                           >
