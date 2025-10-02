@@ -179,29 +179,25 @@ export default function PerfectSecurity() {
                 <AnimatePresence>
                   {securityState === 'notification' && (
                     <motion.div
-                      // Smooth entrance and exit with consistent easing
-                      initial={{ y: -100, x: 20, scale: 0.95 }}
+                      // Fast, smooth entrance and exit with consistent easing (no springs)
+                      initial={{ y: -100, x: 20 }}
                       animate={{ 
                         y: 0, 
                         x: 0,
-                        scale: 1,
                         transition: {
-                          type: 'spring',
-                          stiffness: 300,
-                          damping: 26,
-                          mass: 0.8
+                          duration: 0.35,
+                          ease: [0.22, 1, 0.36, 1] // Apple's ease-out
                         }
                       }}
                       exit={{ 
                         y: -100, 
                         x: 20,
-                        scale: 0.95,
                         transition: { 
-                          duration: 0.25, 
-                          ease: [0.4, 0, 0.2, 1] // Smooth ease-in-out
+                          duration: 0.2, 
+                          ease: [0.4, 0, 1, 1] // Fast ease-in for snappy exit
                         }
                       }}
-                      className="absolute top-3 right-3 md:top-6 md:right-6 z-40 w-[60%] sm:w-[50%] md:w-[40%]"
+                      className="absolute top-3 right-3 md:top-6 md:right-6 z-40 w-[40%]"
                     >
                       {/* Notification Card - Full liquid glass from start */}
                       <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-3 md:p-4 border border-white/50 shadow-2xl">
