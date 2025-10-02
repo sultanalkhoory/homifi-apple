@@ -4,33 +4,49 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fadeRise, scaleIn } from '@/lib/animations';
 
-type SecurityState = 'clear' | 'motion' | 'visitor';
+type SecurityState = 'clear' | 'alert' | 'notification';
 
+/**
+ * PerfectSecurity Section Component
+ * 
+ * Demonstrates instant security notifications with iOS-style rich notification.
+ * Features:
+ * - Multi-layered synchronized experience (camera pulse + card state + notification)
+ * - Authentic doorbell camera thumbnail
+ * - Spring physics animations (Apple-style bounce)
+ * - Three interactive action buttons with staggered entrance
+ * - Auto-triggers when section enters viewport
+ * 
+ * Layout:
+ * - Left column (7/12): Room photo with camera indicator and notification overlay
+ * - Right column (5/12): Heading, description, Control Center card
+ */
 export default function PerfectSecurity() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [securityState, setSecurityState] = useState<SecurityState>('clear');
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
 
-  // Auto-trigger effect using IntersectionObserver
+  /**
+   * Auto-trigger Effect
+   * Detects when section enters viewport and triggers security alert sequence
+   * Only runs once per page load
+   */
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !hasAutoTriggered) {
             setTimeout(() => {
-              // Trigger sequence: clear → motion → visitor → clear
-              setSecurityState('motion');
+              // Start alert sequence: clear → alert → notification
+              setSecurityState('alert');
               
+              // Show notification 600ms after alert starts
               setTimeout(() => {
-                setSecurityState('visitor');
-                
-                setTimeout(() => {
-                  setSecurityState('clear');
-                }, 2000);
-              }, 2000);
+                setSecurityState('notification');
+              }, 600);
               
               setHasAutoTriggered(true);
-            }, 800);
+            }, 800); // Initial delay for dramatic effect
           }
         });
       },
@@ -47,34 +63,58 @@ export default function PerfectSecurity() {
     return () => observer.disconnect();
   }, [hasAutoTriggered]);
 
+  /**
+   * Handle Control Center card click
+   * Manual trigger for security alert sequence
+   */
   const handleCardClick = () => {
-    // Cycle through states
     if (securityState === 'clear') {
-      setSecurityState('motion');
-    } else if (securityState === 'motion') {
-      setSecurityState('visitor');
-    } else {
-      setSecurityState('clear');
+      setSecurityState('alert');
+      setTimeout(() => {
+        setSecurityState('notification');
+      }, 600);
+    } else if (securityState === 'notification') {
+      // Clicking during notification dismisses it
+      handleDismiss();
     }
   };
 
+  /**
+   * Handle notification action buttons
+   * Simulates answering, unlocking, or dismissing the doorbell alert
+   */
+  const handleAnswer = () => {
+    // In real app, would open video call
+    setSecurityState('clear');
+  };
+
+  const handleUnlock = () => {
+    // In real app, would unlock door
+    setSecurityState('clear');
+  };
+
+  const handleDismiss = () => {
+    setSecurityState('clear');
+  };
+
+  /**
+   * Get status text for Control Center card
+   */
   const getStatusText = () => {
-    switch (securityState) {
-      case 'motion': return 'Motion Detected';
-      case 'visitor': return 'Visitor at Door';
-      default: return 'All Clear';
+    if (securityState === 'alert' || securityState === 'notification') {
+      return 'Visitor Detected';
     }
+    return 'All Clear';
   };
 
+  /**
+   * Get Control Center card gradient colors based on state
+   */
   const getCardColors = () => {
-    switch (securityState) {
-      case 'motion':
-        return 'bg-gradient-to-br from-blue-500 via-cyan-500 to-blue-600 shadow-xl shadow-blue-500/20';
-      case 'visitor':
-        return 'bg-gradient-to-br from-orange-400 via-amber-400 to-orange-500 shadow-xl shadow-orange-500/20';
-      default:
-        return 'bg-gray-200 shadow-lg';
+    if (securityState === 'alert' || securityState === 'notification') {
+      return 'bg-gradient-to-br from-orange-400 via-amber-400 to-orange-500 shadow-xl shadow-orange-500/20';
     }
+    return 'bg-gray-200 shadow-lg';
   };
 
   return (
@@ -86,7 +126,7 @@ export default function PerfectSecurity() {
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid md:grid-cols-12 gap-12 items-center">
           
-          {/* ===== LEFT COLUMN: Room Photo with Camera Overlay ===== */}
+          {/* ===== LEFT COLUMN: Room Photo with Camera & Notification ===== */}
           <motion.div
             variants={scaleIn}
             initial="hidden"
@@ -95,37 +135,37 @@ export default function PerfectSecurity() {
             className="md:col-span-7 order-2 md:order-1"
           >
             <div className="relative w-full aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl">
+              {/* Base room photo */}
               <img
                 src="/Curtains-Open-Lights-On-Homepod.png"
                 alt="Smart home with security camera"
                 className="w-full h-full object-cover"
               />
 
-              {/* Doorbell Camera Icon */}
+              {/* Camera Indicator - positioned near door area */}
               <div className="absolute top-[15%] left-[5%] z-30">
                 <motion.div
                   animate={{
-                    scale: securityState === 'motion' || securityState === 'visitor' ? [1, 1.1, 1] : 1,
+                    scale: securityState === 'alert' || securityState === 'notification' ? [1, 1.15, 1] : 1,
                   }}
                   transition={{
                     duration: 1.5,
-                    repeat: securityState === 'motion' || securityState === 'visitor' ? Infinity : 0,
+                    repeat: securityState === 'alert' || securityState === 'notification' ? Infinity : 0,
                     ease: "easeInOut"
                   }}
                   className={`
                     w-10 h-10 backdrop-blur-xl rounded-lg shadow-lg border transition-all duration-500
-                    ${securityState === 'motion' 
-                      ? 'bg-blue-500/30 border-blue-400/50' 
-                      : securityState === 'visitor'
-                      ? 'bg-orange-500/30 border-orange-400/50'
+                    ${securityState === 'alert' || securityState === 'notification'
+                      ? 'bg-orange-500/30 border-orange-400/50' 
                       : 'bg-white/20 border-white/30'
                     }
                   `}
                 >
+                  {/* Camera icon */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <svg 
                       className={`w-5 h-5 transition-colors duration-500 ${
-                        securityState === 'motion' || securityState === 'visitor' ? 'text-white' : 'text-gray-400'
+                        securityState === 'alert' || securityState === 'notification' ? 'text-white' : 'text-gray-400'
                       }`}
                       fill="none" 
                       stroke="currentColor" 
@@ -141,48 +181,142 @@ export default function PerfectSecurity() {
                   </div>
                   
                   {/* Recording dot indicator */}
-                  {(securityState === 'motion' || securityState === 'visitor') && (
+                  {(securityState === 'alert' || securityState === 'notification') && (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: [0.8, 1, 0.8] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
-                      className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"
+                      className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full shadow-lg"
                     />
                   )}
                 </motion.div>
               </div>
 
-              {/* Visitor Notification Overlay */}
+              {/* iOS-Style Rich Notification */}
               <AnimatePresence>
-                {securityState === 'visitor' && (
+                {securityState === 'notification' && (
                   <motion.div
-                    initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute top-6 right-6 z-40"
+                    initial={{ opacity: 0, y: -100, scale: 0.9 }}
+                    animate={{ 
+                      opacity: 1, 
+                      y: 0, 
+                      scale: 1,
+                      transition: {
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 25,
+                        mass: 0.8
+                      }
+                    }}
+                    exit={{ 
+                      opacity: 0, 
+                      y: -80, 
+                      scale: 0.95,
+                      transition: { duration: 0.25, ease: [0.32, 0.72, 0, 1] }
+                    }}
+                    className="absolute top-6 left-1/2 -translate-x-1/2 z-40 w-[90%] max-w-[420px]"
                   >
-                    <div className="backdrop-blur-xl bg-white/20 rounded-2xl p-4 border border-white/30 shadow-xl min-w-[200px]">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-full bg-orange-500/30 border border-orange-400/50 flex items-center justify-center flex-shrink-0">
-                          <svg 
-                            className="w-5 h-5 text-white"
-                            fill="none" 
-                            stroke="currentColor" 
-                            viewBox="0 0 24 24"
-                            strokeWidth={2}
-                          >
-                            <path 
-                              strokeLinecap="round" 
-                              strokeLinejoin="round" 
-                              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" 
-                            />
+                    {/* Notification Card - Frosted Glass */}
+                    <div className="backdrop-blur-2xl bg-white/25 rounded-3xl p-5 border border-white/40 shadow-2xl">
+                      
+                      {/* Header: App Icon + Title */}
+                      <div className="flex items-center gap-3 mb-4">
+                        {/* Home App Icon (rounded square) */}
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md">
+                          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                           </svg>
                         </div>
+                        
+                        {/* Title and timestamp */}
                         <div className="flex-1">
-                          <p className="text-white font-semibold text-sm">Front Door</p>
-                          <p className="text-white/90 text-xs mt-0.5">Someone's at the door</p>
+                          <p className="text-white font-semibold text-sm">Home</p>
+                          <p className="text-white/70 text-xs">Just now</p>
                         </div>
+
+                        {/* HomeKit Secure Video badge */}
+                        <div className="px-2 py-1 rounded-full bg-white/20 backdrop-blur-sm">
+                          <p className="text-white/90 text-[10px] font-medium">HomeKit Secure Video</p>
+                        </div>
+                      </div>
+
+                      {/* Content: Thumbnail + Message */}
+                      <div className="flex gap-4 mb-4">
+                        {/* Doorbell Camera Thumbnail */}
+                        <div className="flex-shrink-0">
+                          <div className="w-24 h-24 rounded-xl overflow-hidden shadow-lg border-2 border-white/30">
+                            <img 
+                              src="/doorbell-visitor.png" 
+                              alt="Front door camera view"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Message text */}
+                        <div className="flex-1 flex flex-col justify-center">
+                          <p className="text-white font-semibold text-base leading-tight mb-1">
+                            Front Door Camera
+                          </p>
+                          <p className="text-white/90 text-sm leading-snug">
+                            Someone's at your front door
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons - Staggered entrance */}
+                      <div className="flex gap-2">
+                        {/* Answer Button (Green) */}
+                        <motion.button
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.1, type: 'spring', stiffness: 400, damping: 25 }}
+                          onClick={handleAnswer}
+                          className="flex-1 py-2.5 rounded-xl bg-gradient-to-br from-green-500 to-green-600 
+                            text-white font-semibold text-sm shadow-lg
+                            hover:scale-[1.02] active:scale-[0.98]
+                            transition-transform duration-150"
+                        >
+                          <div className="flex items-center justify-center gap-1.5">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                            Answer
+                          </div>
+                        </motion.button>
+
+                        {/* Unlock Button (Blue) */}
+                        <motion.button
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.25, type: 'spring', stiffness: 400, damping: 25 }}
+                          onClick={handleUnlock}
+                          className="flex-1 py-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 
+                            text-white font-semibold text-sm shadow-lg
+                            hover:scale-[1.02] active:scale-[0.98]
+                            transition-transform duration-150"
+                        >
+                          <div className="flex items-center justify-center gap-1.5">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                            </svg>
+                            Unlock
+                          </div>
+                        </motion.button>
+
+                        {/* Dismiss Button (Gray) */}
+                        <motion.button
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 0.4, type: 'spring', stiffness: 400, damping: 25 }}
+                          onClick={handleDismiss}
+                          className="px-4 py-2.5 rounded-xl bg-white/20 backdrop-blur-sm
+                            text-white font-medium text-sm
+                            hover:bg-white/30 hover:scale-[1.02] active:scale-[0.98]
+                            transition-all duration-150"
+                        >
+                          Dismiss
+                        </motion.button>
                       </div>
                     </div>
                   </motion.div>
@@ -199,12 +333,15 @@ export default function PerfectSecurity() {
             viewport={{ once: true, margin: "-100px" }}
             className="md:col-span-5 space-y-6 order-1 md:order-2"
           >
+            {/* Section Heading */}
             <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-black">
               Perfect Security
             </h2>
             
+            {/* Description - emphasizing instant notifications */}
             <p className="text-gray-600 text-lg">
-              Know who's at your door. Clear video. Instant alerts.
+              Instant notifications when someone's at your door. Answer, unlock, or dismiss — 
+              all from your phone.
             </p>
             
             {/* ===== CONTROL CENTER CARD ===== */}
@@ -222,15 +359,20 @@ export default function PerfectSecurity() {
               >
                 {/* Top Row: Icon + Status Indicator */}
                 <div className="flex items-start justify-between mb-2 sm:mb-3 md:mb-4">
+                  {/* Camera icon */}
                   <div className={`
                     p-1.5 sm:p-2 md:p-2.5 lg:p-3 rounded-full transition-all duration-300
-                    ${securityState !== 'clear' ? 'bg-white/20 backdrop-blur-sm' : 'bg-white/60'}
+                    ${(securityState === 'alert' || securityState === 'notification') 
+                      ? 'bg-white/20 backdrop-blur-sm' 
+                      : 'bg-white/60'}
                   `}>
                     <svg 
                       className={`
                         w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 
                         transition-colors duration-300
-                        ${securityState !== 'clear' ? 'text-white' : 'text-gray-500'}
+                        ${(securityState === 'alert' || securityState === 'notification') 
+                          ? 'text-white' 
+                          : 'text-gray-500'}
                       `}
                       fill="none" 
                       stroke="currentColor" 
@@ -245,9 +387,10 @@ export default function PerfectSecurity() {
                     </svg>
                   </div>
                   
+                  {/* Status indicator dot */}
                   <div className={`
                     h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full transition-all duration-300
-                    ${securityState !== 'clear'
+                    ${(securityState === 'alert' || securityState === 'notification')
                       ? 'bg-white shadow-lg shadow-white/50' 
                       : 'bg-gray-400'
                     }
@@ -258,21 +401,25 @@ export default function PerfectSecurity() {
                 <div className="text-left">
                   <p className={`
                     text-xs sm:text-sm md:text-base font-semibold transition-colors duration-300
-                    ${securityState !== 'clear' ? 'text-white' : 'text-gray-700'}
+                    ${(securityState === 'alert' || securityState === 'notification') 
+                      ? 'text-white' 
+                      : 'text-gray-700'}
                   `}>
                     Front Door
                   </p>
                   
                   <p className={`
                     text-[10px] sm:text-xs md:text-sm mt-0.5 transition-colors duration-300
-                    ${securityState !== 'clear' ? 'text-white/90' : 'text-gray-500'}
+                    ${(securityState === 'alert' || securityState === 'notification') 
+                      ? 'text-white/90' 
+                      : 'text-gray-500'}
                   `}>
                     {getStatusText()}
                   </p>
                 </div>
                 
-                {/* Subtle inner glow effect */}
-                {securityState !== 'clear' && (
+                {/* Subtle inner glow effect when active */}
+                {(securityState === 'alert' || securityState === 'notification') && (
                   <motion.div 
                     className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent pointer-events-none"
                     initial={{ opacity: 0 }}
