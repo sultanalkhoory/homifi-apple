@@ -199,30 +199,30 @@ export default function PerfectSecurity() {
                       }}
                       className="absolute top-3 right-3 md:top-6 md:right-6 z-40 w-[40%]"
                     >
-                      {/* Notification Card - Full liquid glass from start */}
-                      <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-3 md:p-4 border border-white/50 shadow-2xl">
+                      {/* Notification Card - Full liquid glass from start, compact on mobile */}
+                      <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-2.5 md:p-4 border border-white/50 shadow-2xl">
                         
-                        {/* Header: App Icon + Title */}
-                        <div className="flex items-center gap-2 mb-3">
-                          {/* Home App Icon */}
-                          <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md flex-shrink-0">
-                            <svg className="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        {/* Header: App Icon + Title (smaller text on mobile) */}
+                        <div className="flex items-center gap-2 mb-2.5 md:mb-3">
+                          {/* Home App Icon (smaller on mobile) */}
+                          <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md flex-shrink-0">
+                            <svg className="w-3.5 h-3.5 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
                           </div>
                           
-                          {/* Title and timestamp */}
+                          {/* Title and timestamp (smaller on mobile) */}
                           <div className="flex-1 min-w-0">
-                            <p className="text-white font-semibold text-xs md:text-sm truncate">Home</p>
-                            <p className="text-white/80 text-[10px] md:text-xs">Just now</p>
+                            <p className="text-white font-semibold text-[10px] md:text-sm truncate">Home</p>
+                            <p className="text-white/80 text-[9px] md:text-xs">Just now</p>
                           </div>
                         </div>
 
-                        {/* Content: Thumbnail + Message (text hidden on mobile) */}
-                        <div className="flex flex-col sm:flex-row gap-2.5 md:gap-3 mb-3">
-                          {/* Doorbell Camera Thumbnail */}
+                        {/* Content: Thumbnail + Message (text hidden on mobile, smaller thumbnail) */}
+                        <div className="flex flex-col sm:flex-row gap-2 md:gap-3 mb-2.5 md:mb-3">
+                          {/* Doorbell Camera Thumbnail - Smaller on mobile */}
                           <div className="flex-shrink-0 mx-auto sm:mx-0">
-                            <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden shadow-lg border-2 border-white/40">
+                            <div className="w-16 h-16 md:w-24 md:h-24 rounded-xl overflow-hidden shadow-lg border-2 border-white/40">
                               <img 
                                 src="/doorbell-visitor.png" 
                                 alt="Front door camera view"
@@ -242,15 +242,15 @@ export default function PerfectSecurity() {
                           </div>
                         </div>
 
-                        {/* Action Buttons - Only Unlock and Dismiss (no Answer on Apple TV) */}
-                        <div className="flex flex-col sm:flex-row gap-2">
-                          {/* Unlock Button (Blue) */}
+                        {/* Action Buttons - Icon-only horizontal on mobile, full buttons on desktop */}
+                        <div className="flex gap-2">
+                          {/* Unlock Button - Icon only on mobile, full on desktop */}
                           <motion.button
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.15, type: 'spring', stiffness: 380, damping: 25 }}
                             onClick={handleUnlock}
-                            className="flex-1 py-2.5 md:py-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 
+                            className="flex-1 py-2 md:py-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 
                               text-white font-semibold text-sm md:text-base shadow-lg
                               hover:scale-[1.02] active:scale-[0.98]
                               transition-transform duration-150"
@@ -259,22 +259,27 @@ export default function PerfectSecurity() {
                               <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
                               </svg>
-                              Unlock Door
+                              <span className="hidden sm:inline">Unlock Door</span>
                             </div>
                           </motion.button>
 
-                          {/* Dismiss Button (Gray) */}
+                          {/* Dismiss Button - Icon only on mobile, full on desktop */}
                           <motion.button
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.3, type: 'spring', stiffness: 380, damping: 25 }}
                             onClick={handleDismiss}
-                            className="sm:flex-shrink-0 py-2.5 md:py-3 px-5 rounded-xl bg-white/25 backdrop-blur-sm
+                            className="flex-1 sm:flex-shrink-0 py-2 md:py-3 sm:px-5 rounded-xl bg-white/25 backdrop-blur-sm
                               text-white font-semibold text-sm md:text-base
                               hover:bg-white/35 hover:scale-[1.02] active:scale-[0.98]
                               transition-all duration-150"
                           >
-                            Dismiss
+                            <div className="flex items-center justify-center gap-2">
+                              <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                              <span className="hidden sm:inline">Dismiss</span>
+                            </div>
                           </motion.button>
                         </div>
                       </div>
