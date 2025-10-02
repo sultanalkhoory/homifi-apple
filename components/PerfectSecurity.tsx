@@ -167,7 +167,7 @@ export default function PerfectSecurity() {
                 
                 {/* Apple TV UI Background */}
                 <img
-                  src="/apple-tv-ui.png"
+                  src="/apple-tv-ui.PNG"
                   alt="Apple TV Home Screen"
                   className="w-full h-full object-cover"
                 />
