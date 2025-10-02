@@ -131,26 +131,30 @@ export default function PerfectClimate() {
    * Get visual effect colors based on current temperature/mode
    * Returns colors for airflow streams and particles
    */
+  /**
+   * Get visual effect colors based on current temperature/mode
+   * Colors are muted and Apple-like, with smooth transitions between modes
+   */
   const getEffectColors = () => {
     if (temperature >= 24) {
-      // Warm mode: Orange/amber tones
+      // Warm mode: Subtle orange/amber tones
       return {
         primary: 'rgba(255, 193, 7, 0.1)',
         secondary: 'rgba(255, 152, 0, 0.15)',
         particle: 'bg-orange-200',
       };
     } else if (temperature <= 20) {
-      // Cool mode: Blue tones
+      // Cool mode: Very muted blue tones (Apple-style subtle)
       return {
-        primary: 'rgba(59, 130, 246, 0.18)',
-        secondary: 'rgba(96, 165, 250, 0.25)',
+        primary: 'rgba(59, 130, 246, 0.08)',
+        secondary: 'rgba(96, 165, 250, 0.12)',
         particle: 'bg-blue-200',
       };
     } else {
-      // Comfort mode: Teal/green tones
+      // Comfort mode: Very muted teal/green tones (Apple-style subtle)
       return {
-        primary: 'rgba(20, 184, 166, 0.15)',
-        secondary: 'rgba(16, 185, 129, 0.2)',
+        primary: 'rgba(20, 184, 166, 0.08)',
+        secondary: 'rgba(16, 185, 129, 0.12)',
         particle: 'bg-teal-200',
       };
     }
@@ -201,22 +205,6 @@ export default function PerfectClimate() {
           100% {
             transform: translateX(200px) translateY(-20px);
             opacity: 0;
-          }
-        }
-        @keyframes sunbeamSubtle {
-          0% {
-            opacity: 0;
-            transform: rotate(-3deg) translateY(10px);
-          }
-          15% {
-            opacity: 0.8;
-          }
-          85% {
-            opacity: 0.8;
-          }
-          100% {
-            opacity: 0;
-            transform: rotate(3deg) translateY(-10px);
           }
         }
       `}</style>
@@ -373,14 +361,14 @@ export default function PerfectClimate() {
                   className="absolute inset-0 pointer-events-none"
                 >
                   {/* Airflow streams - concentrated in upper 45% (realistic AC vent position) */}
+                  {/* All modes use same animation (airFlow) with staggered delays for smooth appearance */}
                   {[...Array(4)].map((_, i) => (
                     <div
                       key={`airstream-${i}`}
                       className="absolute"
                       style={{
                         top: `${10 + i * 11.67}%`, // Results in: 10%, 21.67%, 33.34%, 45%
-                        left: mode === 'cool' ? '-20%' : undefined,
-                        right: mode === 'warm' ? '-20%' : undefined,
+                        left: '-20%', // All modes flow from left (same direction)
                         width: '300px',
                         height: '4px',
                         background: `linear-gradient(90deg,
@@ -389,19 +377,18 @@ export default function PerfectClimate() {
                           ${colors.secondary} 70%,
                           transparent 100%
                         )`,
-                        animation: `${
-                          mode === 'cool' ? 'airFlow' : 'sunbeamSubtle'
-                        } ${8 + i * 0.8}s ease-in-out infinite ${i * 1.5}s`,
+                        animation: `airFlow ${8 + i * 0.8}s ease-in-out infinite ${i * 2.8}s`, // Increased stagger delay
                         filter: 'blur(2px)',
+                        transition: 'background 0.8s ease-out', // Smooth color transitions between modes
                       }}
                     />
                   ))}
 
-                  {/* Floating particles */}
+                  {/* Floating particles with smooth color transitions */}
                   {[...Array(3)].map((_, i) => (
                     <div
                       key={`particle-${i}`}
-                      className={`absolute w-1 h-1 ${colors.particle} rounded-full opacity-40`}
+                      className={`absolute w-1 h-1 ${colors.particle} rounded-full opacity-40 transition-colors duration-700 ease-out`}
                       style={{
                         left: `${20 + (i % 3) * 25}%`,
                         top: `${25 + (i % 2) * 20}%`,
