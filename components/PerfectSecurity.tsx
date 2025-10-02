@@ -13,8 +13,11 @@ type SecurityState = 'clear' | 'alert' | 'notification';
  * Features:
  * - Large floating TV with ultra-thin sharp bezels
  * - Apple TV UI displayed on screen
- * - Compact notification (40% TV width) slides from top-right
+ * - Compact notification (40% TV width, 60% mobile) slides from top-right
+ * - Two action buttons: Unlock and Dismiss (no Answer on Apple TV)
  * - Liquid glass appearance from start (no transparency fade)
+ * - Smooth exit animations with consistent easing
+ * - Muted Apple-style blue for alert state
  * - Responsive sizing optimized for mobile (98% width for grand feel)
  * - Synchronized Control Center card below
  * - Auto-triggers when section enters viewport
@@ -85,15 +88,10 @@ export default function PerfectSecurity() {
 
   /**
    * Handle notification action buttons
-   * Simulates answering, unlocking, or dismissing the doorbell alert
+   * Apple TV only supports Unlock and Dismiss (no video call/Answer button)
    */
-  const handleAnswer = () => {
-    // In real app, would open video call
-    setSecurityState('clear');
-  };
-
   const handleUnlock = () => {
-    // In real app, would unlock door
+    // In real app, would unlock door via HomeKit
     setSecurityState('clear');
   };
 
@@ -113,10 +111,11 @@ export default function PerfectSecurity() {
 
   /**
    * Get Control Center card gradient colors based on state
+   * Muted Apple-style blue for alert state
    */
   const getCardColors = () => {
     if (securityState === 'alert' || securityState === 'notification') {
-      return 'bg-gradient-to-br from-orange-400 via-amber-400 to-orange-500 shadow-xl shadow-orange-500/20';
+      return 'bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 shadow-xl shadow-blue-500/15';
     }
     return 'bg-gray-200 shadow-lg';
   };
@@ -144,7 +143,7 @@ export default function PerfectSecurity() {
           
           {/* Description - emphasizing instant notifications */}
           <p className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-            Instant notifications when someone's at your door. Answer, unlock, or dismiss — 
+            Instant notifications when someone's at your door. Unlock remotely or dismiss — 
             all from your Apple TV, iPhone, or iPad.
           </p>
         </motion.div>
@@ -180,7 +179,7 @@ export default function PerfectSecurity() {
                 <AnimatePresence>
                   {securityState === 'notification' && (
                     <motion.div
-                      // No opacity animation - starts as full liquid glass immediately
+                      // Smooth entrance and exit with consistent easing
                       initial={{ y: -100, x: 20, scale: 0.95 }}
                       animate={{ 
                         y: 0, 
@@ -194,12 +193,15 @@ export default function PerfectSecurity() {
                         }
                       }}
                       exit={{ 
-                        y: -80, 
+                        y: -100, 
                         x: 20,
                         scale: 0.95,
-                        transition: { duration: 0.3, ease: [0.32, 0.72, 0, 1] }
+                        transition: { 
+                          duration: 0.25, 
+                          ease: [0.4, 0, 0.2, 1] // Smooth ease-in-out
+                        }
                       }}
-                      className="absolute top-3 right-3 md:top-6 md:right-6 z-40 w-[75%] sm:w-[55%] md:w-[40%]"
+                      className="absolute top-3 right-3 md:top-6 md:right-6 z-40 w-[60%] sm:w-[50%] md:w-[40%]"
                     >
                       {/* Notification Card - Full liquid glass from start */}
                       <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-3 md:p-4 border border-white/50 shadow-2xl">
@@ -244,43 +246,24 @@ export default function PerfectSecurity() {
                           </div>
                         </div>
 
-                        {/* Action Buttons - Staggered fade-in only (no opacity on container) */}
+                        {/* Action Buttons - Only Unlock and Dismiss (no Answer on Apple TV) */}
                         <div className="flex flex-col sm:flex-row gap-2">
-                          {/* Answer Button (Green) */}
-                          <motion.button
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.15, type: 'spring', stiffness: 380, damping: 25 }}
-                            onClick={handleAnswer}
-                            className="flex-1 py-2 md:py-2.5 rounded-xl bg-gradient-to-br from-green-500 to-green-600 
-                              text-white font-semibold text-xs md:text-sm shadow-lg
-                              hover:scale-[1.02] active:scale-[0.98]
-                              transition-transform duration-150"
-                          >
-                            <div className="flex items-center justify-center gap-1.5">
-                              <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                              </svg>
-                              Answer
-                            </div>
-                          </motion.button>
-
                           {/* Unlock Button (Blue) */}
                           <motion.button
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.3, type: 'spring', stiffness: 380, damping: 25 }}
+                            transition={{ delay: 0.15, type: 'spring', stiffness: 380, damping: 25 }}
                             onClick={handleUnlock}
-                            className="flex-1 py-2 md:py-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 
-                              text-white font-semibold text-xs md:text-sm shadow-lg
+                            className="flex-1 py-2.5 md:py-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 
+                              text-white font-semibold text-sm md:text-base shadow-lg
                               hover:scale-[1.02] active:scale-[0.98]
                               transition-transform duration-150"
                           >
-                            <div className="flex items-center justify-center gap-1.5">
-                              <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                            <div className="flex items-center justify-center gap-2">
+                              <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
                               </svg>
-                              Unlock
+                              Unlock Door
                             </div>
                           </motion.button>
 
@@ -288,10 +271,10 @@ export default function PerfectSecurity() {
                           <motion.button
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.45, type: 'spring', stiffness: 380, damping: 25 }}
+                            transition={{ delay: 0.3, type: 'spring', stiffness: 380, damping: 25 }}
                             onClick={handleDismiss}
-                            className="sm:flex-shrink-0 py-2 md:py-2.5 px-4 rounded-xl bg-white/25 backdrop-blur-sm
-                              text-white font-semibold text-xs md:text-sm
+                            className="sm:flex-shrink-0 py-2.5 md:py-3 px-5 rounded-xl bg-white/25 backdrop-blur-sm
+                              text-white font-semibold text-sm md:text-base
                               hover:bg-white/35 hover:scale-[1.02] active:scale-[0.98]
                               transition-all duration-150"
                           >
