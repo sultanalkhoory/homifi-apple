@@ -11,17 +11,18 @@ type SecurityState = 'clear' | 'alert' | 'notification';
  * 
  * Cinematic centered layout showcasing instant security notifications on Apple TV.
  * Features:
- * - Large floating TV with ultra-thin bezels and sharp corners
+ * - Large floating TV with ultra-thin sharp bezels
  * - Apple TV UI displayed on screen
  * - Compact notification (40% TV width) slides from top-right
- * - Responsive sizing for mobile devices
+ * - Liquid glass appearance from start (no transparency fade)
+ * - Responsive sizing optimized for mobile (98% width for grand feel)
  * - Synchronized Control Center card below
  * - Auto-triggers when section enters viewport
  * 
  * Layout:
  * - Centered hero layout
  * - Heading and description centered above
- * - Large TV (75% desktop, 95% mobile) as focal point
+ * - Large TV (98% mobile, 85% tablet, 75% desktop) as focal point
  * - Control Center card centered below
  */
 export default function PerfectSecurity() {
@@ -156,14 +157,14 @@ export default function PerfectSecurity() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-12"
         >
-          {/* TV Container - 75% width on desktop, 95% on mobile */}
-          <div className="mx-auto w-[95%] md:w-[85%] lg:w-[75%]">
+          {/* TV Container - 98% mobile (grand), 85% tablet, 75% desktop */}
+          <div className="mx-auto w-[98%] md:w-[85%] lg:w-[75%]">
             
-            {/* TV Frame with ultra-thin bezels and sharp corners */}
-            <div className="relative bg-black rounded-lg p-1 md:p-1.5 shadow-2xl">
+            {/* TV Frame with ultra-thin sharp bezels (no rounding) */}
+            <div className="relative bg-black rounded-none p-[3px] md:p-1 shadow-2xl">
               
-              {/* TV Screen */}
-              <div className="relative aspect-[16/9] rounded-md overflow-hidden bg-black">
+              {/* TV Screen - sharp corners */}
+              <div className="relative aspect-[16/9] rounded-none overflow-hidden bg-black">
                 
                 {/* Apple TV UI Background */}
                 <img
@@ -175,38 +176,37 @@ export default function PerfectSecurity() {
                 {/* Subtle screen glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5 pointer-events-none" />
 
-                {/* Compact iOS-Style Rich Notification - Top Right, 40% width */}
+                {/* Compact Notification - Liquid glass from start, slides from top-right */}
                 <AnimatePresence>
                   {securityState === 'notification' && (
                     <motion.div
-                      initial={{ opacity: 0, y: -80, x: 20, scale: 0.9 }}
+                      // No opacity animation - starts as full liquid glass immediately
+                      initial={{ y: -100, x: 20, scale: 0.95 }}
                       animate={{ 
-                        opacity: 1, 
                         y: 0, 
                         x: 0,
                         scale: 1,
                         transition: {
                           type: 'spring',
-                          stiffness: 280,
-                          damping: 24,
+                          stiffness: 300,
+                          damping: 26,
                           mass: 0.8
                         }
                       }}
                       exit={{ 
-                        opacity: 0, 
-                        y: -60, 
+                        y: -80, 
                         x: 20,
                         scale: 0.95,
                         transition: { duration: 0.3, ease: [0.32, 0.72, 0, 1] }
                       }}
-                      className="absolute top-3 right-3 md:top-6 md:right-6 z-40 w-[85%] sm:w-[70%] md:w-[40%]"
+                      className="absolute top-3 right-3 md:top-6 md:right-6 z-40 w-[75%] sm:w-[55%] md:w-[40%]"
                     >
-                      {/* Notification Card - Compact frosted glass */}
+                      {/* Notification Card - Full liquid glass from start */}
                       <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-3 md:p-4 border border-white/50 shadow-2xl">
                         
-                        {/* Header: App Icon + Title + Badge */}
+                        {/* Header: App Icon + Title */}
                         <div className="flex items-center gap-2 mb-3">
-                          {/* Home App Icon (smaller, rounded square) */}
+                          {/* Home App Icon */}
                           <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md flex-shrink-0">
                             <svg className="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                               <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -220,9 +220,9 @@ export default function PerfectSecurity() {
                           </div>
                         </div>
 
-                        {/* Content: Thumbnail + Message (horizontal on desktop, vertical on mobile) */}
+                        {/* Content: Thumbnail + Message */}
                         <div className="flex flex-col sm:flex-row gap-2.5 md:gap-3 mb-3">
-                          {/* Doorbell Camera Thumbnail - Compact */}
+                          {/* Doorbell Camera Thumbnail */}
                           <div className="flex-shrink-0 mx-auto sm:mx-0">
                             <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden shadow-lg border-2 border-white/40">
                               <img 
@@ -233,7 +233,7 @@ export default function PerfectSecurity() {
                             </div>
                           </div>
 
-                          {/* Message text - Compact for 40% width */}
+                          {/* Message text */}
                           <div className="flex-1 flex flex-col justify-center text-center sm:text-left">
                             <p className="text-white font-semibold text-sm md:text-base leading-tight mb-1">
                               Front Door
@@ -244,13 +244,13 @@ export default function PerfectSecurity() {
                           </div>
                         </div>
 
-                        {/* Action Buttons - Compact, stacked on mobile */}
+                        {/* Action Buttons - Staggered fade-in only (no opacity on container) */}
                         <div className="flex flex-col sm:flex-row gap-2">
                           {/* Answer Button (Green) */}
                           <motion.button
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.1, type: 'spring', stiffness: 380, damping: 25 }}
+                            transition={{ delay: 0.15, type: 'spring', stiffness: 380, damping: 25 }}
                             onClick={handleAnswer}
                             className="flex-1 py-2 md:py-2.5 rounded-xl bg-gradient-to-br from-green-500 to-green-600 
                               text-white font-semibold text-xs md:text-sm shadow-lg
@@ -269,7 +269,7 @@ export default function PerfectSecurity() {
                           <motion.button
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.25, type: 'spring', stiffness: 380, damping: 25 }}
+                            transition={{ delay: 0.3, type: 'spring', stiffness: 380, damping: 25 }}
                             onClick={handleUnlock}
                             className="flex-1 py-2 md:py-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 
                               text-white font-semibold text-xs md:text-sm shadow-lg
@@ -284,11 +284,11 @@ export default function PerfectSecurity() {
                             </div>
                           </motion.button>
 
-                          {/* Dismiss Button (Gray) - Full width on mobile */}
+                          {/* Dismiss Button (Gray) */}
                           <motion.button
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.4, type: 'spring', stiffness: 380, damping: 25 }}
+                            transition={{ delay: 0.45, type: 'spring', stiffness: 380, damping: 25 }}
                             onClick={handleDismiss}
                             className="sm:flex-shrink-0 py-2 md:py-2.5 px-4 rounded-xl bg-white/25 backdrop-blur-sm
                               text-white font-semibold text-xs md:text-sm
