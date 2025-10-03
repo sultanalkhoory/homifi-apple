@@ -229,27 +229,55 @@ export default function PerfectHomeKey() {
                       
                       {/* Lock screen wallpaper */}
                       <div className="absolute inset-0 bg-gradient-to-b from-blue-400 via-purple-400 to-pink-300">
-                        {/* Time */}
-                        <div className="absolute top-[22%] left-1/2 -translate-x-1/2 text-center">
-                          <p className="text-white text-3xl md:text-4xl font-light">10:05</p>
-                        </div>
-
-                        {/* Lock icon bottom */}
-                        <div className="absolute bottom-[20%] left-1/2 -translate-x-1/2">
-                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
-                            <svg className="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        {/* Status bar */}
+                        <div className="absolute top-12 left-0 right-0 flex justify-between px-6 text-white text-xs font-semibold">
+                          <span>9:41</span>
+                          <div className="flex gap-1 items-center">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                            </svg>
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
                             </svg>
                           </div>
                         </div>
+
+                        {/* Time - larger and centered */}
+                        <div className="absolute top-[28%] left-1/2 -translate-x-1/2 text-center">
+                          <p className="text-white text-5xl md:text-6xl font-light tracking-tight mb-1">10:05</p>
+                          <p className="text-white/90 text-sm font-medium">Tuesday, January 17</p>
+                        </div>
+
+                        {/* Bottom actions */}
+                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-16">
+                          {/* Flashlight */}
+                          <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/15 backdrop-blur-xl border border-white/20 flex items-center justify-center">
+                            <svg className="w-5 h-5 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                          </div>
+                          
+                          {/* Camera */}
+                          <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/15 backdrop-blur-xl border border-white/20 flex items-center justify-center">
+                            <svg className="w-5 h-5 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        {/* Swipe up indicator */}
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
+                          <div className="w-32 h-1 bg-white/60 rounded-full" />
+                        </div>
                       </div>
 
-                      {/* Dynamic Island at top */}
+                      {/* Dynamic Island at top - MUCH SMALLER */}
                       <div className="absolute top-2 left-1/2 -translate-x-1/2 z-40">
                         <motion.div
                           animate={{
-                            width: lockState === 'locked' ? '80px' : '140px',
-                            height: lockState === 'locked' ? '28px' : '44px'
+                            width: lockState === 'locked' ? '50px' : '120px',
+                            height: lockState === 'locked' ? '18px' : '36px'
                           }}
                           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                           className="bg-black rounded-full flex items-center justify-center overflow-hidden relative"
@@ -267,11 +295,11 @@ export default function PerfectHomeKey() {
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.8 }}
                                 transition={{ duration: 0.3 }}
-                                className="flex items-center gap-2 px-3"
+                                className="flex items-center gap-1.5 px-2"
                               >
                                 {/* House icon or checkmark */}
                                 {lockState === 'unlocking' ? (
-                                  <svg className="w-4 h-4 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                                  <svg className="w-3 h-3 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                                   </svg>
                                 ) : (
@@ -280,7 +308,7 @@ export default function PerfectHomeKey() {
                                     animate={{ scale: 1 }}
                                     transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                                   >
-                                    <svg className="w-4 h-4 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                                    <svg className="w-3 h-3 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
                                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                     </svg>
                                   </motion.div>
