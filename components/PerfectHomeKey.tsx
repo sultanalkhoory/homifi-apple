@@ -4,38 +4,35 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fadeRise } from '@/lib/animations';
 
-type SecurityState = 'clear' | 'alert' | 'notification';
+type LockState = 'locked' | 'unlocking' | 'unlocked';
 
 /**
- * PerfectSecurity Section Component - Hero TV Edition
+ * PerfectHomeKey Section Component - Authentic Apple HomeKey Experience
  * 
- * Cinematic centered layout showcasing instant security notifications on Apple TV.
+ * Showcases Apple HomeKey unlock animation exactly as it appears on iPhone.
  * Features:
- * - Large floating TV with ultra-thin sharp bezels
- * - Apple TV UI displayed on screen
- * - Compact notification (40% TV width, 60% mobile) slides from top-right
- * - Two action buttons: Unlock and Dismiss (no Answer on Apple TV)
- * - Liquid glass appearance from start (no transparency fade)
- * - Smooth exit animations with consistent easing
- * - Muted Apple-style blue for alert state
- * - Responsive sizing optimized for mobile (98% width for grand feel)
+ * - Large centered iPhone displaying authentic HomeKey card
+ * - Beige/cream card with layered house icon (matches Apple Wallet design)
+ * - White pulsing rings during NFC unlock
+ * - Green checkmark on success
+ * - Screen dims to black when card appears
  * - Synchronized Control Center card below
  * - Auto-triggers when section enters viewport
  * 
  * Layout:
- * - Centered hero layout
+ * - Centered hero layout (like Security section)
  * - Heading and description centered above
- * - Large TV (98% mobile, 85% tablet, 75% desktop) as focal point
+ * - Large iPhone (70% width) as focal point
  * - Control Center card centered below
  */
-export default function PerfectSecurity() {
+export default function PerfectHomeKey() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [securityState, setSecurityState] = useState<SecurityState>('clear');
+  const [lockState, setLockState] = useState<LockState>('locked');
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
 
   /**
    * Auto-trigger Effect
-   * Detects when section enters viewport and triggers security alert sequence
+   * Unlocks the door when section enters viewport (demo)
    * Only runs once per page load
    */
   useEffect(() => {
@@ -44,16 +41,9 @@ export default function PerfectSecurity() {
         entries.forEach((entry) => {
           if (entry.isIntersecting && !hasAutoTriggered) {
             setTimeout(() => {
-              // Start alert sequence: clear → alert → notification
-              setSecurityState('alert');
-              
-              // Show notification 600ms after alert starts
-              setTimeout(() => {
-                setSecurityState('notification');
-              }, 600);
-              
+              triggerUnlock();
               setHasAutoTriggered(true);
-            }, 800); // Initial delay for dramatic effect
+            }, 800);
           }
         });
       },
@@ -71,51 +61,52 @@ export default function PerfectSecurity() {
   }, [hasAutoTriggered]);
 
   /**
-   * Handle Control Center card click
-   * Manual trigger for security alert sequence
+   * Trigger unlock sequence
+   * Locked → Unlocking (1.2s) → Unlocked (1.5s) → back to Locked
    */
-  const handleCardClick = () => {
-    if (securityState === 'clear') {
-      setSecurityState('alert');
+  const triggerUnlock = () => {
+    if (lockState !== 'locked') return;
+    
+    setLockState('unlocking');
+    
+    // Stay in unlocking state for 1.2 seconds (NFC + rings animation)
+    setTimeout(() => {
+      setLockState('unlocked');
+      
+      // Stay unlocked for 1.5 seconds, then relock
       setTimeout(() => {
-        setSecurityState('notification');
-      }, 600);
-    } else if (securityState === 'notification') {
-      // Clicking during notification dismisses it
-      handleDismiss();
-    }
+        setLockState('locked');
+      }, 1500);
+    }, 1200);
   };
 
   /**
-   * Handle notification action buttons
-   * Apple TV only supports Unlock and Dismiss (no video call/Answer button)
+   * Handle Control Center card click
    */
-  const handleUnlock = () => {
-    // In real app, would unlock door via HomeKit
-    setSecurityState('clear');
-  };
-
-  const handleDismiss = () => {
-    setSecurityState('clear');
+  const handleCardClick = () => {
+    if (lockState === 'locked') {
+      triggerUnlock();
+    }
   };
 
   /**
    * Get status text for Control Center card
    */
   const getStatusText = () => {
-    if (securityState === 'alert' || securityState === 'notification') {
-      return 'Visitor Detected';
-    }
-    return 'All Clear';
+    if (lockState === 'unlocking') return 'Unlocking...';
+    if (lockState === 'unlocked') return 'Unlocked';
+    return 'Locked';
   };
 
   /**
-   * Get Control Center card gradient colors based on state
-   * Muted Apple-style blue for alert state
+   * Get Control Center card gradient colors based on lock state
    */
   const getCardColors = () => {
-    if (securityState === 'alert' || securityState === 'notification') {
+    if (lockState === 'unlocking') {
       return 'bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 shadow-xl shadow-blue-500/15';
+    }
+    if (lockState === 'unlocked') {
+      return 'bg-gradient-to-br from-green-400 via-green-500 to-green-600 shadow-xl shadow-green-500/15';
     }
     return 'bg-gray-200 shadow-lg';
   };
@@ -123,8 +114,8 @@ export default function PerfectSecurity() {
   return (
     <section 
       ref={containerRef} 
-      id="perfect-security" 
-      className="pt-8 pb-20 md:py-28 bg-gray-50"
+      id="perfect-homekey" 
+      className="pt-8 pb-20 md:py-28 bg-white"
     >
       <div className="mx-auto max-w-7xl px-4">
         
@@ -138,17 +129,17 @@ export default function PerfectSecurity() {
         >
           {/* Section Heading */}
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-black mb-6">
-            Perfect Security
+            Perfect Entry
           </h2>
           
-          {/* Description - emphasizing instant notifications */}
+          {/* Description - emphasizing Apple HomeKey and keyless entry */}
           <p className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-            Instant notifications when someone's at your door. Unlock remotely or dismiss — 
-            all from your Apple TV, iPhone, or iPad.
+            Unlock your home with just your iPhone or Apple Watch. No keys, no codes, 
+            no hassle — just tap and you're in.
           </p>
         </motion.div>
 
-        {/* Large Centered TV Display */}
+        {/* Large Centered iPhone Display */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -156,142 +147,153 @@ export default function PerfectSecurity() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-12"
         >
-          {/* TV Container - 98% mobile (grand), 85% tablet, 75% desktop */}
-          <div className="mx-auto w-[98%] md:w-[85%] lg:w-[75%]">
+          {/* iPhone Container - 70% width, centered */}
+          <div className="mx-auto w-[85%] md:w-[75%] lg:w-[70%] max-w-[500px]">
             
-            {/* TV Frame with ultra-thin sharp bezels (no rounding) */}
-            <div className="relative bg-black rounded-none p-[3px] md:p-1 shadow-2xl">
+            {/* iPhone Frame */}
+            <div className="relative bg-black rounded-[3rem] p-3 shadow-2xl">
               
-              {/* TV Screen - sharp corners */}
-              <div className="relative aspect-[16/9] rounded-none overflow-hidden bg-black">
+              {/* iPhone Screen */}
+              <div className="relative aspect-[9/19.5] rounded-[2.5rem] overflow-hidden bg-gradient-to-b from-blue-400 via-blue-300 to-orange-200">
                 
-                {/* Apple TV UI Background */}
-                <img
-                  src="/apple-tv-ui.png"
-                  alt="Apple TV Home Screen"
-                  className="w-full h-full object-cover"
-                />
+                {/* Lock Screen Wallpaper (when not unlocking) */}
+                <div className={`absolute inset-0 transition-opacity duration-300 ${
+                  lockState !== 'locked' ? 'opacity-0' : 'opacity-100'
+                }`}>
+                  <div className="absolute inset-0 bg-gradient-to-b from-blue-400 via-blue-300 to-orange-200" />
+                  
+                  {/* Time display */}
+                  <div className="absolute top-[20%] left-1/2 -translate-x-1/2 text-center">
+                    <p className="text-white text-7xl font-light tracking-tight">10:05</p>
+                    <p className="text-white/80 text-sm mt-2">Tuesday, Jan 17</p>
+                  </div>
 
-                {/* Subtle screen glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5 pointer-events-none" />
+                  {/* Lock icons at bottom */}
+                  <div className="absolute bottom-[25%] left-1/2 -translate-x-1/2 flex gap-8">
+                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
 
-                {/* Compact Notification - Liquid glass from start, slides from top-right */}
+                {/* Black dimmed overlay when HomeKey card appears */}
                 <AnimatePresence>
-                  {securityState === 'notification' && (
+                  {lockState !== 'locked' && (
                     <motion.div
-                      // Fast, smooth entrance and exit with consistent easing (no springs)
-                      initial={{ y: -100, x: 20 }}
-                      animate={{ 
-                        y: 0, 
-                        x: 0,
-                        transition: {
-                          duration: 0.35,
-                          ease: [0.22, 1, 0.36, 1] // Apple's ease-out
-                        }
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute inset-0 bg-black z-10"
+                    />
+                  )}
+                </AnimatePresence>
+
+                {/* HomeKey Card - Authentic Apple Design */}
+                <AnimatePresence>
+                  {lockState !== 'locked' && (
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.9, opacity: 0 }}
+                      transition={{ 
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 25
                       }}
-                      exit={{ 
-                        y: -100, 
-                        x: 20,
-                        transition: { 
-                          duration: 0.2, 
-                          ease: [0.4, 0, 1, 1] // Fast ease-in for snappy exit
-                        }
-                      }}
-                      className="absolute top-3 right-3 md:top-6 md:right-6 z-40 w-[40%]"
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-[85%]"
                     >
-                      {/* Notification Card - Full liquid glass from start, compact on mobile */}
-                      <div className="backdrop-blur-2xl bg-white/30 rounded-2xl p-2.5 md:p-4 border border-white/50 shadow-2xl">
+                      {/* Beige/Cream Card - Credit card style */}
+                      <div className="relative bg-[#E8E3D8] rounded-2xl aspect-[1.6/1] shadow-2xl p-6 flex flex-col">
                         
-                        {/* Header: App Icon + Title (smaller text on mobile) */}
-                        <div className="flex items-center gap-2 mb-2.5 md:mb-3">
-                          {/* Home App Icon (smaller on mobile) */}
-                          <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-md flex-shrink-0">
-                            <svg className="w-3.5 h-3.5 md:w-5 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        {/* HomiFi text top-right */}
+                        <div className="absolute top-4 right-5">
+                          <p className="text-gray-500 text-sm font-medium">HomiFi</p>
+                        </div>
+
+                        {/* Layered House Icon - Center */}
+                        <div className="flex-1 flex items-center justify-center relative">
+                          {/* House icon with concentric layers */}
+                          <div className="relative">
+                            {/* Outer house layer */}
+                            <svg className="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                             </svg>
-                          </div>
-                          
-                          {/* Title and timestamp (smaller on mobile) */}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-white font-semibold text-[10px] md:text-sm truncate">Home</p>
-                            <p className="text-white/80 text-[9px] md:text-xs">Just now</p>
-                          </div>
-                        </div>
 
-                        {/* Content: Thumbnail + Message (text hidden on mobile, smaller thumbnail) */}
-                        <div className="flex flex-col sm:flex-row gap-2 md:gap-3 mb-2.5 md:mb-3">
-                          {/* Doorbell Camera Thumbnail - Smaller on mobile */}
-                          <div className="flex-shrink-0 mx-auto sm:mx-0">
-                            <div className="w-16 h-16 md:w-24 md:h-24 rounded-xl overflow-hidden shadow-lg border-2 border-white/40">
-                              <img 
-                                src="/doorbell-visitor.png" 
-                                alt="Front door camera view"
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
+                            {/* Middle house layer */}
+                            <svg className="absolute inset-0 w-24 h-24 text-gray-500" style={{ transform: 'scale(0.75)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.8}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                            </svg>
+
+                            {/* Inner house layer */}
+                            <svg className="absolute inset-0 w-24 h-24 text-gray-600" style={{ transform: 'scale(0.5)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                            </svg>
+
+                            {/* White pulsing rings during unlock (NFC effect) */}
+                            {lockState === 'unlocking' && (
+                              <>
+                                {[...Array(4)].map((_, i) => (
+                                  <motion.div
+                                    key={`ring-${i}`}
+                                    initial={{ scale: 1, opacity: 0 }}
+                                    animate={{ 
+                                      scale: [1, 2.5],
+                                      opacity: [0, 0.8, 0]
+                                    }}
+                                    transition={{
+                                      duration: 1.2,
+                                      delay: i * 0.2,
+                                      ease: 'easeOut'
+                                    }}
+                                    className="absolute inset-0 w-24 h-24 rounded-full border-2 border-white"
+                                  />
+                                ))}
+                              </>
+                            )}
+
+                            {/* Green checkmark on success */}
+                            <AnimatePresence>
+                              {lockState === 'unlocked' && (
+                                <motion.div
+                                  initial={{ scale: 0, opacity: 0 }}
+                                  animate={{ scale: 1, opacity: 1 }}
+                                  exit={{ scale: 0, opacity: 0 }}
+                                  transition={{ 
+                                    type: 'spring',
+                                    stiffness: 400,
+                                    damping: 20
+                                  }}
+                                  className="absolute inset-0 flex items-center justify-center"
+                                >
+                                  <div className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center">
+                                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
                           </div>
-
-                          {/* Message text - Hidden on mobile, visible on sm+ */}
-                          <div className="hidden sm:flex flex-1 flex-col justify-center text-left">
-                            <p className="text-white font-semibold text-sm md:text-base leading-tight mb-1">
-                              Front Door
-                            </p>
-                            <p className="text-white/95 text-xs md:text-sm leading-snug">
-                              Someone's at your door
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Action Buttons - Icon-only horizontal on mobile, full buttons on desktop */}
-                        <div className="flex gap-2">
-                          {/* Unlock Button - Icon only on mobile, full on desktop */}
-                          <motion.button
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.15, type: 'spring', stiffness: 380, damping: 25 }}
-                            onClick={handleUnlock}
-                            className="flex-1 py-2 md:py-3 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 
-                              text-white font-semibold text-sm md:text-base shadow-lg
-                              hover:scale-[1.02] active:scale-[0.98]
-                              transition-transform duration-150"
-                          >
-                            <div className="flex items-center justify-center gap-2">
-                              <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                              </svg>
-                              <span className="hidden sm:inline">Unlock Door</span>
-                            </div>
-                          </motion.button>
-
-                          {/* Dismiss Button - Icon only on mobile, full on desktop */}
-                          <motion.button
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.3, type: 'spring', stiffness: 380, damping: 25 }}
-                            onClick={handleDismiss}
-                            className="flex-1 sm:flex-shrink-0 py-2 md:py-3 sm:px-5 rounded-xl bg-white/25 backdrop-blur-sm
-                              text-white font-semibold text-sm md:text-base
-                              hover:bg-white/35 hover:scale-[1.02] active:scale-[0.98]
-                              transition-all duration-150"
-                          >
-                            <div className="flex items-center justify-center gap-2">
-                              <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                              </svg>
-                              <span className="hidden sm:inline">Dismiss</span>
-                            </div>
-                          </motion.button>
                         </div>
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
+
+                {/* Subtle screen glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-white/5 pointer-events-none" />
               </div>
+
+              {/* iPhone notch */}
+              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-black rounded-b-3xl z-30" />
             </div>
           </div>
         </motion.div>
 
-        {/* Control Center Card - Centered Below TV */}
+        {/* Control Center Card - Centered Below iPhone */}
         <motion.div
           variants={fadeRise}
           initial="hidden"
@@ -301,50 +303,59 @@ export default function PerfectSecurity() {
         >
           <button
             onClick={handleCardClick}
+            disabled={lockState !== 'locked'}
             className={`
               relative overflow-hidden rounded-xl sm:rounded-2xl
               w-full max-w-[200px] sm:max-w-[220px] md:max-w-[260px]
               p-4 sm:p-5 md:p-6
               transition-all duration-500 ease-out
-              hover:scale-[1.02] active:scale-[0.98]
+              ${lockState === 'locked' ? 'hover:scale-[1.02] active:scale-[0.98] cursor-pointer' : 'cursor-default'}
               ${getCardColors()}
             `}
           >
             {/* Top Row: Icon + Status Indicator */}
             <div className="flex items-start justify-between mb-3 md:mb-4">
-              {/* Camera icon */}
+              {/* Lock icon */}
               <div className={`
                 p-2 md:p-3 rounded-full transition-all duration-300
-                ${(securityState === 'alert' || securityState === 'notification') 
-                  ? 'bg-white/20 backdrop-blur-sm' 
-                  : 'bg-white/60'}
+                ${lockState !== 'locked' ? 'bg-white/20 backdrop-blur-sm' : 'bg-white/60'}
               `}>
                 <svg 
                   className={`
-                    w-6 h-6 md:w-7 md:h-7
+                    w-6 h-6 md:w-7 md:h-7 
                     transition-colors duration-300
-                    ${(securityState === 'alert' || securityState === 'notification') 
-                      ? 'text-white' 
-                      : 'text-gray-500'}
+                    ${lockState !== 'locked' ? 'text-white' : 'text-gray-500'}
                   `}
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                 >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" 
-                  />
+                  {lockState === 'unlocked' ? (
+                    // Unlocked icon
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      d="M8 11V7a4 4 0 014-4 4 4 0 014 4m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" 
+                    />
+                  ) : (
+                    // Locked icon
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" 
+                    />
+                  )}
                 </svg>
               </div>
               
               {/* Status indicator dot */}
               <div className={`
                 h-2 w-2 rounded-full transition-all duration-300
-                ${(securityState === 'alert' || securityState === 'notification')
+                ${lockState === 'unlocked' 
                   ? 'bg-white shadow-lg shadow-white/50' 
+                  : lockState === 'unlocking'
+                  ? 'bg-white shadow-lg shadow-white/50 animate-pulse'
                   : 'bg-gray-400'
                 }
               `} />
@@ -354,25 +365,21 @@ export default function PerfectSecurity() {
             <div className="text-left">
               <p className={`
                 text-sm md:text-base font-semibold transition-colors duration-300
-                ${(securityState === 'alert' || securityState === 'notification') 
-                  ? 'text-white' 
-                  : 'text-gray-700'}
+                ${lockState !== 'locked' ? 'text-white' : 'text-gray-700'}
               `}>
                 Front Door
               </p>
               
               <p className={`
                 text-xs md:text-sm mt-0.5 transition-colors duration-300
-                ${(securityState === 'alert' || securityState === 'notification') 
-                  ? 'text-white/90' 
-                  : 'text-gray-500'}
+                ${lockState !== 'locked' ? 'text-white/90' : 'text-gray-500'}
               `}>
                 {getStatusText()}
               </p>
             </div>
             
             {/* Subtle inner glow effect when active */}
-            {(securityState === 'alert' || securityState === 'notification') && (
+            {lockState !== 'locked' && (
               <motion.div 
                 className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent pointer-events-none"
                 initial={{ opacity: 0 }}
@@ -381,6 +388,20 @@ export default function PerfectSecurity() {
               />
             )}
           </button>
+        </motion.div>
+
+        {/* Additional info - Apple Wallet integration mention */}
+        <motion.div
+          variants={fadeRise}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="flex items-center justify-center gap-2 text-sm text-gray-500 mt-8"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+          <span>Stored securely in Apple Wallet</span>
         </motion.div>
       </div>
     </section>
