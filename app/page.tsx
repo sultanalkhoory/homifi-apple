@@ -5,6 +5,7 @@ import PerfectLight from "@/components/PerfectLight";
 import PerfectPrivacy from "@/components/PerfectPrivacy";
 import PerfectClimate from "@/components/PerfectClimate";
 import PerfectSecurity from "@/components/PerfectSecurity";
+import PerfectHomeKey from "@/components/PerfectHomeKey";
 import { motion } from "framer-motion";
 import { fadeRise } from "@/lib/animations";
 import SmartIndicators from "@/components/SmartIndicators";
@@ -201,6 +202,9 @@ export default function Page() {
       
       {/* ========== PERFECT SECURITY SECTION ========== */}
       <PerfectSecurity />
+
+      {/* ========== PERFECT HOMEKEY SECTION ========== */}
+      <PerfectHomeKey />
       
       {/*
         ========== FOOTER ==========
